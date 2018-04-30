@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="{% static 'ASGS_Mon/style.css' %}" />
+</head>
+<body>
+<script type="text/javascript">
+
+//check for browser support
+ if(typeof(EventSource) !== "undefined") { 	
+ 	// define the event endpoint 
+ 	var eSource = new EventSource("http://127.0.0.1:8000/ASGS_Mon/event");
+	
+ 	// detect message receipt
+ 	eSource.onmessage = function(event) 
+ 	{		
+ 		// parse the incoming data object
+ 		var theMsg = JSON.parse(event.data);
+ 		
+ 		// for each site passed
+ 		for (var i=0; i<theMsg.sites.length; i++)
+ 		{ 			
+ 			// grab some data points
+ 			var siteInfo = theMsg.sites[i];
+ 			var rnd = siteInfo.info.rnd;
+ 			var name = siteInfo.info.name;
+ 			var type = siteInfo.info.type;
+ 			var dateTime = siteInfo.info.datetime;
+ 			var advisory = siteInfo.info.hurricane.advisory;
+ 			
+ 			// create an array of colors
+	 		colors = ["{% static 'ASGS_Mon/images/green.jpg' %}", "{% static 'ASGS_Mon/images/yellow.jpg' %}", "{% static 'ASGS_Mon/images/red.jpg' %}", "{% static 'ASGS_Mon/images/black.jpg' %}"];
+ 			
+ 			// create an array of random text
+	 		text = ["Full site capacity available\ndetailed status:testing", "Site working and has capacity", "Site working, has no more capacity", "Site off-line" ];
+		
+			document.getElementById(name).innerHTML = '<img src="' + colors[rnd] + '" height="100" width="100"><h2><span>' + name + '</span></h2>';
+			
+			document.getElementById("span-" + name).title = "type: " + type + ", date: " + dateTime + ", advisory number: " + advisory + ", extra: " + text[rnd];			
+ 		}
+ 		
+		//write the received data to the page
+ 		document.getElementById("serverData").innerHTML = '<br /><br />PAYLOAD dump:<br /><br />' + event.data;		
+ 	};
+ }
+ else {
+ 	document.getElementById("serverData").innerHTML="Whoops! Your browser doesn't receive server-sent events.";
+ }
+
+ String.prototype.lpad = function(padString, length) {
+		var str = this;
+	    while (str.length < length)
+	        str = padString + str;
+	    return str;
+	}
+ 
+</script>
+
+<table id=dashboard>
+	<tr>
+		<td><span id="span-TACC"><div class="image" id="TACC"></div></span></td>
+		<td><span id="span-LSU"><div class="image" id="LSU"></div></span></td>
+		<td><span id="span-RENCI"><div class="image" id="RENCI"></div></span></td>
+		<td><span id="span-UCF"><div class="image" id="UCF"></div></span></td>
+		<td><span id="span-GM"><div class="image" id="GM"></div></span></td>
+	</tr>
+</table>
+
+<div id="serverData"></div>
+
+</body>
+</html>
