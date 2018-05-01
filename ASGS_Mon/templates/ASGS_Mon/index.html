@@ -22,26 +22,36 @@
  		for (var i=0; i<theMsg.sites.length; i++)
  		{ 			
  			// grab some data points
- 			var siteInfo = theMsg.sites[i];
- 			var rnd = siteInfo.info.rnd;
- 			var name = siteInfo.info.name;
- 			var type = siteInfo.info.type;
- 			var dateTime = siteInfo.info.datetime;
- 			var advisory = siteInfo.info.hurricane.advisory;
+ 			var s = theMsg.sites[i];
+ 			var siteName = s.site;
  			
+ 			var si = s.info
+ 			
+ 			var rnd = si.rnd;			
+ 			var eventType = si.type;
+ 			var clusterName = si.cluster_name;
+ 			var dateTime = si.datetime;
+ 			
+ 			var advisoryNumber = si.hurricane.advisory_number;
+ 			var stormName = si.hurricane.storm
+ 			var stormNumber = si.hurricane.storm_number
+ 			
+ 			var message = si.weather.message;
+ 			var messageType = si.weather.message_type;
+ 				
  			// create an array of colors
 	 		colors = ["{% static 'ASGS_Mon/images/green.jpg' %}", "{% static 'ASGS_Mon/images/yellow.jpg' %}", "{% static 'ASGS_Mon/images/red.jpg' %}", "{% static 'ASGS_Mon/images/black.jpg' %}"];
  			
  			// create an array of random text
 	 		text = ["Full site capacity available\ndetailed status:testing", "Site working and has capacity", "Site working, has no more capacity", "Site off-line" ];
 		
-			document.getElementById(name).innerHTML = '<img src="' + colors[rnd] + '" height="100" width="100"><h2><span>' + name + '</span></h2>';
+			document.getElementById(siteName).innerHTML = '<img src="' + colors[rnd] + '" height="100" width="100"><h2><span>' + siteName + '</span></h2>';
 			
-			document.getElementById("span-" + name).title = "type: " + type + ", date: " + dateTime + ", advisory number: " + advisory + ", extra: " + text[rnd];			
+			document.getElementById("span-" + siteName).title = "event type: " + eventType + ", event date: " + dateTime + ", advisory number: " + advisoryNumber + ", storm name: " + stormName + ", storm_number:" + stormNumber;			
  		}
  		
 		//write the received data to the page
- 		document.getElementById("serverData").innerHTML = '<br /><br />PAYLOAD dump:<br /><br />' + event.data;		
+ 		document.getElementById("serverData").innerHTML = '<br /><br />FULL Payload dump:<br /><br />' + event.data;		
  	};
  }
  else {
