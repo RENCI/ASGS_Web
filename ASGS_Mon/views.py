@@ -22,7 +22,8 @@ def event(request):
                                 join ASGS_Mon_message m on m.id=e.message_id \
                                 join ASGS_Mon_message_type_lu mt on mt.id=m.message_type_id \
                                 join ASGS_Mon_site_lu s on s.id=e.site_id \
-                                join ASGS_Mon_event_type_lu et on et.id=e.event_type_id') :        
+                                join ASGS_Mon_event_type_lu et on et.id=e.event_type_id') :    
+        # for each record returned    
         data += '{ \
                         "site" : "' + e.site_name + '", \
                         "info" : \
