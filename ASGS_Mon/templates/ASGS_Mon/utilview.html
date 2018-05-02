@@ -31,6 +31,9 @@ body {
 	 	// define the event endpoint 
  		var eSource = new EventSource("http://127.0.0.1:8000/ASGS_Mon/event");
 	
+		// TODO: Create div area for textual output of the title bar
+ 		//var titleBar = d3.select("body").append("div").text("this is a title");
+
  		// detect message receipt
  		eSource.onmessage = function(event) 
  		{		
@@ -39,12 +42,15 @@ body {
  	 		
  	 		// get a handle to the cluster data
  	 		var utilization = theMsg.utilization;
- 	 		
+ 	 		 	 		
  	 		// get a reference to the visualization component
  			var svg = d3.select("body").selectAll("svg");
  			
- 	 		// start the re-visualization
+ 	 		// reload the visualization data
  			svg.data(utilization).call(chart.duration(1000));
+ 	 		
+ 			// TODO: Create div area for textual output of the event and message
+ 	 		//var eventMsgText = d3.select("body").append("div").text(event.data);
  		}
  	}
 
@@ -82,20 +88,5 @@ d3.json("{% static 'ASGS_Mon/utilview.json' %}", function(error, data) {
       .attr("dy", "1em")
       .text(function(d) { return d.subtitle; });
 });
-
-function randomize(d) {
-  if (!d.randomizer) d.randomizer = randomizer(d);
-  //d.ranges = d.ranges.map(d.randomizer);
-  //d.markers = d.markers.map(d.randomizer);
-  d.measures = d.measures.map(d.randomizer);
-  return d;
-}
-
-function randomizer(d) {
-  var k = d3.max(d.ranges) * .3;
-  return function(d) {
-    return Math.max(0, d + k * (Math.random() - .5));
-  };
-}
 
 </script>

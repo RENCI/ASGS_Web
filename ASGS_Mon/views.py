@@ -19,6 +19,8 @@ def event(request):
     data = 'data: {"sites" : ['
     utilization = '';
     
+    # TODO: use native django object models to get this data rather than direct SQL
+    # TODO: modify result set to group by site with max(event id)
     for e in models.Event.objects.raw('select e.id AS ''id'', s.name AS ''site_name'', mt.name AS ''message_type_name'', e.event_ts AS ''ts'', s.cluster_name AS ''cluster_name'' \
                                 ,m.advisory_id AS ''advisory_id'', m.message AS ''message_text'', m.storm_name AS ''storm_name'', s.nodes AS ''total_nodes'', e.nodes_in_use AS ''nodes_in_use'' \
                                 ,m.storm_number AS ''storm_number'', m.other AS ''other'', et.name AS ''event_type_name'', e.nodes_available AS ''nodes_available'' \
@@ -27,6 +29,7 @@ def event(request):
                                 join ASGS_Mon_message_type_lu mt on mt.id=m.message_type_id \
                                 join ASGS_Mon_site_lu s on s.id=e.site_id \
                                 join ASGS_Mon_event_type_lu et on et.id=e.event_type_id') :    
+        # TODO: move to use native python arrays and then make call to convert to JSON
         # for each record returned    
         data += '{ \
                         "site" : "' + e.site_name + '", \
@@ -53,10 +56,13 @@ def event(request):
                         } \
                   },'
     
+
+        # TODO: uncomment this and comment out below to go with live DB data        
+        #utilization += '{"title" : "' + e.site_name  + '", "subtitle" : "' + e.cluster_name + '", "ranges" : [0, 0, 4000], "measures" : [' + str(e.nodes_in_use) + ', ' + str(e.nodes_available) + '], "markers" : [' + str(e.total_nodes) + ']},'
+        
+        # TODO: debugging only
         available = randint(randint(0, e.total_nodes), e.total_nodes)
         remaining = e.total_nodes - available
-        
-        #utilization += '{"title" : "' + e.site_name  + '", "subtitle" : "' + e.cluster_name + '", "ranges" : [0, 0, 4000], "measures" : [' + str(e.nodes_in_use) + ', ' + str(e.nodes_available) + '], "markers" : [' + str(e.total_nodes) + ']},'
         utilization += '{"title" : "' + e.site_name  + '", "subtitle" : "' + e.cluster_name + '", "ranges" : [0, 0, 4000], "measures" : [' + str(available) + ', ' + str(remaining) + '], "markers" : [' + str(e.total_nodes) + ']},'
 
     # remove the trailing commas
@@ -73,5 +79,5 @@ def event(request):
     response = HttpResponse(data, content_type='text/event-stream')
     response['Cache-Control'] = 'no-cache'
     
-    # return to the caller
+    # return the resultant JSON to the caller
     return response
