@@ -1,12 +1,18 @@
 {% load static %}
 <!DOCTYPE html>
 <meta charset="utf-8">
+<body>
+	<div style="text-align:center; margin-bottom: 10px; font-size:20pt;">
+		NC-CERA Cluster Utilization Monitor
+	</div>	
+</body>
+
 <style>
 
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   margin: auto;
-  padding-top: 40px;
+  padding-top: 50px;
   position: relative;
   width: 960px;
 }
@@ -31,9 +37,6 @@ body {
 	 	// define the event endpoint 
  		var eSource = new EventSource("http://127.0.0.1:8000/ASGS_Mon/event");
 	
-		// TODO: Create div area for textual output of the title bar
- 		//var titleBar = d3.select("body").append("div").text("this is a title");
-
  		// detect message receipt
  		eSource.onmessage = function(event) 
  		{		
@@ -49,8 +52,10 @@ body {
  	 		// reload the visualization data
  			svg.data(utilization).call(chart.duration(1000));
  	 		
- 			// TODO: Create div area for textual output of the event and message
- 	 		//var eventMsgText = d3.select("body").append("div").text(event.data);
+ 	 		d3.select("#ta").remove();
+ 	 		
+ 			// TODO: Create div area for formatted textual output of the event and message
+ 	 		var eventMsgText = d3.select("body").append("div").attr("id", "ta").text(event.data);
  		}
  	}
 
@@ -62,10 +67,12 @@ var chart = d3.bullet()
     .width(width)
     .height(height);
 
+// TODO: see about moving to a dynamic initial load of the visualization 
 d3.json("{% static 'ASGS_Mon/utilview.json' %}", function(error, data) {
   if (error) throw error;
 
   var svg = d3.select("body").selectAll("svg")
+	.append("div").text("title")
     .data(data)
     .enter().append("svg")
       .attr("class", "bullet")
