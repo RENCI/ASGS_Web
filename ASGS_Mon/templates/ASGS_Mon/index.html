@@ -15,6 +15,9 @@
  	// detect message receipt
  	eSource.onmessage = function(event) 
  	{		
+		//write the received data to the page
+ 		document.getElementById("serverData").innerHTML = '<br /><br />FULL Payload dump:<br /><br />' + event.data;		
+
  		// parse the incoming data object
  		var theMsg = JSON.parse(event.data);
  		
@@ -49,23 +52,15 @@
 			
 			document.getElementById("span-" + siteName).title = "event type: " + eventType + ", event date: " + dateTime + ", advisory number: " + advisoryNumber + ", storm name: " + stormName + ", storm_number:" + stormNumber;			
  		}
- 		
-		//write the received data to the page
- 		document.getElementById("serverData").innerHTML = '<br /><br />FULL Payload dump:<br /><br />' + event.data;		
  	};
  }
  else {
  	document.getElementById("serverData").innerHTML="Whoops! Your browser doesn't receive server-sent events.";
  }
 
- String.prototype.lpad = function(padString, length) {
-		var str = this;
-	    while (str.length < length)
-	        str = padString + str;
-	    return str;
-	}
- 
 </script>
+
+<div id="serverData"></div><br />
 
 <table id=dashboard>
 	<tr>
@@ -76,8 +71,6 @@
 		<td><span id="span-GM"><div class="image" id="GM"></div></span></td>
 	</tr>
 </table>
-
-<div id="serverData"></div>
 
 </body>
 </html>
