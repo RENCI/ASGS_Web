@@ -9,9 +9,6 @@ from ASGS_Mon import models
 def index(request):
     return render(request, 'ASGS_Mon/index.html', {})
 
-def utilview(request):
-    return render(request, 'ASGS_Mon/utilview.html', {})
-
 # client-side event request handler
 def event(request):
 

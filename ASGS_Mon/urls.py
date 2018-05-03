@@ -21,5 +21,4 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('event/', views.event, name='event'),
-    path('utilview/', views.utilview, name='utilview')
 ]

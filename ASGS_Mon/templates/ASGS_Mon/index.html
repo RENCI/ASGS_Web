@@ -1,76 +1,145 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
-<head>
-	<link rel="stylesheet" type="text/css" href="{% static 'ASGS_Mon/style.css' %}" />
-</head>
+<meta charset="utf-8">
 <body>
+</body>
+<style>
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: auto;
+  padding-top: 50px;
+  position: relative;
+  width: 960px;
+  border: 1px solid black;
+}
+
+#hdrdiv {
+    background: url("{% static 'ASGS_Mon/images/logo.jpg' %}");
+    background-size: 100px 80px;
+    background-position: left top;    
+    background-repeat: no-repeat;
+    margin-left: 10px;
+}
+
+table {
+    margin-left: 10px;
+    border: 1px;
+}
+
+.bullet { font: 10px sans-serif; }
+.bullet .marker { stroke: #000; stroke-width: 2px; }
+.bullet .tick line { stroke: #666; stroke-width: .5px; }
+.bullet .range.s0 { fill: #eee; }
+.bullet .range.s1 { fill: #ddd; }
+.bullet .range.s2 { fill: #ccc; }
+.bullet .measure.s0 { fill: honeydew; }
+.bullet .measure.s1 { fill: green; }
+.bullet .title { font-size: 14px; font-weight: bold; }
+.bullet .subtitle { fill: #999; }
+
+</style>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="{% static 'ASGS_Mon/utilview.js' %}"></script>
 <script type="text/javascript">
-
-//check for browser support
- if(typeof(EventSource) !== "undefined") { 	
- 	// define the event endpoint 
- 	var eSource = new EventSource("http://127.0.0.1:8000/ASGS_Mon/event");
+	//check for browser support
+ 	if(typeof(EventSource) !== "undefined") { 	
+	 	// define the event endpoint 
+ 		var eSource = new EventSource("http://127.0.0.1:8000/ASGS_Mon/event");
 	
- 	// detect message receipt
- 	eSource.onmessage = function(event) 
- 	{		
-		//write the received data to the page
- 		document.getElementById("serverData").innerHTML = '<br /><br />FULL Payload dump:<br /><br />' + event.data;		
+ 		// detect message receipt
+ 		eSource.onmessage = function(event) 
+ 		{		
+ 	 		// parse the incoming data object
+ 	 		var theMsg = JSON.parse(event.data);
+ 	 		
+ 	 		// get a handle to the cluster data
+ 	 		var utilization = theMsg.utilization;
+ 	 		 	 		
+ 	 		// get a reference to the visualization component
+ 			var svg = d3.select("body").selectAll("svg");
+ 			
+ 	 		// reload the visualization data
+ 			svg.data(utilization).call(chart.duration(1000));
+ 	 		
+ 	 		// remove the previous event text data if its there
+ 	 		d3.select("#ta").remove();
+ 	 		
+ 			// Create div area for formatted textual output of the event and message
+ 	 		var eventMsgText = d3.select("body").append("div").attr("id", "ta").append("table").append("tr").append("td");
 
- 		// parse the incoming data object
- 		var theMsg = JSON.parse(event.data);
- 		
- 		// for each site passed
- 		for (var i=0; i<theMsg.sites.length; i++)
- 		{ 			
- 			// grab some data points
- 			var s = theMsg.sites[i];
- 			var siteName = s.site;
- 			
- 			var si = s.info
- 			
- 			var rnd = si.rnd;			
- 			var eventType = si.type;
- 			var clusterName = si.cluster_name;
- 			var dateTime = si.datetime;
- 			
- 			var advisoryNumber = si.hurricane.advisory_number;
- 			var stormName = si.hurricane.storm
- 			var stormNumber = si.hurricane.storm_number
- 			
- 			var message = si.weather.message;
- 			var messageType = si.weather.message_type;
- 				
- 			// create an array of colors
-	 		colors = ["{% static 'ASGS_Mon/images/green.jpg' %}", "{% static 'ASGS_Mon/images/yellow.jpg' %}", "{% static 'ASGS_Mon/images/red.jpg' %}", "{% static 'ASGS_Mon/images/black.jpg' %}"];
- 			
- 			// create an array of random text
-	 		text = ["Full site capacity available\ndetailed status:testing", "Site working and has capacity", "Site working, has no more capacity", "Site off-line" ];
-		
-			document.getElementById(siteName).innerHTML = '<img src="' + colors[rnd] + '" height="100" width="100"><h2><span>' + siteName + '</span></h2>';
-			
-			document.getElementById("span-" + siteName).title = "event type: " + eventType + ", event date: " + dateTime + ", advisory number: " + advisoryNumber + ", storm name: " + stormName + ", storm_number:" + stormNumber;			
+ 	 		// for each site passed
+ 	 		for (var i=0; i<theMsg.sites.length; i++)
+ 	 		{ 			
+ 	 			// grab the data points for the site
+ 	 			var s = theMsg.sites[i];
+ 	 			var siteName = s.site;
+ 	 			
+ 	 			// grab the info node
+ 	 			var si = s.info
+ 	 			
+ 	 			// get some event details
+ 	 			var eventType = si.type;
+ 	 			var clusterName = si.cluster_name;
+ 	 			var dateTime = si.datetime;
+ 	 			
+ 	 			// get some storm details
+ 	 			var advisoryNumber = si.hurricane.advisory_number;
+ 	 			var stormName = si.hurricane.storm
+ 	 			var stormNumber = si.hurricane.storm_number
+ 	 			
+ 	 			// get the message details
+ 	 			var message = si.weather.message;
+ 	 			var messageType = si.weather.message_type;
+ 	 				 		
+ 	 			// output the message data
+ 	 			eventMsgText.append("span-" + siteName).attr("style", "font-size:10pt").append("p").text("Site: " + siteName + ", Last update: " + Date() + ", Event type: " + eventType + ", Event date: " + dateTime + ", Advisory number: " + advisoryNumber + ", Storm name: " + stormName + ", Storm number:" + stormNumber);
+  	 		}
  		}
- 	};
- }
- else {
- 	document.getElementById("serverData").innerHTML="Whoops! Your browser doesn't receive server-sent events.";
- }
+ 	}
+
+var margin = {top: 5, right: 40, bottom: 20, left: 120},
+    width = 960 - margin.left - margin.right,
+    height = 50 - margin.top - margin.bottom;
+
+var chart = d3.bullet()
+    .width(width)
+    .height(height);
+
+// TODO: see about moving to a dynamic initial load of the visualization 
+d3.json("{% static 'ASGS_Mon/utilview.json' %}", function(error, data) {
+  if (error) throw error;
+
+  // create a title and put everything in a table
+  d3.select("body")
+  	.append("div")
+  		.attr("id", "hdrdiv")
+  		.attr("style", "text-align:center; margin-top:-35px; margin-bottom:15px; font-size:20pt;")
+  		.text("NC-CERA Weather Event and Cluster Utilization Monitor")
+  
+  var svg = d3.select("body").selectAll("svg")
+	.append("div").text("title")
+    .data(data)
+    .enter().append("svg")
+      .attr("class", "bullet")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+      .call(chart);
+
+  var title = svg.append("g")
+      .style("text-anchor", "end")
+      .attr("transform", "translate(-6," + height / 2 + ")");
+
+  title.append("text")
+      .attr("class", "title")
+      .text(function(d) { return d.title; });
+
+  title.append("text")
+      .attr("class", "subtitle")
+      .attr("dy", "1em")
+      .text(function(d) { return d.subtitle; });
+});
 
 </script>
-
-<div id="serverData"></div><br />
-
-<table id=dashboard>
-	<tr>
-		<td><span id="span-TACC"><div class="image" id="TACC"></div></span></td>
-		<td><span id="span-LSU"><div class="image" id="LSU"></div></span></td>
-		<td><span id="span-RENCI"><div class="image" id="RENCI"></div></span></td>
-		<td><span id="span-UCF"><div class="image" id="UCF"></div></span></td>
-		<td><span id="span-GM"><div class="image" id="GM"></div></span></td>
-	</tr>
-</table>
-
-</body>
-</html>
