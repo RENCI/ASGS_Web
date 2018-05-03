@@ -14,42 +14,42 @@ delete from ASGS_Mon_message;
 
 INSERT 
 INTO ASGS_Mon_event (id, event_ts, nodes_in_use, nodes_available, raw_data, event_type_id, message_id, site_id) 
-VALUES (0, datetime(), 100, 200, 'this is raw_data0', 0, 0, 0);
+VALUES (0, datetime(), 100, 200, 'raw_data 0', 0, 0, 0);
 
 INSERT 
 INTO ASGS_Mon_event (id, event_ts, nodes_in_use, nodes_available, raw_data, event_type_id, message_id, site_id) 
-VALUES (1, datetime(), 100, 200, 'this is raw_data1', 0, 1, 1);
+VALUES (1, datetime(), 100, 200, 'raw_data 1', 0, 1, 1);
 
 INSERT 
 INTO ASGS_Mon_event (id, event_ts, nodes_in_use, nodes_available, raw_data, event_type_id, message_id, site_id) 
-VALUES (2, datetime(), 100, 200, 'this is raw_data2', 0, 2, 2);
+VALUES (2, datetime(), 100, 200, 'raw_data 2', 0, 2, 2);
 
 INSERT 
 INTO ASGS_Mon_event (id, event_ts, nodes_in_use, nodes_available, raw_data, event_type_id, message_id, site_id) 
-VALUES (3, datetime(), 100, 200, 'this is raw_data3', 0, 3, 3);
+VALUES (3, datetime(), 100, 200, 'raw_data 3', 0, 3, 3);
 
 INSERT 
 INTO ASGS_Mon_event (id, event_ts, nodes_in_use, nodes_available, raw_data, event_type_id, message_id, site_id) 
-VALUES (4, datetime(), 100, 200, 'this is raw_data4', 0, 4, 4);
+VALUES (4, datetime(), 100, 200, 'raw_data 4', 0, 4, 4);
 
 
 INSERT 
 INTO ASGS_Mon_message (id, advisory_id, storm_name, storm_number, message, other, message_type_id) 
-VALUES (0, 'Advisory 0', 'TheBigOne0', '0', 'This is a big storm0', '', 0);
+VALUES (0, 'Advisory 0', 'Alpha', '0', 'This is storm Alpha', '', 0);
 
 INSERT 
 INTO ASGS_Mon_message (id, advisory_id, storm_name, storm_number, message, other, message_type_id) 
-VALUES (1, 'Advisory 1', 'TheBigOne1', '1', 'This is a big storm1', '', 1);
+VALUES (1, 'Advisory 1', 'Bravo', '1', 'This is storm Bravo', '', 1);
 
 INSERT 
 INTO ASGS_Mon_message (id, advisory_id, storm_name, storm_number, message, other, message_type_id) 
-VALUES (2, 'Advisory 2', 'TheBigOne2', '2', 'This is a big storm2', '', 2);
+VALUES (2, 'Advisory 2', 'Charlie', '2', 'This is storm Charlie', '', 2);
 
 INSERT 
 INTO ASGS_Mon_message (id, advisory_id, storm_name, storm_number, message, other, message_type_id) 
-VALUES (3, 'Advisory 3', 'TheBigOne3', '3', 'This is a big storm3', '', 3);
+VALUES (3, 'Advisory 3', 'Delta', '3', 'This is storm Delta', '', 3);
 
 INSERT 
 INTO ASGS_Mon_message (id, advisory_id, storm_name, storm_number, message, other, message_type_id) 
-VALUES (4, 'Advisory 4', 'TheBigOne4', '4', 'This is a big storm4', '', 4);
+VALUES (4, 'Advisory 4', 'Echo', '4', 'This is storm Echo', '', 4);
 */

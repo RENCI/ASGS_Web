@@ -2,11 +2,7 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <body>
-	<div style="text-align:center; margin-bottom: 10px; font-size:20pt;">
-		NC-CERA Cluster Utilization Monitor
-	</div>	
 </body>
-
 <style>
 
 body {
@@ -15,6 +11,20 @@ body {
   padding-top: 50px;
   position: relative;
   width: 960px;
+  border: 1px solid black;
+}
+
+#hdrdiv {
+    background: url("{% static 'ASGS_Mon/images/logo.jpg' %}");
+    background-size: 100px 80px;
+    background-position: left top;    
+    background-repeat: no-repeat;
+    margin-left: 10px;
+}
+
+table {
+    margin-left: 10px;
+    border: 1px;
 }
 
 .bullet { font: 10px sans-serif; }
@@ -23,8 +33,8 @@ body {
 .bullet .range.s0 { fill: #eee; }
 .bullet .range.s1 { fill: #ddd; }
 .bullet .range.s2 { fill: #ccc; }
-.bullet .measure.s0 { fill: lightsteelblue; }
-.bullet .measure.s1 { fill: steelblue; }
+.bullet .measure.s0 { fill: honeydew; }
+.bullet .measure.s1 { fill: green; }
 .bullet .title { font-size: 14px; font-weight: bold; }
 .bullet .subtitle { fill: #999; }
 
@@ -52,10 +62,39 @@ body {
  	 		// reload the visualization data
  			svg.data(utilization).call(chart.duration(1000));
  	 		
+ 	 		// remove the previous event text data if its there
  	 		d3.select("#ta").remove();
  	 		
- 			// TODO: Create div area for formatted textual output of the event and message
- 	 		var eventMsgText = d3.select("body").append("div").attr("id", "ta").text(event.data);
+ 			// Create div area for formatted textual output of the event and message
+ 	 		var eventMsgText = d3.select("body").append("div").attr("id", "ta").append("table").append("tr").append("td");
+
+ 	 		// for each site passed
+ 	 		for (var i=0; i<theMsg.sites.length; i++)
+ 	 		{ 			
+ 	 			// grab the data points for the site
+ 	 			var s = theMsg.sites[i];
+ 	 			var siteName = s.site;
+ 	 			
+ 	 			// grab the info node
+ 	 			var si = s.info
+ 	 			
+ 	 			// get some event details
+ 	 			var eventType = si.type;
+ 	 			var clusterName = si.cluster_name;
+ 	 			var dateTime = si.datetime;
+ 	 			
+ 	 			// get some storm details
+ 	 			var advisoryNumber = si.hurricane.advisory_number;
+ 	 			var stormName = si.hurricane.storm
+ 	 			var stormNumber = si.hurricane.storm_number
+ 	 			
+ 	 			// get the message details
+ 	 			var message = si.weather.message;
+ 	 			var messageType = si.weather.message_type;
+ 	 				 		
+ 	 			// output the message data
+ 	 			eventMsgText.append("span-" + siteName).attr("style", "font-size:10pt").append("p").text("Site: " + siteName + ", Last update: " + Date() + ", Event type: " + eventType + ", Event date: " + dateTime + ", Advisory number: " + advisoryNumber + ", Storm name: " + stormName + ", Storm number:" + stormNumber);
+  	 		}
  		}
  	}
 
@@ -71,6 +110,13 @@ var chart = d3.bullet()
 d3.json("{% static 'ASGS_Mon/utilview.json' %}", function(error, data) {
   if (error) throw error;
 
+  // create a title and put everything in a table
+  d3.select("body")
+  	.append("div")
+  		.attr("id", "hdrdiv")
+  		.attr("style", "text-align:center; margin-top:-35px; margin-bottom:15px; font-size:20pt;")
+  		.text("NC-CERA Cluster Utilization Monitor")
+  
   var svg = d3.select("body").selectAll("svg")
 	.append("div").text("title")
     .data(data)
