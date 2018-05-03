@@ -1,7 +1,7 @@
 [
-  {"title":"George Mason","subtitle":"Virginia","ranges":[0,0,4000],"measures":[0,0],"markers":[0]},
-  {"title":"LSU","subtitle":"Louisiana","ranges":[0,0,4000],"measures":[0,0],"markers":[0]},
   {"title":"RENCI","subtitle":"North Carolona","ranges":[0,0,4000],"measures":[0,0],"markers":[0]},
   {"title":"TACC","subtitle":"Texas","ranges":[0,0,4000],"measures":[0,0],"markers":[0]},
-  {"title":"UCF","subtitle":"Florida","ranges":[0,0,4000],"measures":[0,0],"markers":[0]}
+  {"title":"LSU","subtitle":"Louisiana","ranges":[0,0,4000],"measures":[0,0],"markers":[0]},
+  {"title":"UCF","subtitle":"Florida","ranges":[0,0,4000],"measures":[0,0],"markers":[0]},
+  {"title":"George Mason","subtitle":"Virginia","ranges":[0,0,4000],"measures":[0,0],"markers":[0]}
 ]
