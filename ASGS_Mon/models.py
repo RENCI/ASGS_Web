@@ -13,7 +13,7 @@ class Event_type_lu(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length = 50)
     description = models.CharField(max_length = 100)
-''
+
 class Message_type_lu(models.Model):    
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length = 50)

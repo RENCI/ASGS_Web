@@ -55,12 +55,12 @@ def event(request):
     
 
         # TODO: uncomment this and comment out below to go with live DB data        
-        #utilization += '{"title" : "' + e.site_name  + '", "subtitle" : "' + e.cluster_name + '", "ranges" : [0, 0, 4000], "measures" : [' + str(e.nodes_in_use) + ', ' + str(e.nodes_available) + '], "markers" : [' + str(e.total_nodes) + ']},'
+        utilization += '{"title" : "' + e.site_name  + '", "subtitle" : "' + e.cluster_name + '", "ranges" : [0, 0, 4000], "measures" : [' + str(e.nodes_in_use) + ', ' + str(e.nodes_available) + '], "markers" : [' + str(e.total_nodes) + ']},'
         
         # TODO: debugging only
-        available = randint(randint(0, e.total_nodes), e.total_nodes)
-        remaining = e.total_nodes - available
-        utilization += '{"title" : "' + e.site_name  + '", "subtitle" : "' + e.cluster_name + '", "ranges" : [0, 0, 4000], "measures" : [' + str(available) + ', ' + str(remaining) + '], "markers" : [' + str(e.total_nodes) + ']},'
+        #available = randint(randint(0, e.total_nodes), e.total_nodes)
+        #remaining = e.total_nodes - available
+        #utilization += '{"title" : "' + e.site_name  + '", "subtitle" : "' + e.cluster_name + '", "ranges" : [0, 0, 4000], "measures" : [' + str(available) + ', ' + str(remaining) + '], "markers" : [' + str(e.total_nodes) + ']},'
 
     # remove the trailing commas
     data = data[:-1]

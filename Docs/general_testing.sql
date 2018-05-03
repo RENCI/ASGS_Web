@@ -1,4 +1,14 @@
+/* sql to update an event with a new message */
+INSERT 
+INTO ASGS_Mon_message (advisory_id, storm_name, storm_number, message, other, message_type_id) 
+VALUES ('Advisory 41', 'Alpha', '0', 'This is storm Alpha', '', 0);
 
+UPDATE ASGS_Mon_event 
+SET event_ts=datetime(), message_id=(SELECT MAX(id) FROM ASGS_Mon_message), nodes_in_use=400, nodes_available=1024 
+WHERE site_id=0 
+
+
+/* sql to get event records
 select e.id AS 'id', s.name AS 'site_name', mt.name AS 'message_type_name', e.event_ts AS 'ts', s.cluster_name AS 'cluster_name'
                                 ,m.advisory_id AS 'advisory_id', m.message AS 'message_text', m.storm_name AS 'storm_name'
                                 ,m.storm_number AS 'storm_number', m.other AS 'other', et.name AS 'event_type_name'
@@ -7,8 +17,9 @@ select e.id AS 'id', s.name AS 'site_name', mt.name AS 'message_type_name', e.ev
                                 join ASGS_Mon_message_type_lu mt on mt.id=m.message_type_id 
                                 join ASGS_Mon_site_lu s on s.id=e.site_id 
                                 join ASGS_Mon_event_type_lu et on et.id=e.event_type_id
-                                
-/*
+*/                         
+       
+/* sql to reload some events
 delete from ASGS_Mon_event;
 delete from ASGS_Mon_message;
 
