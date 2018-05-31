@@ -26,6 +26,9 @@ class Message(models.Model):
     storm_name = models.CharField(max_length = 50)
     storm_number = models.CharField(max_length = 50)
     message = models.CharField(max_length = 250)
+    process = models.CharField(max_length = 100)
+    pctcomplete = models.DecimalField(max_digits=100, decimal_places=2)
+    state = models.CharField(max_length = 10)
     other = models.CharField(max_length = 250)
     
 class Event(models.Model):
