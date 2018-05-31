@@ -82,6 +82,9 @@ table {
  	 			var eventType = si.type;
  	 			var clusterName = si.cluster_name;
  	 			var dateTime = si.datetime;
+                                var process = si.process;
+                                var pctcomplete = si.pctcomplete;
+                                var state = si.state;
  	 			
  	 			// get some storm details
  	 			var advisoryNumber = si.hurricane.advisory_number;
@@ -93,7 +96,7 @@ table {
  	 			var messageType = si.weather.message_type;
  	 				 		
  	 			// output the message data
- 	 			eventMsgText.append("span-" + siteName).attr("style", "font-size:10pt").append("p").text("Site: " + siteName + ", Last update: " + Date() + ", Event type: " + eventType + ", Event date: " + dateTime + ", Advisory number: " + advisoryNumber + ", Storm name: " + stormName + ", Storm number:" + stormNumber);
+ 	 			eventMsgText.append("span-" + siteName).attr("style", "font-size:10pt").append("p").text("Site: " + siteName + ", Last update: " + Date() + ", Event type: " + eventType + ", Event date: " + dateTime + ", Advisory number: " + advisoryNumber + ", Storm name: " + stormName + ", Storm number: " + stormNumber + ", Process: " + process + ", Percent Complete: " + pctcomplete + ", State: " + state + ", Message: " +  message);
   	 		}
  		}
  	}
@@ -115,7 +118,7 @@ d3.json("{% static 'ASGS_Mon/utilview.json' %}", function(error, data) {
   	.append("div")
   		.attr("id", "hdrdiv")
   		.attr("style", "text-align:center; margin-top:-35px; margin-bottom:15px; font-size:20pt;")
-  		.text("NC-CERA Weather Event and Cluster Utilization Monitor")
+  		.text("ASGS Operational Awareness Dashboard")
   
   var svg = d3.select("body").selectAll("svg")
 	.append("div").text("title")

@@ -21,7 +21,8 @@ def event(request):
     # TODO: use native django object models to get this data rather than direct SQL
     # TODO: modify result set to group by site with max(event id)
     for e in models.Event.objects.raw('select e.id AS ''id'', s.name AS ''site_name'', mt.name AS ''message_type_name'', e.event_ts AS ''ts'', s.cluster_name AS ''cluster_name'' \
-                                ,m.advisory_id AS ''advisory_id'', m.message AS ''message_text'', m.storm_name AS ''storm_name'', s.nodes AS ''total_nodes'', e.nodes_in_use AS ''nodes_in_use'' \
+                                ,m.advisory_id AS ''advisory_id'', m.message AS ''message_text'', m.process AS ''process'', m.pctcomplete AS ''pctcomplete'', m.state AS ''state'' \
+                                ,m.storm_name AS ''storm_name'', s.nodes AS ''total_nodes'', e.nodes_in_use AS ''nodes_in_use'' \
                                 ,m.storm_number AS ''storm_number'', m.other AS ''other'', et.name AS ''event_type_name'', e.nodes_available AS ''nodes_available'' \
                                 from ASGS_Mon_event e \
                                 join ASGS_Mon_message m on m.id=e.message_id \
@@ -40,6 +41,9 @@ def event(request):
                             "nodes_in_use" : ' + str(e.nodes_in_use) + ', \
                             "nodes_available" : ' + str(e.nodes_available) + ', \
                             "type" : "' + str(e.event_type_name) + '", \
+                            "process" : "' + e.process + '", \
+                            "pctcomplete" : "' + str(e.pctcomplete) + '", \
+                            "state" : "' + e.state + '", \
                             "datetime" : "' + str(e.ts) + '", \
                             "hurricane" : \
                             { \
