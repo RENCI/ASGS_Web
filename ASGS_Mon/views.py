@@ -12,7 +12,7 @@ def index(request):
 # client-side event request handler
 def event(request):
     # define a variable that controls the event source reload time.
-    retryMilliSec = '10000'
+    retryMilliSec = '3000'
     
     # compile the info to send back   
     data = 'retry:' + retryMilliSec + '\ndata: {"sites" : ['
