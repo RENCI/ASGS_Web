@@ -40,6 +40,7 @@ class Event(models.Model):
     event_ts = models.DateTimeField()
     advisory_id = models.CharField(max_length = 50)
     pct_complete = models.FloatField()
+    process = models.CharField(max_length = 100)
     host_start_file = models.CharField(max_length = 1000)
     raw_data = models.CharField(max_length = 4000)
 

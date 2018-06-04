@@ -2,7 +2,7 @@ BEGIN;
 --
 -- Create model Event
 --
-CREATE TABLE "ASGS_Mon_event" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "event_ts" datetime NOT NULL, "advisory_id" varchar(50) NOT NULL, "pct_complete" real NOT NULL, "host_start_file" varchar(1000) NOT NULL, "raw_data" varchar(4000) NOT NULL);
+CREATE TABLE "ASGS_Mon_event" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "event_ts" datetime NOT NULL, "advisory_id" varchar(50) NOT NULL, "pct_complete" real NOT NULL, "process" varchar(100) NOT NULL, "host_start_file" varchar(1000) NOT NULL, "raw_data" varchar(4000) NOT NULL);
 --
 -- Create model Event_group
 --
@@ -48,16 +48,16 @@ CREATE INDEX "ASGS_Mon_event_group_state_type_id_60fd7afd" ON "ASGS_Mon_event_gr
 -- Add field event_group to event
 --
 ALTER TABLE "ASGS_Mon_event" RENAME TO "ASGS_Mon_event__old";
-CREATE TABLE "ASGS_Mon_event" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "event_ts" datetime NOT NULL, "advisory_id" varchar(50) NOT NULL, "pct_complete" real NOT NULL, "host_start_file" varchar(1000) NOT NULL, "raw_data" varchar(4000) NOT NULL, "event_group_id" integer NOT NULL REFERENCES "ASGS_Mon_event_group" ("id") DEFERRABLE INITIALLY DEFERRED);
-INSERT INTO "ASGS_Mon_event" ("id", "event_ts", "advisory_id", "pct_complete", "host_start_file", "raw_data", "event_group_id") SELECT "id", "event_ts", "advisory_id", "pct_complete", "host_start_file", "raw_data", NULL FROM "ASGS_Mon_event__old";
+CREATE TABLE "ASGS_Mon_event" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "event_ts" datetime NOT NULL, "advisory_id" varchar(50) NOT NULL, "pct_complete" real NOT NULL, "process" varchar(100) NOT NULL, "host_start_file" varchar(1000) NOT NULL, "raw_data" varchar(4000) NOT NULL, "event_group_id" integer NOT NULL REFERENCES "ASGS_Mon_event_group" ("id") DEFERRABLE INITIALLY DEFERRED);
+INSERT INTO "ASGS_Mon_event" ("id", "event_ts", "advisory_id", "pct_complete", "process", "host_start_file", "raw_data", "event_group_id") SELECT "id", "event_ts", "advisory_id", "pct_complete", "process", "host_start_file", "raw_data", NULL FROM "ASGS_Mon_event__old";
 DROP TABLE "ASGS_Mon_event__old";
 CREATE INDEX "ASGS_Mon_event_event_group_id_df49e39a" ON "ASGS_Mon_event" ("event_group_id");
 --
 -- Add field event_type to event
 --
 ALTER TABLE "ASGS_Mon_event" RENAME TO "ASGS_Mon_event__old";
-CREATE TABLE "ASGS_Mon_event" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "event_ts" datetime NOT NULL, "advisory_id" varchar(50) NOT NULL, "pct_complete" real NOT NULL, "host_start_file" varchar(1000) NOT NULL, "raw_data" varchar(4000) NOT NULL, "event_group_id" integer NOT NULL REFERENCES "ASGS_Mon_event_group" ("id") DEFERRABLE INITIALLY DEFERRED, "event_type_id" integer NOT NULL REFERENCES "ASGS_Mon_event_type_lu" ("id") DEFERRABLE INITIALLY DEFERRED);
-INSERT INTO "ASGS_Mon_event" ("id", "event_ts", "advisory_id", "pct_complete", "host_start_file", "raw_data", "event_group_id", "event_type_id") SELECT "id", "event_ts", "advisory_id", "pct_complete", "host_start_file", "raw_data", "event_group_id", NULL FROM "ASGS_Mon_event__old";
+CREATE TABLE "ASGS_Mon_event" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "event_ts" datetime NOT NULL, "advisory_id" varchar(50) NOT NULL, "pct_complete" real NOT NULL, "process" varchar(100) NOT NULL, "host_start_file" varchar(1000) NOT NULL, "raw_data" varchar(4000) NOT NULL, "event_group_id" integer NOT NULL REFERENCES "ASGS_Mon_event_group" ("id") DEFERRABLE INITIALLY DEFERRED, "event_type_id" integer NOT NULL REFERENCES "ASGS_Mon_event_type_lu" ("id") DEFERRABLE INITIALLY DEFERRED);
+INSERT INTO "ASGS_Mon_event" ("id", "event_ts", "advisory_id", "pct_complete", "process", "host_start_file", "raw_data", "event_group_id", "event_type_id") SELECT "id", "event_ts", "advisory_id", "pct_complete", "process", "host_start_file", "raw_data", "event_group_id", NULL FROM "ASGS_Mon_event__old";
 DROP TABLE "ASGS_Mon_event__old";
 CREATE INDEX "ASGS_Mon_event_event_group_id_df49e39a" ON "ASGS_Mon_event" ("event_group_id");
 CREATE INDEX "ASGS_Mon_event_event_type_id_3b972d2a" ON "ASGS_Mon_event" ("event_type_id");
@@ -65,8 +65,8 @@ CREATE INDEX "ASGS_Mon_event_event_type_id_3b972d2a" ON "ASGS_Mon_event" ("event
 -- Add field site to event
 --
 ALTER TABLE "ASGS_Mon_event" RENAME TO "ASGS_Mon_event__old";
-CREATE TABLE "ASGS_Mon_event" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "event_ts" datetime NOT NULL, "advisory_id" varchar(50) NOT NULL, "pct_complete" real NOT NULL, "host_start_file" varchar(1000) NOT NULL, "raw_data" varchar(4000) NOT NULL, "event_group_id" integer NOT NULL REFERENCES "ASGS_Mon_event_group" ("id") DEFERRABLE INITIALLY DEFERRED, "event_type_id" integer NOT NULL REFERENCES "ASGS_Mon_event_type_lu" ("id") DEFERRABLE INITIALLY DEFERRED, "site_id" integer NOT NULL REFERENCES "ASGS_Mon_site_lu" ("id") DEFERRABLE INITIALLY DEFERRED);
-INSERT INTO "ASGS_Mon_event" ("id", "event_ts", "advisory_id", "pct_complete", "host_start_file", "raw_data", "event_group_id", "event_type_id", "site_id") SELECT "id", "event_ts", "advisory_id", "pct_complete", "host_start_file", "raw_data", "event_group_id", "event_type_id", NULL FROM "ASGS_Mon_event__old";
+CREATE TABLE "ASGS_Mon_event" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "event_ts" datetime NOT NULL, "advisory_id" varchar(50) NOT NULL, "pct_complete" real NOT NULL, "process" varchar(100) NOT NULL, "host_start_file" varchar(1000) NOT NULL, "raw_data" varchar(4000) NOT NULL, "event_group_id" integer NOT NULL REFERENCES "ASGS_Mon_event_group" ("id") DEFERRABLE INITIALLY DEFERRED, "event_type_id" integer NOT NULL REFERENCES "ASGS_Mon_event_type_lu" ("id") DEFERRABLE INITIALLY DEFERRED, "site_id" integer NOT NULL REFERENCES "ASGS_Mon_site_lu" ("id") DEFERRABLE INITIALLY DEFERRED);
+INSERT INTO "ASGS_Mon_event" ("id", "event_ts", "advisory_id", "pct_complete", "process", "host_start_file", "raw_data", "event_group_id", "event_type_id", "site_id") SELECT "id", "event_ts", "advisory_id", "pct_complete", "process", "host_start_file", "raw_data", "event_group_id", "event_type_id", NULL FROM "ASGS_Mon_event__old";
 DROP TABLE "ASGS_Mon_event__old";
 CREATE INDEX "ASGS_Mon_event_event_group_id_df49e39a" ON "ASGS_Mon_event" ("event_group_id");
 CREATE INDEX "ASGS_Mon_event_event_type_id_3b972d2a" ON "ASGS_Mon_event" ("event_type_id");

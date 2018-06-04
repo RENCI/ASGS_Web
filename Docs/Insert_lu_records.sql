@@ -1,11 +1,11 @@
-delete from ASGS_Mon_site_lu
+delete from ASGS_Mon_site_lu;
 INSERT INTO ASGS_Mon_site_lu (id, name, description, cluster_name, tech_contact, phys_location, state_type_id) VALUES (0, 'RENCI', '', 'Hatteras', '', 'NC', 13);
 INSERT INTO ASGS_Mon_site_lu (id, name, description, cluster_name, tech_contact, phys_location, state_type_id) VALUES (1, 'TACC', '', 'TACC cluster', '', 'TX', 13);
 INSERT INTO ASGS_Mon_site_lu (id, name, description, cluster_name, tech_contact, phys_location, state_type_id) VALUES (2, 'LSU', '', 'LSU cluster', '', 'LA', 13);
 INSERT INTO ASGS_Mon_site_lu (id, name, description, cluster_name, tech_contact, phys_location, state_type_id) VALUES (3, 'UCF', '', 'UCF cluster', '', 'FL', 13);
 INSERT INTO ASGS_Mon_site_lu (id, name, description, cluster_name, tech_contact, phys_location, state_type_id) VALUES (4, 'GM', '', 'GM cluster', '', 'VA', 13);
 
-delete from ASGS_Mon_event_type_lu
+delete from ASGS_Mon_event_type_lu;
 INSERT INTO ASGS_Mon_event_type_lu (id, name, description, view_order) VALUES (0, 'RSRT', 'New run has started.', 0);
 INSERT INTO ASGS_Mon_event_type_lu (id, name, description, view_order) VALUES (1, 'PRE1', 'Pre-run 1 operations in progress.', 1);
 INSERT INTO ASGS_Mon_event_type_lu (id, name, description, view_order) VALUES (2, 'NOWC', 'NowCast operations in progress.', 2);
