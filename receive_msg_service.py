@@ -26,24 +26,28 @@ def callback(ch, method, properties, body):
 
     try:
         msg_obj = json.loads(body)
-        hurricane = msg_obj.get("hurricane")
 
         sql_fields = "INSERT INTO ASGS_Mon_message ("
         sql_values = " VALUES ("
 
-    # ****************NEED TO CHANGE DB TO MAKE NULL VALUES ALLOWABLE FOR THESE
+    # ****************NEED TO CHANGE DB TO MAKE NULL VALUES ALLOWABLE FOR THESE ??
         sql_fields += "advisory_id, "
-        sql_fields += "storm_name, "
-        sql_fields += "storm_number, "
-        if (hurricane is not None):
-            if (hurricane.get("advisory_id") is not None and len(hurricane["advisory_id"]) > 0):
-                sql_values += "'" + hurricane["advisory_id"] + "', "
-            if (hurricane.get("storm_name") is not None and len(hurricane["storm_name"]) > 0):
-                sql_values += "'" + hurricane["storm_name"] + "', "
-            if (hurricane.get("storm_number") is not None and len(hurricane["storm_number"]) > 0):
-                sql_values += "'" + hurricane["storm_number"] + "', "        
+        if (msg_obj.get("advisory_id") is not None and len(msg_obj["advisory_id"]) > 0):
+            sql_values += "'" + msg_obj["advisory_id"] + "', "
         else:
-            sql_values += "'N/A', 'N/A', 'N/A', "
+            sql_values += "'N/A', "
+
+        sql_fields += "storm_name, "
+        if (msg_obj.get("storm_name") is not None and len(msg_obj["storm_name"]) > 0):
+            sql_values += "'" + msg_obj["storm_name"] + "', "
+        else:
+            sql_values += "'N/A', "
+
+        sql_fields += "storm_number, "
+        if (msg_obj.get("storm_number") is not None and len(msg_obj["storm_number"]) > 0):
+            sql_values += "'" + msg_obj["storm_number"] + "', "        
+        else:
+            sql_values += "'N/A', "
 
         if (msg_obj.get("message") is not None and len(msg_obj["message"]) > 0):
             # get rid of any special chars that might mess up sqlite
