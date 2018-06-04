@@ -49,7 +49,7 @@ def event(request):
     
 
         # TODO: uncomment this and comment out below to go with live DB data        
-        utilization += '{"title" : "' + e.site_name  + '", "subtitle" : "' + e.cluster_name + '", "ranges" : [0, 0, 100], "measures" : [0,' + str(e.pct_complete) + '], "markers" : [' + str(e.pct_complete) + ']},'
+        utilization += '{"title" : "' + e.site_name  + '", "subtitle" : "' + e.cluster_name + '", "message" : "' + e.message_text + '", "ranges" : [0, 0, 100], "measures" : [0,' + str(e.pct_complete) + '], "markers" : [0]},'
         
         # TODO: debugging only
         #available = randint(randint(0, e.total_nodes), e.total_nodes)

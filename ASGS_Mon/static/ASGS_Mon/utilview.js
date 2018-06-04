@@ -13,6 +13,9 @@ d3.bullet = function() {
   // For each small multiple…
   function bullet(g) {
     g.each(function(d, i) {
+      // update the message text
+      d3.select("#" + d.title).text(d.message);
+    	
       var rangez = ranges.call(this, d, i).slice().sort(d3.descending),
           markerz = markers.call(this, d, i).slice().sort(d3.descending),
           measurez = measures.call(this, d, i).slice().sort(d3.descending),
