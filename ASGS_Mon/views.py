@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.template.context_processors import request
 from django.http import HttpResponse
 
 from random import randint 
@@ -20,15 +19,14 @@ def event(request):
     
     # TODO: use native django object models to get this data rather than direct SQL
     # TODO: modify result set to group by site with max(event id)
-    for e in models.Event.objects.raw('select e.id AS ''id'', s.name AS ''site_name'', mt.name AS ''message_type_name'', e.event_ts AS ''ts'', s.cluster_name AS ''cluster_name'' \
-                                ,m.advisory_id AS ''advisory_id'', m.message AS ''message_text'', m.process AS ''process'', m.pctcomplete AS ''pctcomplete'', m.state AS ''state'' \
-                                ,m.storm_name AS ''storm_name'', s.nodes AS ''total_nodes'', e.nodes_in_use AS ''nodes_in_use'' \
-                                ,m.storm_number AS ''storm_number'', m.other AS ''other'', et.name AS ''event_type_name'', e.nodes_available AS ''nodes_available'' \
-                                from ASGS_Mon_event e \
-                                join ASGS_Mon_message m on m.id=e.message_id \
-                                join ASGS_Mon_message_type_lu mt on mt.id=m.message_type_id \
-                                join ASGS_Mon_site_lu s on s.id=e.site_id \
-                                join ASGS_Mon_event_type_lu et on et.id=e.event_type_id') :    
+    for e in models.Event.objects.raw('select e.id AS ''id'', s.name AS ''site_name'', etl.name AS ''event_type_name'', e.event_ts AS ''ts'', s.cluster_name AS ''cluster_name'' \
+                                               ,eg.advisory_id AS ''advisory_id'', e.raw_data AS ''message_text'', e.pct_complete AS ''pct_complete'', stl.name AS ''state'' \
+                                               ,eg.storm_name AS ''storm_name'', eg.storm_number AS ''storm_number'', etl.name AS ''event_type_name'', e.process as ''process'' \
+                                       from ASGS_Mon_event e \
+                                       join ASGS_Mon_site_lu s ON s.id=e.site_id join ASGS_Mon_event_group eg ON eg.id=e.event_group_id join ASGS_Mon_event_type_lu etl ON etl.id=e.event_type_id \
+                                       join ASGS_Mon_state_type_lu stl ON stl.id=eg.state_type_id \
+                                       inner join (select max(id) AS id from ASGS_Mon_event group by site_id) AS meid ON meid.id=e.id \
+                                       inner join (select max(id) AS id, site_id from ASGS_Mon_event_group group by site_id) AS megid ON megid.id=e.event_group_id AND megid.site_id=e.site_id;') :    
         # TODO: move to use native python arrays and then make call to convert to JSON
         # for each record returned    
         data += '{ \
@@ -37,31 +35,21 @@ def event(request):
                         { \
                             "rnd" : ' + str(randint(0,3)) + ', \
                             "cluster_name" : "' + e.cluster_name + '", \
-                            "nodes" : ' + str(e.total_nodes) + ', \
-                            "nodes_in_use" : ' + str(e.nodes_in_use) + ', \
-                            "nodes_available" : ' + str(e.nodes_available) + ', \
                             "type" : "' + str(e.event_type_name) + '", \
-                            "process" : "' + e.process + '", \
-                            "pctcomplete" : "' + str(e.pctcomplete) + '", \
+                            "pct_complete" : "' + str(e.pct_complete) + '", \
+                            "process" : "' + str(e.process) + '", \
                             "state" : "' + e.state + '", \
                             "datetime" : "' + str(e.ts) + '", \
-                            "hurricane" : \
-                            { \
-                                "storm" : "' + e.storm_name + '", \
-                                "storm_number" : "' + e.storm_number + '", \
-                                "advisory_number" : "' + e.advisory_id + '" \
-                            }, \
-                            "weather" :  \
-                            { \
-                                "message" : "' + e.message_text + '", \
-                                "message_type" : "' + str(e.message_type_name) + '" \
-                            } \
+                            "message" : "' + e.message_text + '", \
+                            "storm" : "' + e.storm_name + '", \
+                            "storm_number" : "' + e.storm_number + '", \
+                            "advisory_number" : "' + e.advisory_id + '" \
                         } \
                   },'
     
 
         # TODO: uncomment this and comment out below to go with live DB data        
-        utilization += '{"title" : "' + e.site_name  + '", "subtitle" : "' + e.cluster_name + '", "ranges" : [0, 0, 4000], "measures" : [' + str(e.nodes_in_use) + ', ' + str(e.nodes_available) + '], "markers" : [' + str(e.total_nodes) + ']},'
+        utilization += '{"title" : "' + e.site_name  + '", "subtitle" : "' + e.cluster_name + '", "ranges" : [0, 0, 100], "measures" : [0,' + str(e.pct_complete) + '], "markers" : [' + str(e.pct_complete) + ']},'
         
         # TODO: debugging only
         #available = randint(randint(0, e.total_nodes), e.total_nodes)

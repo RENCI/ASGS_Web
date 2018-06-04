@@ -52,15 +52,12 @@ table {
  		{		
  	 		// parse the incoming data object
  	 		var theMsg = JSON.parse(event.data);
- 	 		
- 	 		// get a handle to the cluster data
- 	 		var utilization = theMsg.utilization;
  	 		 	 		
  	 		// get a reference to the visualization component
  			var svg = d3.select("body").selectAll("svg");
  			
  	 		// reload the visualization data
- 			svg.data(utilization).call(chart.duration(1000));
+ 			svg.data(theMsg.utilization).call(chart.duration(1000));
  	 		
  	 		// remove the previous event text data if its there
  	 		d3.select("#ta").remove();
@@ -82,21 +79,20 @@ table {
  	 			var eventType = si.type;
  	 			var clusterName = si.cluster_name;
  	 			var dateTime = si.datetime;
-                                var process = si.process;
-                                var pctcomplete = si.pctcomplete;
-                                var state = si.state;
+                var process = si.process;
+                var pct_complete = si.pct_complete;
+                var state = si.state;
  	 			
  	 			// get some storm details
- 	 			var advisoryNumber = si.hurricane.advisory_number;
- 	 			var stormName = si.hurricane.storm
- 	 			var stormNumber = si.hurricane.storm_number
+ 	 			var advisoryNumber = si.advisory_number;
+ 	 			var stormName = si.storm
+ 	 			var stormNumber = si.storm_number
  	 			
  	 			// get the message details
- 	 			var message = si.weather.message;
- 	 			var messageType = si.weather.message_type;
- 	 				 		
+ 	 			var message = si.message;
+
  	 			// output the message data
- 	 			eventMsgText.append("span-" + siteName).attr("style", "font-size:10pt").append("p").text("Site: " + siteName + ", Last update: " + Date() + ", Event type: " + eventType + ", Event date: " + dateTime + ", Advisory number: " + advisoryNumber + ", Storm name: " + stormName + ", Storm number: " + stormNumber + ", Process: " + process + ", Percent Complete: " + pctcomplete + ", State: " + state + ", Message: " +  message);
+ 	 			eventMsgText.append("span-" + siteName).attr("style", "font-size:10pt").append("p").text("Site: " + siteName + ", Last update: " + Date() + ", Event type: " + eventType + ", Event date: " + dateTime + ", Advisory number: " + advisoryNumber + ", Storm name: " + stormName + ", Storm number: " + stormNumber + ", Percent Complete: " + pct_complete + ", State: " + state + ", Message: " +  message);
   	 		}
  		}
  	}

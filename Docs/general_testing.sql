@@ -1,66 +1,49 @@
-/* sql to update an event with a new message */
-INSERT 
-INTO ASGS_Mon_message (advisory_id, storm_name, storm_number, message, other, message_type_id) 
-VALUES ('Advisory 41', 'Alpha', '0', 'This is storm Alpha', '', 0);
-
-UPDATE ASGS_Mon_event 
-SET event_ts=datetime(), message_id=(SELECT MAX(id) FROM ASGS_Mon_message), nodes_in_use=400, nodes_available=1024 
-WHERE site_id=0 
-
-
-/* sql to get event records
-select e.id AS 'id', s.name AS 'site_name', mt.name AS 'message_type_name', e.event_ts AS 'ts', s.cluster_name AS 'cluster_name'
-                                ,m.advisory_id AS 'advisory_id', m.message AS 'message_text', m.storm_name AS 'storm_name'
-                                ,m.storm_number AS 'storm_number', m.other AS 'other', et.name AS 'event_type_name'
-                                from ASGS_Mon_event e
-                                join ASGS_Mon_message m on m.id=e.message_id
-                                join ASGS_Mon_message_type_lu mt on mt.id=m.message_type_id 
-                                join ASGS_Mon_site_lu s on s.id=e.site_id 
-                                join ASGS_Mon_event_type_lu et on et.id=e.event_type_id
-*/                         
-       
-/* sql to reload some events
+/* 
+delete from ASGS_Mon_event_group;
 delete from ASGS_Mon_event;
-delete from ASGS_Mon_message;
 
-INSERT 
-INTO ASGS_Mon_event (id, event_ts, nodes_in_use, nodes_available, raw_data, event_type_id, message_id, site_id) 
-VALUES (0, datetime(), 100, 200, 'raw_data 0', 0, 0, 0);
+select * from ASGS_Mon_event_group
+select * from ASGS_Mon_event
 
-INSERT 
-INTO ASGS_Mon_event (id, event_ts, nodes_in_use, nodes_available, raw_data, event_type_id, message_id, site_id) 
-VALUES (1, datetime(), 100, 200, 'raw_data 1', 0, 1, 1);
+-- it all starts with an event group
+INSERT INTO ASGS_Mon_event_group (event_group_ts, storm_name, storm_number, advisory_id, final_product, site_id, state_type_id) VALUES (datetime(), 'Alpha', '1', '1', 'product', 0, 0);
+INSERT INTO ASGS_Mon_event_group (event_group_ts, storm_name, storm_number, advisory_id, final_product, site_id, state_type_id) VALUES (datetime(), 'Beta', '2', '2', 'product', 1, 0);
+INSERT INTO ASGS_Mon_event_group (event_group_ts, storm_name, storm_number, advisory_id, final_product, site_id, state_type_id) VALUES (datetime(), 'Beta', '2', '2', 'product', 1, 3);
 
-INSERT 
-INTO ASGS_Mon_event (id, event_ts, nodes_in_use, nodes_available, raw_data, event_type_id, message_id, site_id) 
-VALUES (2, datetime(), 100, 200, 'raw_data 2', 0, 2, 2);
+-- then the events flow in
+INSERT INTO ASGS_Mon_event (event_ts, advisory_id, process, pct_complete, host_start_file, raw_data, event_group_id, event_type_id, site_id) VALUES (datetime(), '1', 'the process', 0, 'a host start file', 'Run start', 1, 0, 0);
+UPDATE ASGS_Mon_site_lu SET state_type_id = 1; 
 
-INSERT 
-INTO ASGS_Mon_event (id, event_ts, nodes_in_use, nodes_available, raw_data, event_type_id, message_id, site_id) 
-VALUES (3, datetime(), 100, 200, 'raw_data 3', 0, 3, 3);
+INSERT INTO ASGS_Mon_event (event_ts, advisory_id, process, pct_complete, host_start_file, raw_data, event_group_id, event_type_id, site_id) VALUES (datetime(), '2', 'the process', 0, 'a host start file', 'Run start', 2, 0, 1);
+UPDATE ASGS_Mon_site_lu SET state_type_id = 1; 
 
-INSERT 
-INTO ASGS_Mon_event (id, event_ts, nodes_in_use, nodes_available, raw_data, event_type_id, message_id, site_id) 
-VALUES (4, datetime(), 100, 200, 'raw_data 4', 0, 4, 4);
+INSERT INTO ASGS_Mon_event (event_ts, advisory_id, process, pct_complete, host_start_file, raw_data, event_group_id, event_type_id, site_id) VALUES (datetime(), '1', 'the process', 0, 'a host start file', 'Pre 1', 1, 1, 0);
 
 
-INSERT 
-INTO ASGS_Mon_message (id, advisory_id, storm_name, storm_number, message, other, message_type_id) 
-VALUES (0, 'Advisory 0', 'Alpha', '0', 'This is storm Alpha', '', 0);
+INSERT INTO ASGS_Mon_event (event_ts, advisory_id, process, pct_complete, host_start_file, raw_data, event_group_id, event_type_id, site_id) VALUES (datetime(), '1', 'the process', 0, 'a host start file', 'NowCast', 1, 2, 0);
+INSERT INTO ASGS_Mon_event (event_ts, advisory_id, process, pct_complete, host_start_file, raw_data, event_group_id, event_type_id, site_id) VALUES (datetime(), '1', 'the process', 0, 'a host start file', 'Pre 2', 1, 3, 0);
+INSERT INTO ASGS_Mon_event (event_ts, advisory_id, process, pct_complete, host_start_file, raw_data, event_group_id, event_type_id, site_id) VALUES (datetime(), '1', 'the process', 0, 'a host start file', 'Forecast', 1, 4, 0);
+INSERT INTO ASGS_Mon_event (event_ts, advisory_id, process, pct_complete, host_start_file, raw_data, event_group_id, event_type_id, site_id) VALUES (datetime(), '1', 'the process', 0, 'a host start file', 'Post run', 1, 5, 0);
 
-INSERT 
-INTO ASGS_Mon_message (id, advisory_id, storm_name, storm_number, message, other, message_type_id) 
-VALUES (1, 'Advisory 1', 'Bravo', '1', 'This is storm Bravo', '', 1);
+INSERT INTO ASGS_Mon_event (event_ts, advisory_id, process, pct_complete, host_start_file, raw_data, event_group_id, event_type_id, site_id) VALUES (datetime(), '1', 'the process', 0, 'a start file', 'Run end', 1, 6, 0);
+UPDATE Site_lu SET state_type_id = 5; 
+*/
 
-INSERT 
-INTO ASGS_Mon_message (id, advisory_id, storm_name, storm_number, message, other, message_type_id) 
-VALUES (2, 'Advisory 2', 'Charlie', '2', 'This is storm Charlie', '', 2);
+/*
+-- this query gets the latest event groups across all sites
+select sl.name, stl.name, eg.* 
+from ASGS_Mon_event_group eg 
+join ASGS_Mon_state_type_lu stl on stl.id=eg.state_type_id 
+join ASGS_Mon_site_lu sl on sl.id=eg.site_id
+inner join (select max(id) as id, site_id from ASGS_Mon_event_group group by site_id) AS megid on megid.id=eg.id and megid.site_id=eg.site_id;
+ 
+-- this query gets the latest event from the latest event group across all sites
+select sl.name, eg.storm_name, etl.name,  e.* 
+from ASGS_Mon_event e 
+join ASGS_Mon_site_lu sl on sl.id=e.site_id 
+join ASGS_Mon_event_group eg on eg.id=e.event_group_id 
+join ASGS_Mon_event_type_lu etl on etl.id=e.event_type_id
+inner join (select max(id) as id from ASGS_Mon_event group by site_id) AS meid on meid.id=e.id
+inner join (select max(id) as id, site_id from ASGS_Mon_event_group group by site_id) AS megid on megid.id=e.event_group_id and megid.site_id=e.site_id;
 
-INSERT 
-INTO ASGS_Mon_message (id, advisory_id, storm_name, storm_number, message, other, message_type_id) 
-VALUES (3, 'Advisory 3', 'Delta', '3', 'This is storm Delta', '', 3);
-
-INSERT 
-INTO ASGS_Mon_message (id, advisory_id, storm_name, storm_number, message, other, message_type_id) 
-VALUES (4, 'Advisory 4', 'Echo', '4', 'This is storm Echo', '', 4);
 */
