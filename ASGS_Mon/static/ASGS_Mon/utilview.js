@@ -14,8 +14,20 @@ d3.bullet = function() {
   function bullet(g) {
     g.each(function(d, i) {
       // update the message text
-      d3.select("#" + d.title).text(d.event_message);
-    	
+      d3.select("#" + d.title.replace(" ", "")).text(d.event_message);
+      
+      // get the color of the state indicator for the cluster text
+      if(d.cluster_state_id == "6" || d.cluster_state_id == "3")
+    	  stateTextColor = "red"
+      else if(d.cluster_state_id == "2" || d.cluster_state_id == "4")
+    	  stateTextColor = "goldenrod";
+      else
+    	  stateTextColor = "green";
+      
+     // update the site state indicator
+      d3.select("#" + d.title.replace(" ", "") + "_state").text("State: " + d.cluster_state).attr("fill", stateTextColor);
+      
+      // setup the bar graph details
       var rangez = ranges.call(this, d, i).slice().sort(d3.descending),
           markerz = markers.call(this, d, i).slice().sort(d3.descending),
           measurez = measures.call(this, d, i).slice().sort(d3.descending),
@@ -58,16 +70,23 @@ d3.bullet = function() {
           .attr("width", w1)
           .attr("height", height);
 
-      // Update the measure rects.
-      var measure = g.selectAll("rect.measure")
-          .data(measurez);
+      // get the color of the state indicator for the event group progress bar
+      if(d.group_state_id == "6" || d.group_state_id == "3")
+    	  measureColor = "crimson"
+      else if(d.group_state_id == "2" || d.group_state_id == "4")
+    	  measureColor = "goldenrod";
+      else
+    	  measureColor = "darkseagreen";      
+
+      // Update the measure rects
+      var measure = g.selectAll("rect.measure").data(measurez);
 
       measure.enter().append("rect")
-          .attr("class", function(d, i) { return "measure s" + i; })
+          .attr("class", "measure")
           .attr("width", w0)
           .attr("height", height / 1) 
           .attr("x", reverse ? x0 : 0)
-          .attr("y", 0) 
+          .attr("y", 0)
         .transition()
           .duration(duration)
           .attr("width", w1)
@@ -79,6 +98,8 @@ d3.bullet = function() {
           .attr("height", height / 1)
           .attr("x", reverse ? x1 : 0)
           .attr("y", 0);
+
+      measure.attr("fill", measureColor);
 
       // Update the marker lines.
       var marker = g.selectAll("line.marker")
