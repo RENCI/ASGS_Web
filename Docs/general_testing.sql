@@ -18,14 +18,14 @@ INSERT INTO ASGS_Mon_event_group (event_group_ts, storm_name, storm_number, advi
 --
 -- sequence of events for a typical run are:
 --		represent a new advisory has landed by:
---			update the status of the site to indicate running
+--			update the state of the site to indicate running
 -- 			insert a new event group record for the site (save this ID or get the max(id) for the site)
 --			insert an event to indicate the process has started
 --		subsequent updates for each stage of the process are done by inserting event records based on cluster run status
 --		end of run state is done by:
 --			sending final event to indicate complete
 --			updating the event group to pending another job
---			updating the site's cluster to idle
+--			updating the cluster state to idle
 --------------------------------------------------------------
 
 -- initiate a new run. update the site to RUNN and create a new event group
