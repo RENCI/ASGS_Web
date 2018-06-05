@@ -65,9 +65,9 @@ d3.bullet = function() {
       measure.enter().append("rect")
           .attr("class", function(d, i) { return "measure s" + i; })
           .attr("width", w0)
-          .attr("height", height / 3)
+          .attr("height", height / 1) 
           .attr("x", reverse ? x0 : 0)
-          .attr("y", height / 3)
+          .attr("y", 0) 
         .transition()
           .duration(duration)
           .attr("width", w1)
@@ -76,9 +76,9 @@ d3.bullet = function() {
       measure.transition()
           .duration(duration)
           .attr("width", w1)
-          .attr("height", height / 3)
+          .attr("height", height / 1)
           .attr("x", reverse ? x1 : 0)
-          .attr("y", height / 3);
+          .attr("y", 0);
 
       // Update the marker lines.
       var marker = g.selectAll("line.marker")

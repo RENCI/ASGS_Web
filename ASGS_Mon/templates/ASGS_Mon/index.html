@@ -82,7 +82,8 @@ table {
  	 			var dateTime = si.datetime;
                 var process = si.process;
                 var pct_complete = si.pct_complete;
-                var state = si.state;
+                var group_state = si.group_state;
+                var cluster_state = si.cluster_state;
  	 			
  	 			// get some storm details
  	 			var advisoryNumber = si.advisory_number;
@@ -93,7 +94,7 @@ table {
  	 			var message = si.message;
 
  	 			// output the message data
- 	 			eventMsgText.append("span-" + siteName).attr("style", "font-size:10pt").append("p").text("Site: " + siteName + ", Last update: " + Date() + ", Event type: " + eventType + ", Event date: " + dateTime + ", Advisory number: " + advisoryNumber + ", Storm name: " + stormName + ", Storm number: " + stormNumber + ", Percent Complete: " + pct_complete + ", State: " + state + ", Message: " +  message);
+ 	 			eventMsgText.append("span-" + siteName).attr("style", "font-size:10pt").append("p").text("Site: " + siteName + ", Last update: " + Date() + ", Event type: " + eventType + ", Event date: " + dateTime + ", Advisory number: " + advisoryNumber + ", Storm name: " + stormName + ", Storm number: " + stormNumber + ", Percent Complete: " + pct_complete + ", Cluster state: " + cluster_state + ", Group state: " + group_state + ", Message: " +  message);
   	 		}
  		}
  	}
