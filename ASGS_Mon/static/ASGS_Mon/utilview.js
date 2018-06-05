@@ -14,7 +14,7 @@ d3.bullet = function() {
   function bullet(g) {
     g.each(function(d, i) {
       // update the message text
-      d3.select("#" + d.title).text(d.message);
+      d3.select("#" + d.title).text(d.event_message);
     	
       var rangez = ranges.call(this, d, i).slice().sort(d3.descending),
           markerz = markers.call(this, d, i).slice().sort(d3.descending),
