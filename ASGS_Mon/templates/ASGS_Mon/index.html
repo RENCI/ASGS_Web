@@ -8,7 +8,7 @@
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   margin: auto;
-  padding-top: 50px;
+  padding-top: 40px;
   position: relative;
   width: 960px;
   border: 1px solid black;
@@ -16,10 +16,13 @@ body {
 
 #hdrdiv {
     background: url("{% static 'ASGS_Mon/images/logo.jpg' %}");
-    background-size: 100px 80px;
+    background-size: 50px 50px;
     background-position: left top;    
     background-repeat: no-repeat;
+    height: 50px;
+    width: 940px;
     margin-left: 10px;
+  	border: 1px solid black;
 }
 
 table {
@@ -65,7 +68,16 @@ table {
  	 		d3.select("#ta").remove();
  	 		
  			// Create div area for formatted textual output of the event and message
- 	 		var eventMsgText = d3.select("body").append("div").attr("id", "ta").append("table").append("tr").append("td");
+ 	 		var eventMsgText = d3.select("body")
+ 	 			.append("div")
+ 	 				.attr("id", "ta")
+ 	 				.attr("style", "border:1px solid black; margin-top:30px; margin-bottom:5px; margin-left:5px; width:947px;")
+					.append("p")
+						.attr("style", "margin-left:10px;")
+ 	 					.text("Last messages:")
+ 	 				.append("table")
+ 	 					.append("tr")
+ 	 						.append("td");
 
  	 		// for each site passed
  	 		for (var i=0; i<theMsg.sites.length; i++)
@@ -95,20 +107,25 @@ table {
  	 			var message = si.message;
 
  	 			// output the message data
- 	 			eventMsgText.append("span-" + siteName).attr("style", "font-size:10pt").append("p").text("Site: " + siteName + ", Last update: " + Date() + ", Event type: " + eventType + ", Event date: " + dateTime + ", Advisory number: " + advisoryNumber + ", Storm name: " + stormName + ", Storm number: " + stormNumber + ", Percent Complete: " + pct_complete + ", Cluster state: " + cluster_state + ", Group state: " + group_state + ", Message: " +  message);
+ 	 			eventMsgText.append("span-" + siteName.replace(" ", ""))
+ 	 				.attr("style", "font-size:8pt")
+ 	 				.append("p")
+ 	 				.text("Site: " + siteName + ", Last update: " + Date() + ", Event type: " + eventType + ", Event date: " + dateTime + ", Advisory number: " + advisoryNumber + ", Storm name: " + stormName + ", Storm number: " + stormNumber + ", Percent Complete: " + pct_complete + ", Cluster state: " + cluster_state + ", Group state: " + group_state + ", Message: " +  message);
   	 		}
  		}
  	}
 
-var margin = {top: 5, right: 40, bottom: 20, left: 120},
-    width = 960 - margin.left - margin.right,
-    height = 50 - margin.top - margin.bottom;
+	// set the location of the dash component
+	var margin = {top: 5, right: 40, bottom: 20, left: 120},
+    	width = 960 - margin.left - margin.right,
+    	height = 50 - margin.top - margin.bottom;
 
-var chart = d3.bullet()
-    .width(width)
-    .height(height);
+	// create the visualization component
+	var chart = d3.bullet()
+    	.width(width)
+    	.height(height);
 
-// TODO: see about moving to a dynamic initial load of the visualization 
+// load the visualization 
 d3.json("{% static 'ASGS_Mon/utilview.json' %}", function(error, data) {
   if (error) throw error;
 
@@ -116,7 +133,7 @@ d3.json("{% static 'ASGS_Mon/utilview.json' %}", function(error, data) {
   d3.select("body")
   	.append("div")
   		.attr("id", "hdrdiv")
-  		.attr("style", "text-align:center; margin-top:-35px; margin-bottom:15px; font-size:20pt;")
+  		.attr("style", "line-height: 50px; text-align:center; margin-top:-25px; margin-bottom:25px; font-size:20pt;")
   		.text("ASGS Operational Awareness Dashboard")
   
   // get the svg region on the page 

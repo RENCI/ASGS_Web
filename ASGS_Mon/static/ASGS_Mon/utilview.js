@@ -72,7 +72,7 @@ d3.bullet = function() {
 
       // get the color of the state indicator for the event group progress bar
       if(d.group_state_id == "6" || d.group_state_id == "3")
-    	  measureColor = "crimson"
+    	  measureColor = "#F08080"
       else if(d.group_state_id == "2" || d.group_state_id == "4")
     	  measureColor = "goldenrod";
       else

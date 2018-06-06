@@ -41,6 +41,7 @@ def event(request):
                             "pct_complete" : "' + str(e.pct_complete) + '", \
                             "process" : "' + str(e.process) + '", \
                             "cluster_state" : "' + e.cluster_state + '", \
+                            "cluster_name" : "' + e.cluster_name + '", \
                             "group_state" : "' + e.group_state + '", \
                             "datetime" : "' + str(e.ts) + '", \
                             "message" : "' + e.message_text + '", \
