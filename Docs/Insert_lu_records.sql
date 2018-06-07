@@ -13,6 +13,8 @@ INSERT INTO ASGS_Mon_event_type_lu (id, name, description, view_order) VALUES (3
 INSERT INTO ASGS_Mon_event_type_lu (id, name, description, view_order) VALUES (4, 'FDRC', 'Forcast operations in progress', 4);
 INSERT INTO ASGS_Mon_event_type_lu (id, name, description, view_order) VALUES (5, 'POST', 'Post-run operations in progress', 5);
 INSERT INTO ASGS_Mon_event_type_lu (id, name, description, view_order) VALUES (6, 'REND', 'Run has ended', 6);
+INSERT INTO ASGS_Mon_event_type_lu (id, name, description, view_order) VALUES (7, 'RDY', 'Ready for next run', 6);
+
 
 delete from ASGS_Mon_state_type_lu;
 INSERT INTO ASGS_Mon_state_type_lu (id, name, description, view_order) VALUES (0, 'STRT', 'Operational.', 0);
