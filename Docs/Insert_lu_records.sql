@@ -6,7 +6,7 @@ INSERT INTO ASGS_Mon_site_lu (id, name, description, cluster_name, tech_contact,
 INSERT INTO ASGS_Mon_site_lu (id, name, description, cluster_name, tech_contact, phys_location, state_type_id) VALUES (4, 'George Mason', '', 'GM cluster', '', 'VA', 13);
 
 delete from ASGS_Mon_event_type_lu;
-INSERT INTO ASGS_Mon_event_type_lu (id, name, description, view_order) VALUES (0, 'RSRT', 'New run has started', 0);
+INSERT INTO ASGS_Mon_event_type_lu (id, name, description, view_order) VALUES (0, 'RSTR', 'New run has started', 0);
 INSERT INTO ASGS_Mon_event_type_lu (id, name, description, view_order) VALUES (1, 'PRE1', 'Pre-run 1 operations in progress', 1);
 INSERT INTO ASGS_Mon_event_type_lu (id, name, description, view_order) VALUES (2, 'NOWC', 'NowCast operations in progress', 2);
 INSERT INTO ASGS_Mon_event_type_lu (id, name, description, view_order) VALUES (3, 'PRE2', 'Pre-run 2 operations in progress', 3);
