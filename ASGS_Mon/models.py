@@ -11,6 +11,7 @@ class Event_type_lu(models.Model):
     name = models.CharField(max_length = 50)
     description = models.CharField(max_length = 100)
     view_order = models.IntegerField()
+    pct_complete = models.IntegerField()
     
 class Site_lu(models.Model):
     id = models.AutoField(primary_key=True)
@@ -39,7 +40,7 @@ class Event(models.Model):
     event_type = models.ForeignKey(Event_type_lu, on_delete=models.PROTECT)
     event_ts = models.DateTimeField()
     advisory_id = models.CharField(max_length = 50)
-    pct_complete = models.FloatField()
+    pct_complete = models.IntegerField()
     process = models.CharField(max_length = 100)
     host_start_file = models.CharField(max_length = 1000)
     raw_data = models.CharField(max_length = 4000)
