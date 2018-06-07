@@ -1,0 +1,18 @@
+this doc lays out how to update or create a data model for the project
+
+1) if an update, prep by removing old db migration (/ASGS_Mon/migrations/initial.py) and the old database (ASGS_Web/db.sqlite3)
+
+2) edit models.py to reflect data model
+
+3) open a command shell and navigate the the project (/ASGS_Web)
+
+4) activate model by executing the following command in the root project directory to create the 0001_initial.py migraton and the new database db.sqlite3. verify that 0001_initial.py represents the new model correctly.
+	python manage.py makemigrations ASGS_Mon
+
+5) optional: create helper db create script by executing the following command. save the output in /Docs/CreateDB.sql for posterity
+	python manage.py sqlmigrate ASGS_Mon 0001
+	
+6) complete the implementation by running the following command to implement the new data model. this should create ASGS_Mon/0001_initial.py
+	python manage.py migrate
+
+7) reload all DB static data tables.
