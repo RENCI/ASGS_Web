@@ -47,11 +47,14 @@ def insert_event(conn, site_id, event_group_id, event_type_id, msg_obj):
         else:
             sql_values += "'N/A', "
 
+        # for now (until detail page is developed)
+        # ignore intermediary cluster job completion percentage
         sql_fields += "pct_complete, "
-        pctcomplete = "0"
-        if (msg_obj.get("pctcomplete") is not None and len(msg_obj["pctcomplete"]) > 0):
-            pctcomplete = msg_obj["pctcomplete"]
-        sql_values += pctcomplete + ", "
+        sql_values += "0, "
+        #pctcomplete = "0"
+        #if (msg_obj.get("pctcomplete") is not None and len(msg_obj["pctcomplete"]) > 0):
+            #pctcomplete = msg_obj["pctcomplete"]
+        #sql_values += pctcomplete + ", "
 
         sql_fields += "process, "
         if (msg_obj.get("process") is not None and len(msg_obj["process"]) > 0):
@@ -165,7 +168,7 @@ def callback(ch, method, properties, body):
         event_group_id = -1
         # if this is the start of a group of Events, create a new event_group record
         # qualifying group initiation: event type = RSTR
-        if(event_name == "RSTR"):
+        if((event_name == "RSTR") or (event_name == "STRT")):
             # get run state id from state name
             state_name = ""
             if (msg_obj.get("state") is not None and len(msg_obj["state"]) > 0):
@@ -180,12 +183,20 @@ def callback(ch, method, properties, body):
             state_id = site[0]
             event_group_id = insert_event_group(conn, site_id, state_id, msg_obj)
         else:
+            # don't need a new event group
             # get last message from this site in order to retrieve current event group id
             query = "SELECT max(id) AS id, event_group_id FROM ASGS_Mon_event e WHERE e.site_id=" + str(site_id)
             cur = conn.cursor()
             cur.execute(query)
             event = cur.fetchone()
             event_group_id = event[1] 
+            # update event group with this latest state
+            sql_stmt = "UPDATE ASGS_Mon_event_group SET state_type_id = " + str(state_id) + " WHERE event_group_id = " + str(event_group_id)
+            conn.execute(sql_stmt)
+
+        # update site with latest state_type_id
+        sql_stmt = "UPDATE ASGS_Mon_site_lu SET state_type_id = " + str(state_id) + " WHERE id = " + str(site_id)
+        conn.execute(sql_stmt)
 
 
         # now insert message into the event table
