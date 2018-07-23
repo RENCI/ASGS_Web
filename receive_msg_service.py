@@ -13,7 +13,7 @@ logging.basicConfig(filename=logfile, format='%(asctime)s %(message)s', datefmt=
 logging.info("Started receive_msg_service")
 
 # set up AMQP credentials and connect to asgs queue
-credentials = pika.PlainCredentials('asgs', 'ZippityD0Da')
+credentials = pika.PlainCredentials('user', 'password')
 parameters = pika.ConnectionParameters('localhost', 5672, '/', credentials, socket_timeout=2)
 connection = pika.BlockingConnection(parameters)
 channel = connection.channel()
