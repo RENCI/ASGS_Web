@@ -10,7 +10,7 @@ body {
   margin: auto;
   padding-top: 40px;
   position: relative;
-  width: 960px;
+  width: 90%;
   border: 1px solid black;
 }
 
@@ -20,7 +20,7 @@ body {
     background-position: left top;    
     background-repeat: no-repeat;
     height: 50px;
-    width: 940px;
+    width: 98%;
     margin-left: 10px;
   	border: 1px solid black;
 }
@@ -30,160 +30,165 @@ table {
     border: 1px;
 }
 
-.bullet { font: 10px sans-serif; }
-.bullet .marker { stroke: #000; stroke-width: 2px; }
 .bullet .tick line { stroke: #666; stroke-width: .5px; }
-.bullet .range.s0 { fill: #eee; }
-.bullet .range.s1 { fill: #ddd; }
-.bullet .range.s2 { fill: #ccc; }
-.bullet .measure { }
-.bullet .title { font-size: 14px; font-weight: bold; }
-.bullet .subtitle { fill: #999; }
-.bullet .message { font: 12px sans-serif; fill: #999; }
-.bullet .stateSm { font: 11px sans-serif; }
-.bullet .state { font: 12px sans-serif; }
+
+.siteInstance { font: 10px sans-serif; border: 1px solid black; margin-left: 10px;}
+.siteInstance .marker { stroke: #000; stroke-width: 2px; }
+.siteInstance .range.s0 { fill: #eee; }
+.siteInstance .range.s1 { fill: #ddd; }
+.siteInstance .range.s2 { fill: #ccc; }
+.siteInstance .measure { }
+.siteInstance .title { font-size: 10px; font-weight: bold; }
+.siteInstance .subtitle { fill: #999; }
+.siteInstance .message { font: 12px sans-serif; fill: #999; }
+.siteInstance .stateSm { font: 11px sans-serif; }
+.siteInstance .state { font: 10px sans-serif; }
+.siteInstance .summary { font: 8px sans-serif; font-style: italic;}
+.siteInstance .params { font: 8px sans-serif; font-style: italic;}
 
 </style>
 <script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="https://d3js.org/d3-time-format.v2.min.js"></script>
 <script src="{% static 'ASGS_Mon/utilview.js' %}"></script>
 <script type="text/javascript">
-	//check for browser support
- 	if(typeof(EventSource) !== "undefined") { 	
+	// create a title area and fill it
+	d3.select("body")
+		.append("div")
+  		.attr("id", "hdrdiv")
+  		.attr("style", "line-height: 50px; text-align:center; margin-top:-25px; margin-bottom:25px; font-size:20pt;")
+  		.text("ASGS Operational Awareness Dashboard")
+  				
+	// set the location of the individual site component
+	var margin = {top: 20, right: 15, bottom: 20, left: 15};
+	
+	// set the width of the individual site component
+	var width = 400 - margin.left - margin.right;
+    
+	// set the height of the individual site component
+	var height = 50 - margin.top - margin.bottom;
+
+	// init the site instance visualization component
+	var siteInstance = d3.bullet()
+    	.width(width)
+    	.height(height);
+	
+	// TODO: check for browser support?
+ 	if(typeof(EventSource) !== "undefined") 
+ 	{ 	
 	 	// define the event endpoint 
  		var eSource = new EventSource("http://127.0.0.1:8000/ASGS_Mon/event");
 	
  		// detect message receipt
  		eSource.onmessage = function(event) 
- 		{		
+ 		{		 	 		
+			// create/init the shells for all the site instances
+			d3.json("http://127.0.0.1:8000/ASGS_Mon/init", function(error, data) // {% static 'ASGS_Mon/utilview.json' %}
+			{
+				// bail out on error
+				if (error) 
+				{
+					curRendered = d3.selectAll(".siteInstance").remove();
+					//throw error;
+				}
+				
+				// get the current rendered items
+				var curRendered = d3.selectAll(".siteInstance");
+
+				// do we have a valid site instance defined
+				if(typeof(curRendered[0][0]) != "undefined")
+				{
+					// loop through the rendered site instances and remove ones with no data incoming
+					for(i=0; i<curRendered[0].length; i++)
+					{
+						// set the found it flag
+						bfound = false;
+						
+						// for each id in the incoming data
+						for(j=0; j<data.length; j++)
+						{
+							// was it there
+							if(curRendered[0][i].id == data[j].eg_id)
+							{
+								// set the flag
+								bfound = true;
+								
+								// no need to continue
+								break;
+							}
+						}
+						
+						// if not found remove it
+						if(!bfound)
+							d3.selectAll(".siteInstance")[0][i].remove();
+					}
+				}
+				
+			  	// render the svg region for all individual site instances
+			  	var svg = d3.select("body").selectAll("svg")
+				    .data(data)
+				    .enter().append("svg")
+						.attr("class", "siteInstance")
+						.attr("id", function(d) {return d.eg_id;} )
+						.attr("width", width + margin.left + margin.right)
+						.attr("height", height + margin.top + margin.bottom + 40)
+				    .append("g")
+						.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+						.call(siteInstance);
+			
+				// append the run parameters text
+				svg.append("g")
+			      	.style("text-anchor", "end")
+					.attr("transform", "translate(" + width + ", -5)")
+						.append("text")
+							.attr("id", function(d) { return d.title.replace(" ", "") + "_params"; })
+							.attr("class", "params")
+							.text(function(d) { return ""; });					 	 		
+
+				// append the event operation message text that goes inside the bar graph
+				svg.append("g")
+					.attr("transform", "translate(6," + height / 2 + ")")
+						.append("text")
+							.attr("id", function(d) { return d.title.replace(" ", "") + "_operation"; })
+							.attr("class", "state")
+							.attr("dy", ".35em")
+							.text(function(d) { return d.message; });
+
+				// create a region for the textual information
+			  	var title = svg.append("g")
+			      	//.style("text-anchor", "end")
+			      	.attr("transform", "translate(-10,-5)");
+			
+				// append the site name
+				title.append("text")
+				    .attr("class", "title")
+				    .text(function(d) { return d.title + " - Process: TBD"; });
+			  	  
+				// append the process run state. colored RGB later
+				title.append("text")
+					.attr("id", function(d) { return d.title.replace(" ", "") + "_state"; })
+					.attr("class", "stateSm")
+					.attr("y", "40px")
+					.attr("fill", "black")
+					.text(function(d) { return d.cluster_state; });
+				
+				title.append("text")
+					.attr("id", function(d) { return d.title.replace(" ", "") + "_summary"; })
+					.attr("class", "summary")
+					.attr("y", "60px")
+					.attr("fill", "black")
+					.text(function(d) { return d.cluster_state; });
+			  
+							
+			});
+			
  	 		// parse the incoming data object
  	 		var theMsg = JSON.parse(event.data);
  	 		 	 		
  	 		// get a reference to the visualization component
  			var svg = d3.select("body").selectAll("svg");
  			
- 	 		// reload the data to visualize
- 			svg.data(theMsg.utilization).call(chart.duration(2000));
- 	 		
- 	 		// remove the previous event text data if its there
- 	 		d3.select("#ta").remove();
- 	 		
- 			// Create div area for formatted textual output of the event and message
- 	 		var eventMsgText = d3.select("body")
- 	 			.append("div")
- 	 				.attr("id", "ta")
- 	 				.attr("style", "border:1px solid black; margin-top:30px; margin-bottom:5px; margin-left:5px; width:947px;")
-					.append("p")
-						.attr("style", "margin-left:10px;")
- 	 					.text("Last messages:")
- 	 				.append("table")
- 	 					.append("tr")
- 	 						.append("td");
-
- 	 		// for each site passed
- 	 		for (var i=0; i<theMsg.sites.length; i++)
- 	 		{ 			
- 	 			// grab the data points for the site
- 	 			var s = theMsg.sites[i];
- 	 			var siteName = s.site;
- 	 			
- 	 			// grab the info node
- 	 			var si = s.info
- 	 			
- 	 			// get some event details
- 	 			var eventType = si.type;
- 	 			var clusterName = si.cluster_name;
- 	 			var dateTime = si.datetime;
-                var process = si.process;
-                var pct_complete = si.pct_complete;
-                var group_state = si.group_state;
-                var cluster_state = si.cluster_state;
- 	 			
- 	 			// get some storm details
- 	 			var advisoryNumber = si.advisory_number;
- 	 			var stormName = si.storm
- 	 			var stormNumber = si.storm_number
- 	 			
- 	 			// get the message details
- 	 			var message = si.message;
-
- 	 			// output the message data
- 	 			eventMsgText.append("span-" + siteName.replace(" ", ""))
- 	 				.attr("style", "font-size:8pt")
- 	 				.append("p")
- 	 				.text("Site: " + siteName + ", Last update: " + Date() + ", Event type: " + eventType + ", Event date: " + dateTime + ", Advisory number: " + advisoryNumber + ", Storm name: " + stormName + ", Storm number: " + stormNumber + ", Percent Complete: " + pct_complete + ", Cluster state: " + cluster_state + ", Group state: " + group_state + ", Message: " +  message);
-  	 		}
+ 	 		// reload the visualization with the new data
+ 			svg.data(theMsg.utilization).call(siteInstance.duration(1500)); //theMsg.utilization, theMsg.sites
  		}
  	}
-
-	// set the location of the dash component
-	var margin = {top: 5, right: 40, bottom: 20, left: 120},
-    	width = 960 - margin.left - margin.right,
-    	height = 50 - margin.top - margin.bottom;
-
-	// create the visualization component
-	var chart = d3.bullet()
-    	.width(width)
-    	.height(height);
-
-// load the visualization 
-d3.json("{% static 'ASGS_Mon/utilview.json' %}", function(error, data) {
-  if (error) throw error;
-
-  // create a title and put everything in a table
-  d3.select("body")
-  	.append("div")
-  		.attr("id", "hdrdiv")
-  		.attr("style", "line-height: 50px; text-align:center; margin-top:-25px; margin-bottom:25px; font-size:20pt;")
-  		.text("ASGS Operational Awareness Dashboard")
-  
-  // get the svg region on the page 
-  var svg = d3.select("body").selectAll("svg")
-	.append("div").text("title")
-    .data(data)
-    .enter().append("svg")
-      .attr("class", "bullet")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-      .call(chart);
-
-  // create a region for the site name and location
-  var title = svg.append("g")
-      .style("text-anchor", "end")
-      .attr("transform", "translate(-6," + height / 2 + ")");
-
-  // append the site name
-  title.append("text")
-      .attr("class", "title")
-      .text(function(d) { return d.title; });
-  
-  // append the site location
-  title.append("text")
-	  .attr("class", "subtitle")
-	  .attr("dy", "1.2em")
-	  .text(function(d) { return d.subtitle; });
-  
-  // append the site state
-  title.append("text")
-	  .attr("id", function(d) { 
-		  return d.title.replace(" ", "") + "_state"; 
-		  })
-	  .attr("class", "stateSm")
-	  .attr("dy", "2.45em")
-	  .attr("fill", "black")
-	  .text(function(d) { return d.cluster_state; });
-  
-  // append the event message text
-  svg.append("g")
-      .attr("transform", "translate(6," + height / 2 + ")")
-	  .append("text")
-  		.attr("id", function(d) { 
-  			return d.title.replace(" ", ""); 
-  			})
-  	  	.attr("class", "state")
-	  	.attr("dy", ".35em")
-	  	.text(function(d) { return d.message; });
-});
-
 </script>

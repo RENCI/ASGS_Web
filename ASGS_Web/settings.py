@@ -30,6 +30,7 @@ ALLOWED_HOSTS = ['*']
 CORS_ORIGIN_WHITELIST = (
     'localhost:8000',
     '127.0.0.1:8000',
+    'phil-p51.ad.renci.org:8000',
 )
 
 CORS_ORIGIN_ALLOW_ALL = True
