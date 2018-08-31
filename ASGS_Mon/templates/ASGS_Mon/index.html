@@ -30,21 +30,20 @@ table {
     border: 1px;
 }
 
-.bullet .tick line { stroke: #666; stroke-width: .5px; }
-
-.siteInstance { font: 10px sans-serif; border: 1px solid black; margin-left: 10px;}
-.siteInstance .marker { stroke: #000; stroke-width: 2px; }
-.siteInstance .range.s0 { fill: #eee; }
-.siteInstance .range.s1 { fill: #ddd; }
-.siteInstance .range.s2 { fill: #ccc; }
-.siteInstance .measure { }
-.siteInstance .title { font-size: 10px; font-weight: bold; }
-.siteInstance .subtitle { fill: #999; }
-.siteInstance .message { font: 12px sans-serif; fill: #999; }
-.siteInstance .stateSm { font: 11px sans-serif; }
-.siteInstance .state { font: 10px sans-serif; }
-.siteInstance .summary { font: 8px sans-serif; font-style: italic;}
-.siteInstance .params { font: 8px sans-serif; font-style: italic;}
+.siteInstanceView .tick line { stroke: #666; stroke-width: .5px; }
+.siteInstanceView { font: 10px sans-serif; border: 1px solid black; margin-left: 10px;}
+.siteInstanceView .marker { stroke: #000; stroke-width: 2px; }
+.siteInstanceView .range.s0 { fill: #eee; }
+.siteInstanceView .range.s1 { fill: #ddd; }
+.siteInstanceView .range.s2 { fill: #ccc; }
+.siteInstanceView .measure { }
+.siteInstanceView .title { font-size: 10px; font-weight: bold; }
+.siteInstanceView .subtitle { fill: #999; }
+.siteInstanceView .message { font: 12px sans-serif; fill: #999; }
+.siteInstanceView .stateSm { font: 11px sans-serif; }
+.siteInstanceView .state { font: 10px sans-serif; }
+.siteInstanceView .summary { font: 8px sans-serif; font-style: italic;}
+.siteInstanceView .params { font: 8px sans-serif; font-style: italic;}
 
 </style>
 <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -68,7 +67,7 @@ table {
 	var height = 50 - margin.top - margin.bottom;
 
 	// init the site instance visualization component
-	var siteInstance = d3.bullet()
+	var siteInstance = d3.siteInstanceView()
     	.width(width)
     	.height(height);
 	
@@ -87,12 +86,12 @@ table {
 				// bail out on error
 				if (error) 
 				{
-					curRendered = d3.selectAll(".siteInstance").remove();
+					curRendered = d3.selectAll(".siteInstanceView").remove();
 					//throw error;
 				}
 				
 				// get the current rendered items
-				var curRendered = d3.selectAll(".siteInstance");
+				var curRendered = d3.selectAll(".siteInstanceView");
 
 				// do we have a valid site instance defined
 				if(typeof(curRendered[0][0]) != "undefined")
@@ -119,7 +118,7 @@ table {
 						
 						// if not found remove it
 						if(!bfound)
-							d3.selectAll(".siteInstance")[0][i].remove();
+							d3.selectAll(".siteInstanceView")[0][i].remove();
 					}
 				}
 				
@@ -127,7 +126,7 @@ table {
 			  	var svg = d3.select("body").selectAll("svg")
 				    .data(data)
 				    .enter().append("svg")
-						.attr("class", "siteInstance")
+						.attr("class", "siteInstanceView")
 						.attr("id", function(d) {return d.eg_id;} )
 						.attr("width", width + margin.left + margin.right)
 						.attr("height", height + margin.top + margin.bottom + 40)
@@ -171,14 +170,17 @@ table {
 					.attr("fill", "black")
 					.text(function(d) { return d.cluster_state; });
 				
+				// append the summary text
 				title.append("text")
 					.attr("id", function(d) { return d.title.replace(" ", "") + "_summary"; })
 					.attr("class", "summary")
 					.attr("y", "60px")
 					.attr("fill", "black")
-					.text(function(d) { return d.cluster_state; });
-			  
-							
+					.text(function(d) { return ""; });
+
+				title.append("div")
+					.attr("width", "100%")
+					.attr("id", function(d) { return d.title.replace(" ", "") + "_ta"; })
 			});
 			
  	 		// parse the incoming data object

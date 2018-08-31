@@ -5,7 +5,8 @@
  */
 (function() 
 {
-	d3.bullet = function() 
+	// definition of the site instance view
+	d3.siteInstanceView = function() 
 	{
 		// init default view params
 		var orient = "left";
@@ -19,7 +20,7 @@
 	    var tickFormat = null;
 
 		// render a site instance
-		function bullet(g) 
+		function siteInstanceView(g) 
 		{
 			// for each site/instance in the view
 			g.each(function(d, i) 
@@ -37,15 +38,16 @@
 			      
 			    // update the site state indicator
 			    d3.select("#" + d.title.replace(" ", "") + "_state")
-			    	.text("Cluster state: " + d.cluster_state).attr("fill", stateTextColor);
-			    			    
-			    // update the summary indicator
-			    d3.select("#" + d.title.replace(" ", "") + "_summary")
-			    	.text("Last event - " + d.datetime + ",  Advisory: " + d.advisory_number + ", Storm: " + d.storm + ", Message: " +  d.message);
+			    	.text("Cluster state: " + d.cluster_state).attr("fill", stateTextColor);			    			    
 			    
 			    // update the run parameter indicator
 			    d3.select("#" + d.title.replace(" ", "") + "_params")
 			    	.text("Run params: TBD");
+			    
+			    // update the summary indicator
+			    d3.select("#" + d.title.replace(" ", "") + "_summary")
+			    	.text("Last event - " + d.datetime + ",  Advisory: " + d.advisory_number + ", Storm: " + d.storm + ", Message: " +  d.message);
+			    
 			    
 				// setup the bar graph details
 				var rangez = ranges.call(this, d, i).slice().sort(d3.descending);
@@ -69,10 +71,10 @@
 				this.__chart__ = x1;
 			
 				// Derive width-scales from the x-scales.
-				var w0 = bulletWidth(x0);
-				var w1 = bulletWidth(x1);
+				var w0 = viewWidth(x0);
+				var w1 = viewWidth(x1);
 	
-				// Update the range rects.
+				// Update the range rects
 				var range = g.selectAll("rect.range").data(rangez);
 	
 				range.enter().append("rect")
@@ -156,7 +158,7 @@
 				// Initialize the ticks with the old scale, x0.
 				var tickEnter = tick.enter().append("g")
 					.attr("class", "tick")
-					.attr("transform", bulletTranslate(x0))
+					.attr("transform", viewTranslate(x0))
 						.style("opacity", 1e-6);
 	
 				tickEnter.append("line")
@@ -172,13 +174,13 @@
 				// Transition the entering ticks to the new scale, x1.
 				tickEnter.transition()
 					.duration(duration)
-						.attr("transform", bulletTranslate(x1))
+						.attr("transform", viewTranslate(x1))
 							.style("opacity", 1);
 				
 				// Transition the updating ticks to the new scale, x1.
 				var tickUpdate = tick.transition()
 					.duration(duration)
-						.attr("transform", bulletTranslate(x1))
+						.attr("transform", viewTranslate(x1))
 							.style("opacity", 1);
 				
 				tickUpdate.select("line")
@@ -192,7 +194,7 @@
 				tick.exit()
 					.transition()
 						.duration(duration)
-						.attr("transform", bulletTranslate(x1))
+						.attr("transform", viewTranslate(x1))
 							.style("opacity", 1e-6)
 								.remove();	
 			});
@@ -201,7 +203,7 @@
 		}
 	
 		// left, right, top, bottom
-		bullet.orient = function(x) 
+		siteInstanceView.orient = function(x) 
 		{
 			if (!arguments.length) 
 				return orient;
@@ -209,69 +211,69 @@
 			orient = x;
 			reverse = orient == "right" || orient == "bottom";
 			
-			return bullet;
+			return siteInstanceView;
 		};
 	
 		// ranges (bad, satisfactory, good)
-		bullet.ranges = function(x) 
+		siteInstanceView.ranges = function(x) 
 		{
 			if (!arguments.length) return ranges;
 				ranges = x;
 			
-			return bullet;
+			return siteInstanceView;
 		};
 		
 		// markers (previous, goal)
-		bullet.markers = function(x) 
+		siteInstanceView.markers = function(x) 
 		{
 			if (!arguments.length) return markers;
 				markers = x;
 				
-			return bullet;
+			return siteInstanceView;
 		};
 		
 		// measures (actual, forecast)
-		bullet.measures = function(x) 
+		siteInstanceView.measures = function(x) 
 		{
 			if (!arguments.length) return measures;
 				measures = x;
 		
-			return bullet;
+			return siteInstanceView;
 		};
 		
-		bullet.width = function(x) 
+		siteInstanceView.width = function(x) 
 		{
 			if (!arguments.length) return width;
 				width = x;
 		
-			return bullet;
+			return siteInstanceView;
 		};
 		
-		bullet.height = function(x) 
+		siteInstanceView.height = function(x) 
 		{
 			if (!arguments.length) return height;
 				height = x;
 			
-			return bullet;
+			return siteInstanceView;
 		};
 		
-		bullet.tickFormat = function(x) 
+		siteInstanceView.tickFormat = function(x) 
 		{
 			if (!arguments.length) return tickFormat;
 				tickFormat = x;
 		
-			return bullet;
+			return siteInstanceView;
 		};
 		
-		bullet.duration = function(x) 
+		siteInstanceView.duration = function(x) 
 		{
 			if (!arguments.length) return duration;
 				duration = x;
 				
-			return bullet;
+			return siteInstanceView;
 		};
 	
-		return bullet;
+		return siteInstanceView;
 	};
 	
 	function viewRanges(d) 
@@ -289,7 +291,7 @@
 		return d.measures;
 	}
 	
-	function bulletTranslate(x) 
+	function viewTranslate(x) 
 	{
 		return function(d) 
 		{
@@ -297,7 +299,7 @@
 		};
 	}
 	
-	function bulletWidth(x) 
+	function viewWidth(x) 
 	{
 		var x0 = x(0);
 	  
