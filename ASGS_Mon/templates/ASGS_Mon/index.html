@@ -73,7 +73,7 @@ table {
 	
 	// TODO: check for browser support?
  	if(typeof(EventSource) !== "undefined") 
- 	{ 	
+ 	{
 	 	// define the event endpoint 
  		var eSource = new EventSource("http://127.0.0.1:8000/ASGS_Mon/event");
 	
@@ -85,28 +85,25 @@ table {
 			{
 				// erase all the site instances on error
 				if (error) 
-				{
 					curRendered = d3.selectAll(".siteInstanceView").remove();
-					//throw error;
-				}
 				
 				// get the current rendered items
-				var curRendered = d3.selectAll(".siteInstanceView");
+				var curRendered = d3.selectAll(".siteInstanceView").selectAll("svg");
 
 				// do we have a valid site instance defined
-				if(typeof(curRendered[0][0]) != "undefined")
+				if(Array.isArray(curRendered))
 				{
-					// loop through the rendered site instances and remove ones with no data incoming
-					for(i=0; i<curRendered[0].length; i++)
+					// loop through the rendered site instances and remove ones with no incoming data 
+					for(i=0; i<curRendered.length; i++)
 					{
-						// set the found it flag
+						// reset the found flag
 						bfound = false;
 						
 						// for each id in the incoming data
 						for(j=0; j<data.length; j++)
 						{
-							// was it there
-							if(curRendered[0][i].id == data[j].eg_id)
+							// was it previously rendered
+							if(curRendered[i].parentNode.id == data[j].eg_id)
 							{
 								// set the flag
 								bfound = true;
@@ -116,9 +113,9 @@ table {
 							}
 						}
 						
-						// if not found remove it
+						// if data for this rendered item is not found remove it
 						if(!bfound)
-							d3.selectAll(".siteInstanceView")[0][i].remove();
+							curRendered[i].parentNode.remove();
 					}
 				}
 				

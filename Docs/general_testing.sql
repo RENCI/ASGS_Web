@@ -59,13 +59,14 @@ inner join (select max(id) as id, site_id from ASGS_Mon_event_group group by sit
 
 */
 
+delete from ASGS_Mon_event_group; delete from ASGS_Mon_event;
 
---delete from ASGS_Mon_event_group where id=64;
---delete from ASGS_Mon_event where event_group_id=64;
+--delete from ASGS_Mon_event_group where id=134; delete from ASGS_Mon_event where event_group_id=134;
 
---select * from ASGS_Mon_event_group;
+--select * from ASGS_Mon_event_group eg join ASGS_Mon_site_lu s on s.id=eg.site_id;
 --select * from ASGS_Mon_event;
 --select * from ASGS_Mon_site_lu;
+update ASGS_Mon_event_group set state_type_id=0 where id=134;
 
 -- it all starts with an event group. make one for every site
 INSERT INTO ASGS_Mon_event_group (event_group_ts, storm_name, storm_number, advisory_id, final_product, site_id, state_type_id) VALUES (datetime(), 'Alpha', '1', '1', 'product', 0, 0);
