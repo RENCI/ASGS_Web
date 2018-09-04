@@ -1,7 +1,7 @@
 /*****
  * Renders all site/instance elements
  * 
- * @returns
+ * @returns nothing. It renders the data or it doesnt.
  */
 (function() 
 {
@@ -46,8 +46,7 @@
 			    
 			    // update the summary indicator
 			    d3.select("#" + d.title.replace(" ", "") + "_summary")
-			    	.text("Last event - " + d.datetime + ",  Advisory: " + d.advisory_number + ", Storm: " + d.storm + ", Message: " +  d.message);
-			    
+			    	.text("Last event - " + d.datetime + ",  Advisory: " + d.advisory_number + ", Storm: " + d.storm + ", Message: " +  d.message);			    
 			    
 				// setup the bar graph details
 				var rangez = ranges.call(this, d, i).slice().sort(d3.descending);
