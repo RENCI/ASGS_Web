@@ -7,9 +7,8 @@ from ASGS_Mon import models
 def index(request):
     return render(request, 'ASGS_Mon/index.html', {})
 
-def init(request):
-    # init the return
-    siteInstances = "[";
+def init(request):        
+    siteInstances = "";
     
     # create the SQL
     theSQL =  'select eg.id AS ''id'', s.name AS ''site_name'', s.cluster_name AS ''cluster_name'' \
@@ -36,7 +35,7 @@ def init(request):
                         },'
 
     # remove the trailing commas
-    siteInstances = siteInstances[:-1]
+    siteInstances = "[" + siteInstances[:-1]
     
     #add in the utilization
     siteInstances += ']'
@@ -51,7 +50,7 @@ def init(request):
 # client-side event request handler
 def event(request):
     # define a variable that controls the event source reload time.
-    retryMilliSec = '2000';
+    retryMilliSec = '3000';
 
     # compile the info to send back   
     data = '';

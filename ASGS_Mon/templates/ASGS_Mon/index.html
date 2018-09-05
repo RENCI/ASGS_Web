@@ -40,9 +40,9 @@ table {
 .siteInstanceView .title { font-size: 10px; font-weight: bold; }
 .siteInstanceView .subtitle { fill: #999; }
 .siteInstanceView .message { font: 12px sans-serif; fill: #999; }
-.siteInstanceView .stateSm { font: 11px sans-serif; }
+.siteInstanceView .stateSm { font: 9px sans-serif; font-weight: bold; font-style: italic;}
 .siteInstanceView .state { font: 10px sans-serif; }
-.siteInstanceView .summary { font: 8px sans-serif; font-style: italic;}
+.siteInstanceView .eventSummary { font: 8px sans-serif; font-style: italic;}
 .siteInstanceView .params { font: 8px sans-serif; font-style: italic;}
 
 </style>
@@ -75,18 +75,21 @@ table {
  	if(typeof(EventSource) !== "undefined") 
  	{
 	 	// define the event endpoint 
- 		var eSource = new EventSource("http://127.0.0.1:8000/ASGS_Mon/event");
+ 		var eSource = new EventSource("http://localhost:8000/ASGS_Mon/event/");
 	
  		// detect message receipt
  		eSource.onmessage = function(event) 
  		{		 	 		
 			// create/init the shells for all the site instances
-			d3.json("http://127.0.0.1:8000/ASGS_Mon/init", function(error, data)
+			d3.json("http://localhost:8000/ASGS_Mon/init/", function(error, data)
 			{
 				// erase all the site instances on error
-				if (error) 
+				if (error || data.length == 0) 
+				{
 					curRendered = d3.selectAll(".siteInstanceView").remove();
-				
+					return;
+				}
+					
 				// get the current rendered items
 				var curRendered = d3.selectAll(".siteInstanceView").selectAll("svg");
 
@@ -130,7 +133,7 @@ table {
 				    .append("g")
 						.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 						.call(siteInstance);
-			
+			  	
 				// append the run parameters text
 				svg.append("g")
 			      	.style("text-anchor", "end")
@@ -144,36 +147,35 @@ table {
 				svg.append("g")
 					.attr("transform", "translate(6," + height / 2 + ")")
 						.append("text")
+							.text(function(d) { return d.message; })
 							.attr("id", function(d) { return d.title.replace(" ", "") + "_operation"; })
 							.attr("class", "state")
-							.attr("dy", ".35em")
-							.text(function(d) { return d.message; });
+							.attr("dy", ".35em");
 				
 				// create a region for the textual information
 			  	var title = svg.append("g")
-			      	//.style("text-anchor", "end")
 			      	.attr("transform", "translate(-10,-5)");
 			
 				// append the site name
 				title.append("text")
-				    .attr("class", "title")
-				    .text(function(d) { return d.title + " - Process: TBD"; });
+				    .text(function(d) { return d.title + " - Process: TBD"; })
+				    .attr("class", "title");
 			  	  
 				// append the process run state. colored RGB later
 				title.append("text")
+					.text(function(d) { return d.cluster_state; })
 					.attr("id", function(d) { return d.title.replace(" ", "") + "_state"; })
 					.attr("class", "stateSm")
 					.attr("y", "40px")
-					.attr("fill", "black")
-					.text(function(d) { return d.cluster_state; });
+					.attr("x", width/2 - 40);
 				
 				// append the summary text
 				title.append("text")
-					.attr("id", function(d) { return d.title.replace(" ", "") + "_summary"; })
-					.attr("class", "summary")
-					.attr("y", "60px")
-					.attr("fill", "black")
-					.text(function(d) { return ""; });
+					.text("textarea")
+					.text(function(d) { return ""; })
+					.attr("id", function(d) { return d.title.replace(" ", "") + "_eventSummary"; })
+					.attr("class", "eventSummary")
+					.attr("y", "55px")
 			});
 			
  	 		// parse the incoming data object

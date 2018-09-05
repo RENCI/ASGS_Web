@@ -38,15 +38,19 @@
 			      
 			    // update the site state indicator
 			    d3.select("#" + d.title.replace(" ", "") + "_state")
-			    	.text("Cluster state: " + d.cluster_state).attr("fill", stateTextColor);			    			    
-			    
+			    	.text("Cluster state: " + d.cluster_state)
+			    		.transition().duration(0)
+			      		.attr("fill", "green")
+			    	.transition().delay(0).duration(2000)
+			      		.attr("fill", stateTextColor);		    			    
+
 			    // update the run parameter indicator
 			    d3.select("#" + d.title.replace(" ", "") + "_params")
 			    	.text("Run params: TBD");
 			    
 			    // update the summary indicator
-			    d3.select("#" + d.title.replace(" ", "") + "_summary")
-			    	.text("Last event - " + d.datetime + ",  Advisory: " + d.advisory_number + ", Storm: " + d.storm + ", Message: " +  d.message);			    
+			    d3.select("#" + d.title.replace(" ", "") + "_eventSummary")
+			    	.text("Last event - " + d.datetime + ",  Advisory: " + d.advisory_number + ", Storm: " + d.storm + ", Message: " +  d.message)			    
 			    
 				// setup the bar graph details
 				var rangez = ranges.call(this, d, i).slice().sort(d3.descending);
