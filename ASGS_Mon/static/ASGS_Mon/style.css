@@ -1,18 +1,3 @@
-#dashboard {
-    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-    border-collapse: collapse;
-    width: 10%;
-}
-
-#dashboard td, #dashboard th {
-    border: 1px solid #ddd;
-    padding: 8px;
-}
-
-.image { 
-   position: relative; 
-   width: 100%; /* for IE 6 */
-}
 
 h2 { 
    position: absolute; 
@@ -28,3 +13,40 @@ h2 span {
    halign:center;
    padding: 12px; 
 }
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: auto;
+  padding-top: 40px;
+  position: relative;
+  width: 90%;
+  border: 1px solid black;
+}
+
+#hdrdiv {
+    background: url("images/logo.jpg");
+    background-size: 50px 50px;
+    background-position: left top;    
+    background-repeat: no-repeat;
+    height: 50px;
+    width: 98%;
+    margin-left: 10px;
+  	border: 1px solid black;
+}
+
+table { margin-left: 10px;border: 1px;}
+
+.siteInstanceView .tick line { stroke: #666; stroke-width: .5px; }
+.siteInstanceView { font: 10px sans-serif; border: 1px solid black; margin-left: 10px;}
+.siteInstanceView .marker { stroke: #000; stroke-width: 2px; }
+.siteInstanceView .range.s0 { fill: #eee; }
+.siteInstanceView .range.s1 { fill: #ddd; }
+.siteInstanceView .range.s2 { fill: #ccc; }
+.siteInstanceView .measure { }
+.siteInstanceView .title { font-size: 10px; font-weight: bold; }
+.siteInstanceView .subtitle { fill: #999; }
+.siteInstanceView .message { font: 12px sans-serif; fill: #999; }
+.siteInstanceView .stateSm { font: 9px sans-serif; font-weight: bold; font-style: italic;}
+.siteInstanceView .state { font: 10px sans-serif; }
+.siteInstanceView .eventSummary { font: 8px sans-serif; font-style: italic;}
+.siteInstanceView .params { font: 8px sans-serif; font-style: italic;}
