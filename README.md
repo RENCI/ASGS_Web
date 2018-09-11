@@ -17,7 +17,7 @@ Config steps:
 => python3 manage.py makemigrations ASGS_Mon
 => python3 manage.py sqlmigrate ASGS_Mon 0001
 => python3 manage.py migrate
-=> manage.py runserver 0.0.0.0:8000 
+=> python3 manage.py runserver 0.0.0.0:8000 
 ```
 
 Import test data
