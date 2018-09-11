@@ -23,24 +23,16 @@ body {
   border: 1px solid black;
 }
 
-#hdrdiv {
-    background: url("images/logo.jpg");
-    background-size: 50px 50px;
-    background-position: left top;    
-    background-repeat: no-repeat;
-    height: 50px;
-    width: 98%;
-    margin-left: 10px;
+#pagehdr {  
+	width: 97%;
     margin-right: 20px;
-  	border: 1px solid black;
-  	line-height: 50px; 
-  	text-align: center; 
-  	margin-top: -20px; 
+  	margin-top: -35px; 
   	margin-bottom: 5px; 
-  	font-size: 20pt;
+  	margin-left: 10px;
+  	border: 1px solid black;
+  	text-align: center; 
+  	font-size: 17pt;
 }
-
-table { margin-left: 10px;border: 1px;}
 
 .siteInstanceView .tick line { stroke: #666; stroke-width: .5px; }
 .siteInstanceView { font: 10px sans-serif; border: 1px solid black; margin-left: 10px;}

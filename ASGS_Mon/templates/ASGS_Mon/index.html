@@ -10,11 +10,21 @@
 	<script src="{% static 'ASGS_Mon/utilview.js' %}"></script>
 	<script type="text/javascript">
 		// create a title area and fill it
-		d3.select("body")
-			.append("div")
-	  		.attr("id", "hdrdiv")
-	  		.text("ASGS Operational Awareness Dashboard")
-	  				
+		var tbl = d3.select("body")
+					.append("table")
+			  		.attr("id", "pagehdr");
+		
+		var tr = tbl.append("tr");
+		
+		tr.append("td")
+					.html(function() {
+						return "<img height=\"30\" width=\"30\" src=\"{% static 'ASGS_Mon/images/logo.jpg' %}\"/>";
+					});
+				
+		tr.append("td")
+			.attr("text-align", "center")
+			.text("ASGS Operational Awareness Dashboard");
+		
 		// set the location of the individual site component
 		var margin = {top: 15, right: 15, bottom: 20, left: 15};
 		
@@ -131,15 +141,21 @@
 							if(si.style('height') == "75px")
 							{
 								// make it small
-								si.attr('height', "15px");
+								si.transition()
+									.duration(300)
+										.attr("height", "15")
+
+								//si.attr('height', "15px");
 								
 								// adjust the direction image
 								d3.select(this).attr({"xlink:href": "{% static 'ASGS_Mon/images/sorted_down.gif' %}"});
 							}
 							else
 							{
-								// make it large
-								si.attr('height', "75px");	
+								// make it small
+								si.transition()
+									.duration(300)
+										.attr("height", "75")
 								
 								// adjust the direction image
 								d3.select(this).attr({"xlink:href": "{% static 'ASGS_Mon/images/sorted_up.gif' %}"});
