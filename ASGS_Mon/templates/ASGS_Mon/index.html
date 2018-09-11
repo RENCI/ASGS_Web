@@ -13,14 +13,13 @@
 		d3.select("body")
 			.append("div")
 	  		.attr("id", "hdrdiv")
-	  		.attr("style", "line-height: 50px; text-align:center; margin-top:-25px; margin-bottom:25px; font-size:20pt;")
 	  		.text("ASGS Operational Awareness Dashboard")
 	  				
 		// set the location of the individual site component
-		var margin = {top: 20, right: 15, bottom: 20, left: 15};
+		var margin = {top: 15, right: 15, bottom: 20, left: 15};
 		
 		// set the width of the individual site component
-		var width = 400 - margin.left - margin.right;
+		var width = margin.left + 450 + margin.right;
 	    
 		// set the height of the individual site component
 		var height = 50 - margin.top - margin.bottom;
@@ -34,13 +33,13 @@
 	 	if(typeof(EventSource) !== "undefined") 
 	 	{
 		 	// define the event endpoint 
-	 		var eSource = new EventSource("http://localhost:8000/ASGS_Mon/event/");
+	 		var eSource = new EventSource("event");
 		
-	 		// detect message receipt
+	 		// detect message receipt to a event load
 	 		eSource.onmessage = function(event) 
 	 		{		 	 		
 				// create/init the shells for all the site instances
-				d3.json("http://localhost:8000/ASGS_Mon/init/", function(error, data)
+				d3.json("init", function(error, data)
 				{
 					// erase all the site instances on error
 					if (error || data.length == 0) 
@@ -65,7 +64,7 @@
 							for(j=0; j<data.length; j++)
 							{
 								// was it previously rendered
-								if(curRendered[i].parentNode.id == data[j].eg_id)
+								if(curRendered[i].parentNode.id == "_" + data[j].eg_id)
 								{
 									// set the flag
 									bfound = true;
@@ -84,14 +83,15 @@
 				  	// render the svg region for all individual site instances
 				  	var svg = d3.select("body").selectAll("svg")
 					    .data(data)
-					    .enter().append("svg")
-							.attr("class", "siteInstanceView")
-							.attr("id", function(d) {return d.eg_id;} )
-							.attr("width", width + margin.left + margin.right)
-							.attr("height", height + margin.top + margin.bottom + 40)
-					    .append("g")
-							.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-							.call(siteInstance);
+					    .enter()
+					    	.append("svg")
+								.attr("class", "siteInstanceView")
+								.attr("id", function(d) {return "_" + d.eg_id;} )
+								.attr("width", width + 30)
+								.attr("height", height + 60)
+								.append("g")
+									.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+									.call(siteInstance);
 				  	
 					// append the run parameters text
 					svg.append("g")
@@ -113,8 +113,39 @@
 					
 					// create a region for the textual information
 				  	var title = svg.append("g")
-				      	.attr("transform", "translate(-10,-5)");
+				      	.attr("transform", "translate(0, -4)");
 				
+					// append the expand/collapse image
+					title.append("image")
+					    .attr("xlink:href","{% static 'ASGS_Mon/images/sorted_up.gif' %}")
+					    .attr("width", 10)
+					    .attr("height", 10)
+						.attr("x", -13)
+						.attr("y", -9)
+						.on("click", function(d) 
+						{
+							// get a ref to the site instance
+							si = d3.select("#_" + d.eg_id);
+							
+							// if it is large
+							if(si.style('height') == "75px")
+							{
+								// make it small
+								si.attr('height', "15px");
+								
+								// adjust the direction image
+								d3.select(this).attr({"xlink:href": "{% static 'ASGS_Mon/images/sorted_down.gif' %}"});
+							}
+							else
+							{
+								// make it large
+								si.attr('height', "75px");	
+								
+								// adjust the direction image
+								d3.select(this).attr({"xlink:href": "{% static 'ASGS_Mon/images/sorted_up.gif' %}"});
+							}
+						})
+
 					// append the site name
 					title.append("text")
 					    .text(function(d) { return d.title + " - Process: TBD"; })
@@ -125,16 +156,15 @@
 						.text(function(d) { return d.cluster_state; })
 						.attr("id", function(d) { return d.title.replace(" ", "") + "_state"; })
 						.attr("class", "stateSm")
-						.attr("y", "40px")
 						.attr("x", width/2 - 40);
 					
-					// append the summary text
-					title.append("text")
-						.text("textarea")
-						.text(function(d) { return ""; })
-						.attr("id", function(d) { return d.title.replace(" ", "") + "_eventSummary"; })
-						.attr("class", "eventSummary")
-						.attr("y", "55px")
+					var lastEvent = svg.append("g")
+			      		.attr("transform", "translate(0, 45)")
+						.append("text")
+							.text("textarea")
+							.text(function(d) { return ""; })
+							.attr("id", function(d) { return d.title.replace(" ", "") + "_eventSummary"; })
+							.attr("class", "eventSummary")
 				});
 				
 	 	 		// parse the incoming data object

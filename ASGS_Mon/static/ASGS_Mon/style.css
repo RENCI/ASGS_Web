@@ -19,7 +19,7 @@ body {
   margin: auto;
   padding-top: 40px;
   position: relative;
-  width: 90%;
+  width: 95%;
   border: 1px solid black;
 }
 
@@ -31,7 +31,13 @@ body {
     height: 50px;
     width: 98%;
     margin-left: 10px;
+    margin-right: 20px;
   	border: 1px solid black;
+  	line-height: 50px; 
+  	text-align: center; 
+  	margin-top: -20px; 
+  	margin-bottom: 5px; 
+  	font-size: 20pt;
 }
 
 table { margin-left: 10px;border: 1px;}
@@ -48,5 +54,5 @@ table { margin-left: 10px;border: 1px;}
 .siteInstanceView .message { font: 12px sans-serif; fill: #999; }
 .siteInstanceView .stateSm { font: 9px sans-serif; font-weight: bold; font-style: italic;}
 .siteInstanceView .state { font: 10px sans-serif; }
-.siteInstanceView .eventSummary { font: 8px sans-serif; font-style: italic;}
+.siteInstanceView .eventSummary { font: 9px sans-serif; font-style: italic;}
 .siteInstanceView .params { font: 8px sans-serif; font-style: italic;}

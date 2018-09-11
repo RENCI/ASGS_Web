@@ -27,7 +27,7 @@
 			{
 				// update the message text
 				d3.select("#" + d.title.replace(" ", "") + "_operation").text(d.event_message);
-				      
+				
 				// get the color of the state indicator for the cluster text
 				if(d.cluster_state_id == "6" || d.cluster_state_id == "3")
 					stateTextColor = "red"
@@ -50,16 +50,19 @@
 			    
 			    // update the summary indicator
 			    d3.select("#" + d.title.replace(" ", "") + "_eventSummary")
-			    	.text("Last event - " + d.datetime + ",  Advisory: " + d.advisory_number + ", Storm: " + d.storm + ", Message: " +  d.message)			    
+			    	.text("Last event - " + d.datetime + ",  Advisory: " + d.advisory_number + ", Storm: " + d.storm + ", Message: " +  d.message)			    			    
+			
+				// get a reference to this element
+				var g = d3.select(this);
 			    
+				// is this component is in expanded view
+				var isExpanded = true;
+				
 				// setup the bar graph details
 				var rangez = ranges.call(this, d, i).slice().sort(d3.descending);
 				var markerz = markers.call(this, d, i).slice().sort(d3.descending);
 				var measurez = measures.call(this, d, i).slice().sort(d3.descending);
-			
-				// get a reference to this element
-				var g = d3.select(this);
-			
+							
 				// Compute the new x-scale.
 				var x1 = d3.scale.linear()
 					.domain([0, Math.max(rangez[0], markerz[0], measurez[0])])
