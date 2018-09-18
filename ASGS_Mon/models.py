@@ -4,7 +4,6 @@ class State_type_lu(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length = 50)
     description = models.CharField(max_length = 100)
-    view_order = models.IntegerField()
 
 class Instance_state_type_lu(models.Model):
     id = models.AutoField(primary_key=True)
@@ -15,7 +14,6 @@ class Event_type_lu(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length = 50)
     description = models.CharField(max_length = 100)
-    view_order = models.IntegerField()
     pct_complete = models.IntegerField()
     
 class Site_lu(models.Model):
@@ -25,7 +23,6 @@ class Site_lu(models.Model):
     cluster_name = models.CharField(max_length = 100)
     tech_contact = models.CharField(max_length = 100)
     phys_location = models.CharField(max_length = 100)
-    notes = models.CharField(max_length = 1000)
     
 class Instance(models.Model):
     id = models.AutoField(primary_key=True)
