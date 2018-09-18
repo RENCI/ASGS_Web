@@ -27,6 +27,16 @@ class Site_lu(models.Model):
     phys_location = models.CharField(max_length = 100)
     notes = models.CharField(max_length = 1000)
     
+class Instance(models.Model):
+    id = models.AutoField(primary_key=True)
+    epoch = models.BigIntegerField()
+    run_params = models.CharField(max_length = 100)
+    inst_state_type = models.ForeignKey(Instance_state_type_lu, on_delete=models.PROTECT)
+    site = models.ForeignKey(Site_lu, on_delete=models.PROTECT)
+
+    class Meta:
+       unique_together = (('id', 'epoch'),)
+    
 class Event_group(models.Model):    
     id = models.AutoField(primary_key=True)
     instance = models.ForeignKey(Instance, on_delete=models.PROTECT)
@@ -48,13 +58,3 @@ class Event(models.Model):
     pct_complete = models.IntegerField()
     process = models.CharField(max_length = 100)
     raw_data = models.CharField(max_length = 4000)
-
-class Instance(models.Model):
-    id = models.AutoField(primary_key=True)
-    epoch = models.BigIntegerField()
-    run_params = models.CharField(max_length = 100)
-    inst_state_type = models.ForeignKey(Instance_state_type_lu, on_delete=models.PROTECT)
-    site = models.ForeignKey(Site_lu, on_delete=models.PROTECT)
-
-    class Meta:
-       unique_together = (('id', 'epoch'),)
