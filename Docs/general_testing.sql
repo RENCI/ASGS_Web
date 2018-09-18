@@ -59,9 +59,11 @@ inner join (select max(id) as id, site_id from ASGS_Mon_event_group group by sit
 
 */
 
+
+
 delete from ASGS_Mon_event_group; delete from ASGS_Mon_event;
 
---delete from ASGS_Mon_event_group where id=148; delete from ASGS_Mon_event where event_group_id=148;
+--delete from ASGS_Mon_event_group where id=142; delete from ASGS_Mon_event where event_group_id=142;
 
 --select * from ASGS_Mon_event_group eg join ASGS_Mon_site_lu s on s.id=eg.site_id;
 --select * from ASGS_Mon_event;
