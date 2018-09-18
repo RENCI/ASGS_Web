@@ -7,6 +7,7 @@ from ASGS_Mon import models
 def index(request):
     return render(request, 'ASGS_Mon/index.html', {})
 
+# gets the running instances
 def init(request):        
     siteInstances = "";
     
@@ -47,7 +48,7 @@ def init(request):
     # return the resultant JSON to the caller
     return response
     
-# client-side event request handler
+# client-side event request handler to populate the information in each instance view
 def event(request):
     # define a variable that controls the event source reload time.
     retryMilliSec = '3000';
