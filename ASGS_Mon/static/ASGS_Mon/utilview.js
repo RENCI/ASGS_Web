@@ -38,7 +38,7 @@
 			      
 			    // update the site state indicator
 			    d3.select("#" + d.title.replace(" ", "") + "_state")
-			    	.text("Cluster state: " + d.cluster_state)
+			    	.text("Instance: " + d.cluster_state)
 			    		.transition().duration(0)
 			      		.attr("fill", "green")
 			    	.transition().delay(0).duration(2000)
