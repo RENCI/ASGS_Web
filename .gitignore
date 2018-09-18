@@ -1,1 +1,4 @@
 /db.sqlite3
+/venv
+/ASGS_Mon/__pycache__
+/ASGS_Web/__pycache__

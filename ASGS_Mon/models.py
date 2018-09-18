@@ -5,6 +5,11 @@ class State_type_lu(models.Model):
     name = models.CharField(max_length = 50)
     description = models.CharField(max_length = 100)
     view_order = models.IntegerField()
+
+class Instance_state_type_lu(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length = 50)
+    description = models.CharField(max_length = 100)
     
 class Event_type_lu(models.Model):
     id = models.AutoField(primary_key=True)
@@ -15,16 +20,28 @@ class Event_type_lu(models.Model):
     
 class Site_lu(models.Model):
     id = models.AutoField(primary_key=True)
-    state_type = models.ForeignKey(State_type_lu, on_delete=models.PROTECT)
     name = models.CharField(max_length = 50)
     description = models.CharField(max_length = 100)
     cluster_name = models.CharField(max_length = 100)
     tech_contact = models.CharField(max_length = 100)
     phys_location = models.CharField(max_length = 100)
+    notes = models.CharField(max_length = 1000)
+    
+class Instance(models.Model):
+    id = models.AutoField(primary_key=True)
+    instance_id = models.BigIntegerField()
+    start_ts = models.DateTimeField()
+    end_ts = models.DateTimeField()
+    run_params = models.CharField(max_length = 100)
+    inst_state_type = models.ForeignKey(Instance_state_type_lu, on_delete=models.PROTECT)
+    site = models.ForeignKey(Site_lu, on_delete=models.PROTECT)
+
+    class Meta:
+        unique_together = (('id', 'instance_id'),)
     
 class Event_group(models.Model):    
     id = models.AutoField(primary_key=True)
-    site = models.ForeignKey(Site_lu, on_delete=models.PROTECT)
+    instance = models.ForeignKey(Instance, on_delete=models.PROTECT)
     state_type = models.ForeignKey(State_type_lu, on_delete=models.PROTECT)
     event_group_ts = models.DateTimeField()
     storm_name = models.CharField(max_length = 50)
@@ -42,6 +59,4 @@ class Event(models.Model):
     advisory_id = models.CharField(max_length = 50)
     pct_complete = models.IntegerField()
     process = models.CharField(max_length = 100)
-    host_start_file = models.CharField(max_length = 1000)
     raw_data = models.CharField(max_length = 4000)
-
