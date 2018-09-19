@@ -10,7 +10,8 @@
 -- update ASGS_Mon_instance set inst_state_type_id=2 where id=8
 -- update ASGS_Mon_event_group set state_type_id=2 where id=8
 
--- insert instances
+
+-- insert intial ASGS_Mon_instance for renci cluster
 INSERT INTO ASGS_Mon_instance (process_id, site_id, inst_state_type_id, start_ts, run_params) VALUES (1, 0, 1, datetime(), 'run params 1');
 
 -- insert an event group
@@ -34,7 +35,7 @@ INSERT INTO ASGS_Mon_event (site_id, event_group_id, event_type_id, event_ts, ad
 INSERT INTO ASGS_Mon_instance (process_id, site_id, inst_state_type_id, start_ts, run_params) VALUES (6, 0, 1, datetime(), 'run params 6');
 
 -- insert an event group
-INSERT INTO ASGS_Mon_event_group (instance_id, state_type_id, event_group_ts, storm_name, storm_number, advisory_id, final_product) VALUES ((select max(id) from ASGS_Mon_instance where site_id=0 and process_id=6), 1, datetime(), 'Alpha', '1', '1', 'product 1');
+INSERT INTO ASGS_Mon_event_group (instance_id, state_type_id, event_group_ts, storm_name, storm_number, advisory_id, final_product) VALUES ((select max(id) from ASGS_Mon_instance where site_id=0 and process_id=6), 1, datetime(), 'Alpha', '1', '1', 'product 6');
 
 -- insert the events for site 0, instance 1 
 -- first get max event group id for display purposes 
@@ -54,7 +55,7 @@ INSERT INTO ASGS_Mon_event (site_id, event_group_id, event_type_id, event_ts, ad
 
 
 
--- additional ASGS_Mon_instance for renci cluster
+-- ASGS_Mon_instance for TACC cluster
 INSERT INTO ASGS_Mon_instance (process_id, site_id, inst_state_type_id, start_ts, run_params) VALUES (2, 1, 1, datetime(), 'run params 2');
 
 -- insert an event group
