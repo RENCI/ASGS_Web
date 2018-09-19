@@ -1,14 +1,14 @@
 -- wipe everything
-delete from ASGS_Mon_instance;
-delete from ASGS_Mon_event_group;
-delete from ASGS_Mon_event;
+-- delete from ASGS_Mon_instance;
+-- delete from ASGS_Mon_event_group;
+-- delete from ASGS_Mon_event;
 
 -- select * from ASGS_Mon_instance
 -- select * from ASGS_Mon_event_group
 -- select * from ASGS_Mon_event_group where instance_id = (select max(instance_id) from ASGS_Mon_instance where site_id=0 and process_id=1)
 -- select * from ASGS_Mon_event
 -- update ASGS_Mon_instance set inst_state_type_id=2 where id=8
-update ASGS_Mon_event_group set state_type_id=2 where id=8
+-- update ASGS_Mon_event_group set state_type_id=2 where id=8
 
 -- insert instances
 INSERT INTO ASGS_Mon_instance (process_id, site_id, inst_state_type_id, start_ts, run_params) VALUES (1, 0, 1, datetime(), 'run params 1');
