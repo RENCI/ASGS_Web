@@ -26,15 +26,15 @@ class Site_lu(models.Model):
     
 class Instance(models.Model):
     id = models.AutoField(primary_key=True)
-    instance_id = models.BigIntegerField()
-    start_ts = models.DateTimeField()
-    end_ts = models.DateTimeField()
-    run_params = models.CharField(max_length = 100)
-    inst_state_type = models.ForeignKey(Instance_state_type_lu, on_delete=models.PROTECT)
+    process_id = models.BigIntegerField()
     site = models.ForeignKey(Site_lu, on_delete=models.PROTECT)
+    inst_state_type = models.ForeignKey(Instance_state_type_lu, on_delete=models.PROTECT)
+    start_ts = models.DateTimeField()
+    end_ts = models.DateTimeField(null = True)
+    run_params = models.CharField(max_length = 100)
 
     class Meta:
-        unique_together = (('id', 'instance_id'),)
+        unique_together = (('id', 'process_id'))
     
 class Event_group(models.Model):    
     id = models.AutoField(primary_key=True)

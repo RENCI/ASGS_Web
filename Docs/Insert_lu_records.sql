@@ -23,7 +23,7 @@ INSERT INTO ASGS_Mon_state_type_lu (id, name, description) VALUES (2, 'PEND', 'P
 INSERT INTO ASGS_Mon_state_type_lu (id, name, description) VALUES (3, 'FAIL', 'Error.');
 INSERT INTO ASGS_Mon_state_type_lu (id, name, description) VALUES (4, 'WARN', 'Warning.');
 INSERT INTO ASGS_Mon_state_type_lu (id, name, description) VALUES (5, 'IDLE', 'Idle.');
-INSERT INTO ASGS_Mon_state_type_lu (id, name, description) VALUES (6, 'CMPL', 'Completing and event.');
+INSERT INTO ASGS_Mon_state_type_lu (id, name, description) VALUES (6, 'CMPL', 'Completing an event.');
 INSERT INTO ASGS_Mon_state_type_lu (id, name, description) VALUES (7, 'NONE', 'Starting or completing an event group.');
 
 delete from ASGS_Mon_instance_state_type_lu;
@@ -33,7 +33,7 @@ INSERT INTO ASGS_Mon_instance_state_type_lu (id, name, description) VALUES (2, '
 INSERT INTO ASGS_Mon_instance_state_type_lu (id, name, description) VALUES (3, 'FAIL', 'Error.');
 INSERT INTO ASGS_Mon_instance_state_type_lu (id, name, description) VALUES (4, 'WARN', 'Warning.');
 INSERT INTO ASGS_Mon_instance_state_type_lu (id, name, description) VALUES (5, 'IDLE', 'Idle.');
-INSERT INTO ASGS_Mon_instance_state_type_lu (id, name, description) VALUES (6, 'CMPL', 'Completing and event.');
+INSERT INTO ASGS_Mon_instance_state_type_lu (id, name, description) VALUES (6, 'CMPL', 'Completing an event.');
 INSERT INTO ASGS_Mon_instance_state_type_lu (id, name, description) VALUES (7, 'NONE', 'Starting or completing an event group.');
 
 -- use this to create python constants ready for cut/paste into the codebase

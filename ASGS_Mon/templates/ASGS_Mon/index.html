@@ -74,7 +74,7 @@
 							for(j=0; j<data.length; j++)
 							{
 								// was it previously rendered
-								if(curRendered[i].parentNode.id == "_" + data[j].eg_id)
+								if(curRendered[i].parentNode.id == "_" + data[j].instance_id)
 								{
 									// set the flag
 									bfound = true;
@@ -96,28 +96,19 @@
 					    .enter()
 					    	.append("svg")
 								.attr("class", "siteInstanceView")
-								.attr("id", function(d) {return "_" + d.eg_id;} )
+								.attr("id", function(d) {return "_" + d.instance_id;} )
 								.attr("width", width + 30)
 								.attr("height", height + 60)
 								.append("g")
 									.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 									.call(siteInstance);
-				  	
-					// append the run parameters text
-					svg.append("g")
-				      	.style("text-anchor", "end")
-						.attr("transform", "translate(" + width + ", -5)")
-							.append("text")
-								.attr("id", function(d) { return d.title.replace(" ", "") + "_params"; })
-								.attr("class", "params")
-								.text(function(d) { return ""; });					 	 		
-	
+				  		
 					// append the event operation message text that goes inside the bar graph
 					svg.append("g")
 						.attr("transform", "translate(6," + height / 2 + ")")
 							.append("text")
 								.text(function(d) { return d.message; })
-								.attr("id", function(d) { return d.title.replace(" ", "") + "_operation"; })
+								.attr("id", function(d) { return "_" + d.instance_id + "_operation"; })
 								.attr("class", "state")
 								.attr("dy", ".35em");
 					
@@ -135,7 +126,7 @@
 						.on("click", function(d) 
 						{
 							// get a ref to the site instance
-							si = d3.select("#_" + d.eg_id);
+							si = d3.select("#_" + d.instance_id);
 							
 							// if it is large
 							if(si.style('height') == "75px")
@@ -164,22 +155,31 @@
 
 					// append the site name
 					title.append("text")
-					    .text(function(d) { return d.title + " - Process: TBD"; })
+					    .text(function(d) { return d.title + " - Process: " + d.process_id; })
 					    .attr("class", "title");
 				  	  
 					// append the process run state. colored RGB later
 					title.append("text")
 						.text(function(d) { return d.cluster_state; })
-						.attr("id", function(d) { return d.title.replace(" ", "") + "_state"; })
+						.attr("id", function(d) { return "_" + d.instance_id + "_state"; })
 						.attr("class", "stateSm")
 						.attr("x", width/2 - 40);
 					
+					// append the run parameters text
+					svg.append("g")
+				      	.style("text-anchor", "end")
+						.attr("transform", "translate(" + width + ", -5)")
+							.append("text")
+								.attr("id", function(d) { return "_" + d.instance_id + "_params"; })
+								.attr("class", "params")
+								.text(function(d) { return "Run params: " + d.run_params; });					 	 		
+
 					var lastEvent = svg.append("g")
 			      		.attr("transform", "translate(0, 45)")
 						.append("text")
 							.text("textarea")
-							.text(function(d) { return ""; })
-							.attr("id", function(d) { return d.title.replace(" ", "") + "_eventSummary"; })
+							.text(function(d) { return "Loading..."; })
+							.attr("id", function(d) { return "_" + d.instance_id + "_eventSummary"; })
 							.attr("class", "eventSummary")
 				});
 				

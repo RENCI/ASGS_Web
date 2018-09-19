@@ -26,7 +26,7 @@
 			g.each(function(d, i) 
 			{
 				// update the message text
-				d3.select("#" + d.title.replace(" ", "") + "_operation").text(d.event_message);
+				d3.select("#_" + d.instance_id + "_operation").text(d.event_message);
 				
 				// get the color of the state indicator for the cluster text
 				if(d.cluster_state_id == "6" || d.cluster_state_id == "3")
@@ -37,19 +37,15 @@
 			    	stateTextColor = "green";
 			      
 			    // update the site state indicator
-			    d3.select("#" + d.title.replace(" ", "") + "_state")
+			    d3.select("#_" + d.instance_id + "_state")
 			    	.text("Instance: " + d.cluster_state)
 			    		.transition().duration(0)
 			      		.attr("fill", "green")
 			    	.transition().delay(0).duration(2000)
 			      		.attr("fill", stateTextColor);		    			    
-
-			    // update the run parameter indicator
-			    d3.select("#" + d.title.replace(" ", "") + "_params")
-			    	.text("Run params: TBD");
 			    
 			    // update the summary indicator
-			    d3.select("#" + d.title.replace(" ", "") + "_eventSummary")
+			    d3.select("#_" + d.instance_id + "_eventSummary")
 			    	.text("Last event - " + d.datetime + ",  Advisory: " + d.advisory_number + ", Storm: " + d.storm + ", Message: " +  d.message)			    			    
 			
 				// get a reference to this element
