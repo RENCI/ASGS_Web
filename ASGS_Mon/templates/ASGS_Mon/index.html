@@ -18,11 +18,11 @@
 		
 		tr.append("td")
 					.html(function() {
-						return "<img height=\"30\" width=\"30\" src=\"{% static 'ASGS_Mon/images/logo.jpg' %}\"/>";
+						return "<img src=\"{% static 'ASGS_Mon/images/logo.jpg' %}\"/>";
 					});
 				
 		tr.append("td")
-			.attr("text-align", "center")
+			.attr("text-align", "middle")
 			.text("ASGS Operational Awareness Dashboard");
 		
 		// set the location of the individual site component
@@ -118,7 +118,7 @@
 				
 					// append the expand/collapse image
 					title.append("image")
-					    .attr("xlink:href","{% static 'ASGS_Mon/images/sorted_up.gif' %}")
+					    .attr("xlink:href","{% static 'ASGS_Mon/images/up2.gif' %}")
 					    .attr("width", 10)
 					    .attr("height", 10)
 						.attr("x", -13)
@@ -139,7 +139,7 @@
 								//si.attr('height', "15px");
 								
 								// adjust the direction image
-								d3.select(this).attr({"xlink:href": "{% static 'ASGS_Mon/images/sorted_down.gif' %}"});
+								d3.select(this).attr({"xlink:href": "{% static 'ASGS_Mon/images/down2.gif' %}"});
 							}
 							else
 							{
@@ -149,7 +149,7 @@
 										.attr("height", "75")
 								
 								// adjust the direction image
-								d3.select(this).attr({"xlink:href": "{% static 'ASGS_Mon/images/sorted_up.gif' %}"});
+								d3.select(this).attr({"xlink:href": "{% static 'ASGS_Mon/images/up2.gif' %}"});
 							}
 						})
 

@@ -38,15 +38,15 @@
 			      
 			    // update the site state indicator
 			    d3.select("#_" + d.instance_id + "_state")
-			    	.text("Instance: " + d.cluster_state)
+			    	.text("Process " + d.cluster_state)
 			    		.transition().duration(0)
 			      		.attr("fill", "green")
-			    	.transition().delay(0).duration(2000)
+			    	.transition().delay(0).duration(duration)
 			      		.attr("fill", stateTextColor);		    			    
 			    
 			    // update the summary indicator
 			    d3.select("#_" + d.instance_id + "_eventSummary")
-			    	.text("Last event - " + d.datetime + ",  Advisory: " + d.advisory_number + ", Storm: " + d.storm + ", Message: " +  d.message)			    			    
+			    	.text(d.datetime + " -  Advisory: " + d.advisory_number + ", Storm: " + d.storm + ", Message: " +  d.message)			    			    
 			
 				// get a reference to this element
 				var g = d3.select(this);
@@ -122,9 +122,8 @@
 						.attr("width", w1)
 						.attr("height", height / 1)
 						.attr("x", reverse ? x1 : 0)
-						.attr("y", 0);
-	
-				measure.attr("fill", measureColor);
+						.attr("y", 0)
+						.attr("fill", measureColor);
 	
 				// Update the marker lines.
 				var marker = g.selectAll("line.marker").data(markerz);

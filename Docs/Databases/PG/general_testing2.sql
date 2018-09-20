@@ -4,7 +4,7 @@
 -- delete from "ASGS_Mon_event";
 
 -- select * from "ASGS_Mon_instance"
--- select * from "ASGS_Mon_event"group"
+-- select * from "ASGS_Mon_event_group"
 -- select * from "ASGS_Mon_event_group" where instance_id = (select max(instance_id) from "ASGS_Mon_instance" where site_id=0 and process_id=1)
 -- select * from "ASGS_Mon_event"
 -- update "ASGS_Mon_instance" set inst_state_type_id=2 where id=8
@@ -74,3 +74,6 @@ INSERT INTO "ASGS_Mon_event" (site_id, event_group_id, event_type_id, event_ts, 
 
 INSERT INTO "ASGS_Mon_event" (site_id, event_group_id, event_type_id, event_ts, advisory_id, pct_complete, process, raw_data) VALUES (0, (SELECT MAX(id) FROM "ASGS_Mon_event_group" where instance_id = (select max(id) from "ASGS_Mon_instance" where site_id=1 and process_id=2)), 2, now(), 'advisory 2', 30, 'process 2', 'event data 2-3');;
 INSERT INTO "ASGS_Mon_event" (site_id, event_group_id, event_type_id, event_ts, advisory_id, pct_complete, process, raw_data) VALUES (0, (SELECT MAX(id) FROM "ASGS_Mon_event_group" where instance_id = (select max(id) from "ASGS_Mon_instance" where site_id=1 and process_id=2)), 2, now(), 'advisory 2', 40, 'process 2', 'event data 2-4');;
+
+INSERT INTO "ASGS_Mon_event" (site_id, event_group_id, event_type_id, event_ts, advisory_id, pct_complete, process, raw_data) VALUES (0, (SELECT MAX(id) FROM "ASGS_Mon_event_group" where instance_id = (select max(id) from "ASGS_Mon_instance" where site_id=1 and process_id=2)), 3, now(), 'advisory 2', 30, 'process 2', 'event data 3-5');;
+INSERT INTO "ASGS_Mon_event" (site_id, event_group_id, event_type_id, event_ts, advisory_id, pct_complete, process, raw_data) VALUES (0, (SELECT MAX(id) FROM "ASGS_Mon_event_group" where instance_id = (select max(id) from "ASGS_Mon_instance" where site_id=1 and process_id=2)), 3, now(), 'advisory 2', 40, 'process 2', 'event data 3-6');;
