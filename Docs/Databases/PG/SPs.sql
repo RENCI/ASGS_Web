@@ -19,10 +19,10 @@ BEGIN
 	SELECT json_agg(json_build_object
 	(
 		'instance_id', i.id,
-		'site_name', s.name,
-		'cluster_name', s.cluster_name,
 		'process_id', i.process_id,
 		'run_params', i.run_params,
+		'title', s.name,
+		'subtitle', s.cluster_name,
 		'message', '',
 		'ranges', ARRAY[100],
 		'measures', ARRAY[0],
@@ -47,7 +47,6 @@ GRANT EXECUTE ON FUNCTION public.get_init_json() TO PUBLIC;
 COMMENT ON FUNCTION public.get_init_json()
     IS 'Returns a recordset (json) of the running ASGS cluster instances.';
 
-    
     
 -- FUNCTION: public.get_event_json()
 
@@ -116,3 +115,4 @@ GRANT EXECUTE ON FUNCTION public.get_event_json() TO PUBLIC;
 
 COMMENT ON FUNCTION public.get_event_json()
     IS 'Returns a recordset (json) of the active cluster events.';
+    

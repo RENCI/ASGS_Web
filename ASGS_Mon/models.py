@@ -57,3 +57,6 @@ class Event(models.Model):
     pct_complete = models.IntegerField()
     process = models.CharField(max_length = 100)
     raw_data = models.CharField(max_length = 4000)
+
+class Json(models.Model):
+    data = models.CharField(max_length = 4000)
