@@ -86,7 +86,7 @@ BEGIN
 		'type', etl.name, 
 		'event_message', 'Storm ' || etl.description || ': ' || etl.description || ' for advisory number ' || eg.advisory_id, 
 		'pct_complete', e.pct_complete, 
-		'datetime', e.event_ts, 
+		'datetime', to_char(e.event_ts, 'YYYY-MM-DD HH24:MI:SS'), 
 		'message', etl.description,
 		'storm', eg.storm_name, 
 		'storm_number', eg.storm_number, 
@@ -115,4 +115,3 @@ GRANT EXECUTE ON FUNCTION public.get_event_json() TO PUBLIC;
 
 COMMENT ON FUNCTION public.get_event_json()
     IS 'Returns a recordset (json) of the active cluster events.';
-    
