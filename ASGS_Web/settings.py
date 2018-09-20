@@ -89,6 +89,14 @@ DATABASES = {
         'PASSWORD': 'Z1ppityD0Da',
         'HOST': 'asgs-monitordb.edc.renci.org',
         'PORT': '',
+    },
+    'productiondb': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'asgs_dashboard',
+        'USER': 'asgs',
+        'PASSWORD': 'Z1ppityD0Da',
+        'HOST': 'asgs-monitordb.edc.renci.org',
+        'PORT': '',
     }
 }
 
