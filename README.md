@@ -16,7 +16,7 @@ Config steps:
 => delete 0001 file 
 => python3 manage.py makemigrations ASGS_Mon
 => python3 manage.py sqlmigrate ASGS_Mon 0001
-=> python3 manage.py migrate
+=> python3 manage.py migrate (--database=productiondb) # database tag is optional; default db will be used if omitted
 => python3 manage.py runserver 0.0.0.0:8000 
 ```
 
