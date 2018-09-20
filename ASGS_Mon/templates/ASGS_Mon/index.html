@@ -43,13 +43,13 @@
 	 	if(typeof(EventSource) !== "undefined") 
 	 	{
 		 	// define the event endpoint 
-	 		var eSource = new EventSource("event");
+	 		var eSource = new EventSource("dataReq?type=event");
 		
 	 		// detect message receipt to a event load
 	 		eSource.onmessage = function(event) 
 	 		{		 	 		
 				// create/init the shells for all the site instances
-				d3.json("init", function(error, data)
+				d3.json("dataReq?type=init", function(error, data)
 				{
 					// erase all the site instances on error
 					if (error || data.length == 0) 
