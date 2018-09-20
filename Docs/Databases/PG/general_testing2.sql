@@ -1,11 +1,11 @@
 -- wipe everything
 -- delete from "ASGS_Mon_instance";
--- delete from ""SGS_Mon_event_group";
+-- delete from "ASGS_Mon_event_group";
 -- delete from "ASGS_Mon_event";
 
 -- select * from "ASGS_Mon_instance"
--- select * from ""SGS_Mon_event"group"
--- select * from ""SGS_Mon_event_group" where instance_id = (select max(instance_id) from "ASGS_Mon_instance" where site_id=0 and process_id=1)
+-- select * from "ASGS_Mon_event"group"
+-- select * from "ASGS_Mon_event_group" where instance_id = (select max(instance_id) from "ASGS_Mon_instance" where site_id=0 and process_id=1)
 -- select * from "ASGS_Mon_event"
 -- update "ASGS_Mon_instance" set inst_state_type_id=2 where id=8
 -- update "ASGS_Mon_event_group" set state_type_id=2 where id=8
