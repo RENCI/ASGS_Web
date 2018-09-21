@@ -24,7 +24,7 @@ def dataReq(request):
     
         # events need a wrapper
         if reqType == 'event':
-            data = 'retry:3000\ndata: {"utilization" : ' + data +'} \n\n'
+            data = 'retry:5000\ndata: {"utilization" : ' + data +'} \n\n'
     else:
         data = ''
                

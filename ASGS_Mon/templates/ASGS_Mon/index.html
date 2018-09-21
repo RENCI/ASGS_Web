@@ -105,17 +105,7 @@
 								.attr("height", 75)
 								.append("g")
 									.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-									.call(siteInstance);
-				  		
-					// append the event operation message text that goes inside the bar graph
-					svg.append("g")
-						.attr("transform", "translate(6," + height / 2 + ")")
-							.append("text")
-								.text("Working...")
-								.attr("id", function(d) { return "_" + d.instance_id + "_operation"; })
-					      		.attr("fill", "gray")
-								.attr("class", "state")
-								.attr("dy", ".35em");
+									.call(siteInstance);				  		
 					
 					// create a region for the textual information
 				  	var title = svg.append("g")
@@ -142,7 +132,7 @@
 										.attr("height", "14")
 								
 								// adjust the direction image
-								d3.select(this).attr({"xlink:href": "{% static 'ASGS_Mon/images/down2.gif' %}"});
+								d3.select(this).attr({"xlink:href": "{% static 'ASGS_Mon/images/up2.gif' %}"});
 							}
 							else
 							{
@@ -152,7 +142,7 @@
 										.attr("height", "75")
 								
 								// adjust the direction image
-								d3.select(this).attr({"xlink:href": "{% static 'ASGS_Mon/images/up2.gif' %}"});
+								d3.select(this).attr({"xlink:href": "{% static 'ASGS_Mon/images/down2.gif' %}"});
 							}
 						})
 
@@ -168,7 +158,17 @@
 						.attr("class", "stateSm")
 			      		.attr("fill", "gray")
 						.attr("x", width/2 - 40);
-					
+
+					// append the event operation message text that goes inside the bar graph
+					svg.append("g")
+						.attr("transform", "translate(6," + height / 2 + ")")
+							.append("text")
+								.text("Working...")
+								.attr("id", function(d) { return "_" + d.instance_id + "_operation"; })
+					      		.attr("fill", "gray")
+								.attr("class", "state")
+								.attr("dy", ".35em");
+
 					// append the run parameters text
 					svg.append("g")
 				      	.style("text-anchor", "end")

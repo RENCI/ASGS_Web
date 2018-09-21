@@ -300,7 +300,7 @@
 	{
 		return function(d) 
 		{
-			return "translate(" + x(d) + ",0)";
+			return "translate(" + x(d) + ", 0)";
 		};
 	}
 	
