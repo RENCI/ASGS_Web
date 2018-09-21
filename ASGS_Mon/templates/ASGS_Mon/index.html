@@ -9,18 +9,22 @@
 	<script src="https://d3js.org/d3-time-format.v2.min.js"></script>
 	<script src="{% static 'ASGS_Mon/utilview.js' %}"></script>
 	<script type="text/javascript">
-		// create a title area and fill it
+		// create a table for the title area
 		var tbl = d3.select("body")
 					.append("table")
 			  		.attr("id", "pagehdr");
 		
+		// create a table row
 		var tr = tbl.append("tr");
 		
+		// create a row column for the logo
 		tr.append("td")
+			.attr("align", "left")
 					.html(function() {
 						return "<img src=\"{% static 'ASGS_Mon/images/logo.jpg' %}\"/>";
 					});
-				
+		
+		// and another for the title				
 		tr.append("td")
 			.attr("text-align", "middle")
 			.text("ASGS Operational Awareness Dashboard");
@@ -28,13 +32,13 @@
 		// set the location of the individual site component
 		var margin = {top: 15, right: 15, bottom: 20, left: 15};
 		
-		// set the width of the individual site component
+		// set the width of the individual site instance component
 		var width = margin.left + 450 + margin.right;
 	    
-		// set the height of the individual site component
+		// set the height of the individual site instance component
 		var height = 50 - margin.top - margin.bottom;
 	
-		// init the site instance visualization component
+		// create the site instance visualization component
 		var siteInstance = d3.siteInstanceView()
 	    	.width(width)
 	    	.height(height);
@@ -95,10 +99,10 @@
 					    .data(data)
 					    .enter()
 					    	.append("svg")
-								.attr("class", "siteInstanceView")
 								.attr("id", function(d) {return "_" + d.instance_id;} )
+								.attr("class", "siteInstanceView")
 								.attr("width", width + 30)
-								.attr("height", height + 60)
+								.attr("height", 75)
 								.append("g")
 									.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 									.call(siteInstance);
@@ -107,18 +111,19 @@
 					svg.append("g")
 						.attr("transform", "translate(6," + height / 2 + ")")
 							.append("text")
-								.text(function(d) { return d.message; })
+								.text("Working...")
 								.attr("id", function(d) { return "_" + d.instance_id + "_operation"; })
+					      		.attr("fill", "gray")
 								.attr("class", "state")
 								.attr("dy", ".35em");
 					
 					// create a region for the textual information
 				  	var title = svg.append("g")
-				      	.attr("transform", "translate(0, -4)");
+				      	.attr("transform", "translate(0, -5)");
 				
 					// append the expand/collapse image
 					title.append("image")
-					    .attr("xlink:href","{% static 'ASGS_Mon/images/up2.gif' %}")
+					    .attr("xlink:href","{% static 'ASGS_Mon/images/down2.gif' %}")
 					    .attr("width", 10)
 					    .attr("height", 10)
 						.attr("x", -13)
@@ -131,19 +136,17 @@
 							// if it is large
 							if(si.style('height') == "75px")
 							{
-								// make it small
+								// make it small, showing only the header
 								si.transition()
 									.duration(300)
-										.attr("height", "15")
-
-								//si.attr('height', "15px");
+										.attr("height", "14")
 								
 								// adjust the direction image
 								d3.select(this).attr({"xlink:href": "{% static 'ASGS_Mon/images/down2.gif' %}"});
 							}
 							else
 							{
-								// make it small
+								// make it ful size
 								si.transition()
 									.duration(300)
 										.attr("height", "75")
@@ -160,9 +163,10 @@
 				  	  
 					// append the process run state. colored RGB later
 					title.append("text")
-						.text(function(d) { return d.cluster_state; })
+						.text("Working...")
 						.attr("id", function(d) { return "_" + d.instance_id + "_state"; })
 						.attr("class", "stateSm")
+			      		.attr("fill", "gray")
 						.attr("x", width/2 - 40);
 					
 					// append the run parameters text
@@ -174,13 +178,26 @@
 								.attr("class", "params")
 								.text(function(d) { return "Run params: " + d.run_params; });					 	 		
 
-					var lastEvent = svg.append("g")
-			      		.attr("transform", "translate(0, 45)")
+					// create a rect for the event summary text
+					var lastEventBox = svg.append("g")
+			      		.attr("transform", "translate(0, 35)")
+						.append("rect")
+						.attr("class", "eventBox")
+						.attr("height", 14)
+						.attr("width", 0)
+						.transition()
+							.duration(1500)
+								.attr("width", width);
+
+					// output a place holder for the eventual event summary
+		      		var lastEventText = svg.append("g")						
+			      		.attr("transform", "translate(3, 45)")
 						.append("text")
-							.text("textarea")
-							.text(function(d) { return "Loading..."; })
-							.attr("id", function(d) { return "_" + d.instance_id + "_eventSummary"; })
 							.attr("class", "eventSummary")
+							.attr("id", function(d) { return "_" + d.instance_id + "_eventSummary"; })
+							.text("textarea")
+				      		.attr("fill", "gray")
+							.text("Working...")
 				});
 				
 	 	 		// parse the incoming data object

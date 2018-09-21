@@ -25,9 +25,6 @@
 			// for each site/instance in the view
 			g.each(function(d, i) 
 			{
-				// update the message text
-				d3.select("#_" + d.instance_id + "_operation").text(d.event_message);
-				
 				// get the color of the state indicator for the cluster text
 				if(d.cluster_state_id == "6" || d.cluster_state_id == "3")
 					stateTextColor = "red"
@@ -35,8 +32,13 @@
 			    	stateTextColor = "goldenrod";
 			    else
 			    	stateTextColor = "green";
-			      
-			    // update the site state indicator
+
+				// update the operation message text
+				d3.select("#_" + d.instance_id + "_operation")
+					.text(d.event_message)
+		      		.attr("fill", "black");
+							      
+			    // update the site state indicator text
 			    d3.select("#_" + d.instance_id + "_state")
 			    	.text("Process " + d.cluster_state)
 			    		.transition().duration(0)
@@ -46,12 +48,14 @@
 			    
 			    // update the summary indicator
 			    d3.select("#_" + d.instance_id + "_eventSummary")
-			    	.text(d.datetime + " -  Advisory: " + d.advisory_number + ", Storm: " + d.storm + ", Message: " +  d.message)			    			    
+			    	.text(d.datetime + " -  Advisory: " + d.advisory_number + ", Storm: " + d.storm + ", Message: " +  d.message)
+		      		.attr("fill", "black")
+
 			
 				// get a reference to this element
 				var g = d3.select(this);
 			    
-				// is this component is in expanded view
+				// instance view is expanded flag 
 				var isExpanded = true;
 				
 				// setup the bar graph details
@@ -75,8 +79,8 @@
 				// Derive width-scales from the x-scales.
 				var w0 = viewWidth(x0);
 				var w1 = viewWidth(x1);
-	
-				// Update the range rects
+												
+				// Update the range rect
 				var range = g.selectAll("rect.range").data(rangez);
 	
 				range.enter().append("rect")

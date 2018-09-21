@@ -84,7 +84,7 @@ BEGIN
 		'group_state_id', stlgrp.id,
 		
 		'type', etl.name, 
-		'event_message', 'Storm ' || etl.description || ': ' || etl.description || ' for advisory number ' || eg.advisory_id, 
+		'event_message', 'Storm ' || eg.storm_name || ': ' || etl.description || ' for advisory number ' || eg.advisory_id, 
 		'pct_complete', e.pct_complete, 
 		'datetime', to_char(e.event_ts, 'YYYY-MM-DD HH24:MI:SS'), 
 		'message', etl.description,
