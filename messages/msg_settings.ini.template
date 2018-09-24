@@ -1,0 +1,12 @@
+[postgres]
+host = localhost
+port = 5432
+database = database
+username = username
+password = password
+
+[pika]
+host = host
+port = port
+username = username
+password = password
