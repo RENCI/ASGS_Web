@@ -7,6 +7,6 @@ password = password
 
 [pika]
 host = host
-port = port
+port = 5672
 username = username
 password = password
