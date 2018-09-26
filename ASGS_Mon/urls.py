@@ -20,5 +20,5 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('dataReq/', views.dataReq, name='dataReq')
+    path('dataReq', views.dataReq, name='dataReq')
 ]
