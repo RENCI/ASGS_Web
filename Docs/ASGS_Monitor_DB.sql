@@ -84,6 +84,7 @@ CREATE TABLE ASGS_Mon_instance
 	start_ts date NULL,
 	end_ts date NULL,
 	run_params varchar(100) NULL
+	instance_name varchar(100) NULL
 )
 ;
 

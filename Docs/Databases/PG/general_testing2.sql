@@ -12,7 +12,7 @@
 
 
 -- insert intial "ASGS_Mon_instance" for renci cluster
-INSERT INTO "ASGS_Mon_instance" (process_id, site_id, inst_state_type_id, start_ts, run_params) VALUES (1, 0, 1, now(), 'run params 1');
+INSERT INTO "ASGS_Mon_instance" (process_id, site_id, inst_state_type_id, start_ts, run_params, instance_name) VALUES (1, 0, 1, now(), 'run params 1', 'instance1');
 
 -- insert an event group
 INSERT INTO "ASGS_Mon_event_group" (instance_id, state_type_id, event_group_ts, storm_name, storm_number, advisory_id, final_product) VALUES ((select max(id) from "ASGS_Mon_instance" where site_id=0 and process_id=1), 1, now(), 'Alpha', '1', '1', 'product 1');
@@ -32,7 +32,7 @@ INSERT INTO "ASGS_Mon_event" (site_id, event_group_id, event_type_id, event_ts, 
 
 
 -- additional "ASGS_Mon_instance" for renci cluster
-INSERT INTO "ASGS_Mon_instance" (process_id, site_id, inst_state_type_id, start_ts, run_params) VALUES (6, 0, 1, now(), 'run params 6');
+INSERT INTO "ASGS_Mon_instance" (process_id, site_id, inst_state_type_id, start_ts, run_params, instance_name) VALUES (6, 0, 1, now(), 'run params 6', 'instance6');
 
 -- insert an event group
 INSERT INTO "ASGS_Mon_event_group" (instance_id, state_type_id, event_group_ts, storm_name, storm_number, advisory_id, final_product) VALUES ((select max(id) from "ASGS_Mon_instance" where site_id=0 and process_id=6), 1, now(), 'Alpha', '1', '1', 'product 6');
@@ -56,7 +56,7 @@ INSERT INTO "ASGS_Mon_event" (site_id, event_group_id, event_type_id, event_ts, 
 
 
 -- "ASGS_Mon_instance" for TACC cluster
-INSERT INTO "ASGS_Mon_instance" (process_id, site_id, inst_state_type_id, start_ts, run_params) VALUES (2, 1, 1, now(), 'run params 2');
+INSERT INTO "ASGS_Mon_instance" (process_id, site_id, inst_state_type_id, start_ts, run_params, instance_name) VALUES (2, 1, 1, now(), 'run params 2', 'instance2');
 
 -- insert an event group
 INSERT INTO "ASGS_Mon_event_group" (instance_id, state_type_id, event_group_ts, storm_name, storm_number, advisory_id, final_product) VALUES ((select max(id) from "ASGS_Mon_instance" where site_id=1 and process_id=2), 1, now(), 'Beta', '2', '2', 'product 2');

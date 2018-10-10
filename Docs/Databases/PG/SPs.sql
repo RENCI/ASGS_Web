@@ -21,6 +21,7 @@ BEGIN
 		'instance_id', i.id,
 		'process_id', i.process_id,
 		'run_params', i.run_params,
+		'instance_name', i.instance_name,
 		'title', s.name,
 		'subtitle', s.cluster_name,
 		'message', '',

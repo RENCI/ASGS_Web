@@ -8,14 +8,17 @@ INSERT INTO "ASGS_Mon_site_lu" (id, name, description, cluster_name, tech_contac
 
 delete from "ASGS_Mon_event_type_lu";
 INSERT INTO "ASGS_Mon_event_type_lu" (id, name, description, pct_complete) VALUES (0, 'RSTR', 'New run has started', 0);
-INSERT INTO "ASGS_Mon_event_type_lu" (id, name, description, pct_complete) VALUES (1, 'PRE1', 'Pre-run 1 operations in progress', 20);
-INSERT INTO "ASGS_Mon_event_type_lu" (id, name, description, pct_complete) VALUES (2, 'NOWC', 'NowCast operations in progress', 40);
-INSERT INTO "ASGS_Mon_event_type_lu" (id, name, description, pct_complete) VALUES (3, 'PRE2', 'Pre-run 2 operations in progress', 60);
-INSERT INTO "ASGS_Mon_event_type_lu" (id, name, description, pct_complete) VALUES (4, 'FORE', 'Forcast operations in progress', 80);
+INSERT INTO "ASGS_Mon_event_type_lu" (id, name, description, pct_complete) VALUES (1, 'PRE1', 'Pre-run 1 operations in progress', 0);
+INSERT INTO "ASGS_Mon_event_type_lu" (id, name, description, pct_complete) VALUES (2, 'NOWC', 'NowCast operations in progress', 20);
+INSERT INTO "ASGS_Mon_event_type_lu" (id, name, description, pct_complete) VALUES (3, 'PRE2', 'Pre-run 2 operations in progress', 40);
+INSERT INTO "ASGS_Mon_event_type_lu" (id, name, description, pct_complete) VALUES (4, 'FORE', 'Forcast operations in progress', 60);
 INSERT INTO "ASGS_Mon_event_type_lu" (id, name, description, pct_complete) VALUES (5, 'POST', 'Post-run operations in progress', 90);
 INSERT INTO "ASGS_Mon_event_type_lu" (id, name, description, pct_complete) VALUES (6, 'REND', 'Run has ended', 100);
 INSERT INTO "ASGS_Mon_event_type_lu" (id, name, description, pct_complete) VALUES (7, 'STRT', 'Start submission of run', 0);
 INSERT INTO "ASGS_Mon_event_type_lu" (id, name, description, pct_complete) VALUES (8, 'HIND', 'Ready for next run', 0);
+INSERT INTO "ASGS_Mon_event_type_lu" (id, name, description, pct_complete) VALUES (9, 'EXIT', 'Model run terminated', 0);
+INSERT INTO "ASGS_Mon_event_type_lu" (id, name, description, pct_complete) VALUES (10, 'FSTR', 'Start of Forecast operations', 40);
+INSERT INTO "ASGS_Mon_event_type_lu" (id, name, description, pct_complete) VALUES (11, 'FEND', 'End of Forecast operations', 90);
 
 delete from "ASGS_Mon_state_type_lu";
 INSERT INTO "ASGS_Mon_state_type_lu" (id, name, description) VALUES (0, 'INIT', 'Operational.');
@@ -26,6 +29,7 @@ INSERT INTO "ASGS_Mon_state_type_lu" (id, name, description) VALUES (4, 'WARN', 
 INSERT INTO "ASGS_Mon_state_type_lu" (id, name, description) VALUES (5, 'IDLE', 'Idle.');
 INSERT INTO "ASGS_Mon_state_type_lu" (id, name, description) VALUES (6, 'CMPL', 'Completing an event.');
 INSERT INTO "ASGS_Mon_state_type_lu" (id, name, description) VALUES (7, 'NONE', 'Starting or completing an event group.');
+INSERT INTO "ASGS_Mon_state_type_lu" (id, name, description) VALUES (8, 'WAIT', 'Waiting.');
 
 delete from "ASGS_Mon_instance_state_type_lu";
 INSERT INTO "ASGS_Mon_instance_state_type_lu" (id, name, description) VALUES (0, 'INIT', 'Operational.');
