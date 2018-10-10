@@ -5,7 +5,7 @@ cd ../
 
 # start the receive messages process
 # this will get asgs messages off of the Rabbit MQ and write them into the ASGS Monitor DB
-setsid python receive_msg_service.py > /dev/null 2>&1 &
+setsid python messages/receive_msg_service_pg.py > /dev/null 2>&1 &
 RETVAL=$?
 PID=$!
 [ $RETVAL -eq 0 ] && echo $PID > .msg_pidfile && echo "Started ASGS-Monitor receive mesg process" || echo "Failed to successfully start receive mesg ASGS-Monitor process"
