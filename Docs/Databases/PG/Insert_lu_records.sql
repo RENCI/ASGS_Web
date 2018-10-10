@@ -30,6 +30,7 @@ INSERT INTO "ASGS_Mon_state_type_lu" (id, name, description) VALUES (5, 'IDLE', 
 INSERT INTO "ASGS_Mon_state_type_lu" (id, name, description) VALUES (6, 'CMPL', 'Completing an event.');
 INSERT INTO "ASGS_Mon_state_type_lu" (id, name, description) VALUES (7, 'NONE', 'Starting or completing an event group.');
 INSERT INTO "ASGS_Mon_state_type_lu" (id, name, description) VALUES (8, 'WAIT', 'Waiting.');
+INSERT INTO "ASGS_Mon_state_type_lu" (id, name, description) VALUES (9, 'EXIT', 'Defunct.');
 
 delete from "ASGS_Mon_instance_state_type_lu";
 INSERT INTO "ASGS_Mon_instance_state_type_lu" (id, name, description) VALUES (0, 'INIT', 'Operational.');
@@ -40,6 +41,8 @@ INSERT INTO "ASGS_Mon_instance_state_type_lu" (id, name, description) VALUES (4,
 INSERT INTO "ASGS_Mon_instance_state_type_lu" (id, name, description) VALUES (5, 'IDLE', 'Idle.');
 INSERT INTO "ASGS_Mon_instance_state_type_lu" (id, name, description) VALUES (6, 'CMPL', 'Completing an event.');
 INSERT INTO "ASGS_Mon_instance_state_type_lu" (id, name, description) VALUES (7, 'NONE', 'Starting or completing an event group.');
+INSERT INTO "ASGS_Mon_instance_state_type_lu" (id, name, description) VALUES (8, 'WAIT', 'Waiting.');
+INSERT INTO "ASGS_Mon_instance_state_type_lu" (id, name, description) VALUES (9, 'EXIT', 'Defunct.');
 
 -- use this to create python constants ready for cut/paste into the codebase
 select d.const_name from 
