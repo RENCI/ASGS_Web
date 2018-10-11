@@ -32,6 +32,7 @@ class Instance(models.Model):
     start_ts = models.DateTimeField()
     end_ts = models.DateTimeField(null = True)
     run_params = models.CharField(max_length = 100)
+    instance_name = models.CharField(max_length = 100)
 
     class Meta:
         unique_together = (('id', 'process_id'))
