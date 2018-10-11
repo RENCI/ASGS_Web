@@ -26,7 +26,7 @@
 			g.each(function(d, i) 
 			{
 				// get the color of the state indicator for the cluster text
-				if(d.cluster_state_id == "6" || d.cluster_state_id == "3")
+				if(d.cluster_state_id == "6" || d.cluster_state_id == "3" || d.instance_status == 9)
 					stateTextColor = "red"
 			    else if(d.cluster_state_id == "2" || d.cluster_state_id == "4")
 			    	stateTextColor = "goldenrod";

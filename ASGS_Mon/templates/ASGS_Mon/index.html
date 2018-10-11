@@ -102,7 +102,12 @@
 								.attr("id", function(d) {return "_" + d.instance_id;} )
 								.attr("class", "siteInstanceView")
 								.attr("width", width + 30)
-								.attr("height", 75)
+								.attr("height", function(d) { 
+									if(d.instance_status == 9) 
+										return '14px'; 
+									else 
+										return '75px';
+									} )
 								.append("g")
 									.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 									.call(siteInstance);				  		
@@ -129,7 +134,7 @@
 								// make it small, showing only the header
 								si.transition()
 									.duration(300)
-										.attr("height", "14")
+										.attr("height", "14px")
 								
 								// adjust the direction image
 								d3.select(this).attr({"xlink:href": "{% static 'ASGS_Mon/images/up2.gif' %}"});
@@ -139,7 +144,7 @@
 								// make it ful size
 								si.transition()
 									.duration(300)
-										.attr("height", "75")
+										.attr("height", "75px")
 								
 								// adjust the direction image
 								d3.select(this).attr({"xlink:href": "{% static 'ASGS_Mon/images/down2.gif' %}"});
@@ -148,7 +153,7 @@
 
 					// append the site name
 					title.append("text")
-					    .text(function(d) { return d.title + " - Process: " + d.process_id; })
+					    .text(function(d) { return d.title + " - " + d.instance_name; })
 					    .attr("class", "title");
 				  	  
 					// append the process run state. colored RGB later
