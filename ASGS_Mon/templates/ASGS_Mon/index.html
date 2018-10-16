@@ -223,7 +223,7 @@
 							    var eventMsgs = d.event_raw_msgs;
 
 								// if it is large
-								if(parseInt(msgRect.style('height')) >= 75)
+								if(parseInt(msgRect.node().getBoundingClientRect().height) >= 75)
 								{
 									// make it regular size
 									msgRect.transition()

@@ -62,7 +62,7 @@
 				    var eventMsgs = d.event_raw_msgs;
 				    
 				    // if the event text area is not expanded only output the latest message 
-				    if(parseInt(msgRect.style('height')) >= 75)
+				    if(parseInt(msgRect.node().getBoundingClientRect().height) >= 75)
 			    	{
 				    	// loop through the messages
 					    eventMsgs.forEach(function(info, i)
@@ -83,7 +83,7 @@
 								    	});
 					    	});
 			    	}
-				    // else output the top 5
+				    // else output the top 7
 				    else
 				    {
 			    		textarea
