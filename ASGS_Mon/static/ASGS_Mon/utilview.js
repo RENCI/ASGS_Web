@@ -47,7 +47,7 @@
 			      		.attr("fill", stateTextColor);		    			    
 			    
 			    // get the event msg rectangle
-			    var msgRect = d3.select("#_" + d.instance_id + "_rectX");
+			    var msgRect = d3.select("#_" + d.instance_id + "_rect");
 			    
 			    // if the rectangle is there process the event text
 			    if(msgRect[0][0] != null)
@@ -62,24 +62,8 @@
 				    var eventMsgs = d.event_raw_msgs;
 				    
 				    // if the event text area is not expanded only output the latest message 
-				    if(msgRect.style('height') != "75px")
+				    if(parseInt(msgRect.style('height')) >= 75)
 			    	{
-			    		textarea
-					    	.append("text")
-							.attr("class", "eventSummary")
-						    .text(function(d) 
-						    	{ 
-						    		var ellipsis = '';
-						    		
-						    		if(eventMsgs[0].event_summary.length > 175)
-						    			ellipsis = '...';
-						    			
-						    		return eventMsgs[0].event_summary.substring(0, 175); 
-						    	});
-			    	}
-				    // else output the top 5
-				    else
-				    {
 				    	// loop through the messages
 					    eventMsgs.forEach(function(info, i)
 					    	{
@@ -97,6 +81,22 @@
 							    			
 								    		return info.event_summary.substring(0, 175) + ellipsis; 
 								    	});
+					    	});
+			    	}
+				    // else output the top 5
+				    else
+				    {
+			    		textarea
+				    	.append("text")
+						.attr("class", "eventSummary")
+					    .text(function(d) 
+					    	{ 
+					    		var ellipsis = '';
+					    		
+					    		if(eventMsgs[0].event_summary.length > 175)
+					    			ellipsis = '...';
+					    			
+					    		return eventMsgs[0].event_summary.substring(0, 175); 
 					    	});
 				    }
 			    }
