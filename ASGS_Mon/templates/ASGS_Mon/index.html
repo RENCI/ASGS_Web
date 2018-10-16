@@ -133,7 +133,7 @@
 							si = d3.select("#_" + d.instance_id);
 							
 							// get the size of the event message summary rect
-							msgRect = d3.select("#_" + d.instance_id + "_rect");
+							msgRect = d3.select("#_" + d.instance_id + "_rectX");
 							
 							// reset the event message area
 							msgRect.transition()
@@ -201,14 +201,14 @@
 					
 					// load the event messages rectangle
 					lastEventBox.append("rect")
-							.attr("id", function(d) { return "_" + d.instance_id + "_rect"; })
+							.attr("id", function(d) { return "_" + d.instance_id + "_rectX"; })
 							.attr("class", "eventBox")
 							.attr("height", 14)
 							.attr("width", 0)
 							.on("click", function(d) 
 							{
 								// get a ref to the rectangle the event msg is in
-								msgRect = d3.select("#_" + d.instance_id + "_rect");
+								msgRect = d3.select("#_" + d.instance_id + "_rectX");
 
 								// get a ref to the site instance
 								si = d3.select("#_" + d.instance_id);
@@ -238,7 +238,15 @@
 						    		textarea
 							    	.append("text")
 									.attr("class", "eventSummary")
-								    .text(function(d) { return eventMsgs[0].event_summary.substring(0, 175); });
+								    .text(function(d) 
+								    	{
+								    		var ellipsis = '';
+								    		
+								    		if(eventMsgs[0].event_summary.length > 175)
+								    			ellipsis = '...';
+								    			
+								    		return eventMsgs[0].event_summary.substring(0, 175) + ellipsis; 
+								    	});
 								}
 								else
 								{
@@ -260,7 +268,15 @@
 										    	.append("text")
 										    	.attr("class", "eventSummary")
 										    	.attr("transform", "translate(0, " + i * 10 +")")
-											    .text(function(d) { return info.event_summary.substring(0, 175); });
+											    .text(function(d) 
+											    	{
+											    		var ellipsis = '';
+											    		
+											    		if(eventMsgs[0].event_summary.length > 175)
+											    			ellipsis = '...';
+										    			
+											    		return info.event_summary.substring(0, 175) + ellipsis; 
+											    	});
 								    	});
 								}
 							})							

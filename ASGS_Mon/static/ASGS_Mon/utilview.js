@@ -47,7 +47,7 @@
 			      		.attr("fill", stateTextColor);		    			    
 			    
 			    // get the event msg rectangle
-			    var msgRect = d3.select("#_" + d.instance_id + "_rect");
+			    var msgRect = d3.select("#_" + d.instance_id + "_rectX");
 			    
 			    // if the rectangle is there process the event text
 			    if(msgRect[0][0] != null)
@@ -67,7 +67,15 @@
 			    		textarea
 					    	.append("text")
 							.attr("class", "eventSummary")
-						    .text(function(d) { return eventMsgs[0].event_summary.substring(0, 175); });
+						    .text(function(d) 
+						    	{ 
+						    		var ellipsis = '';
+						    		
+						    		if(eventMsgs[0].event_summary.length > 175)
+						    			ellipsis = '...';
+						    			
+						    		return eventMsgs[0].event_summary.substring(0, 175); 
+						    	});
 			    	}
 				    // else output the top 5
 				    else
@@ -80,10 +88,21 @@
 							    	.append("text")
 							    	.attr("class", "eventSummary")
 							    	.attr("transform", "translate(0, " + i * 10 +")")
-								    .text(function(d) { return info.event_summary.substring(0, 175); });
+								    .text(function(d) 
+								    	{ 
+								    		var ellipsis = '';
+								    		
+								    		if(eventMsgs[0].event_summary.length > 175)
+								    			ellipsis = '...';
+							    			
+								    		return info.event_summary.substring(0, 175) + ellipsis; 
+								    	});
 					    	});
 				    }
 			    }
+			    
+				// get a reference to this element
+				var g = d3.select(this);
 				
 				// setup the bar graph details
 				var rangez = ranges.call(this, d, i).slice().sort(d3.descending);
