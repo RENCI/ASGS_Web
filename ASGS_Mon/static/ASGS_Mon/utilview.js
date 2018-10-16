@@ -46,17 +46,69 @@
 			    	.transition().delay(0).duration(duration)
 			      		.attr("fill", stateTextColor);		    			    
 			    
+			    // get the event msg rectangle
+			    var msgRect = d3.select("#_" + d.instance_id + "_rect");
+			    
+			    // if the rectangle is there process the event text
+			    if(msgRect[0][0] != null)
+			    {		
+			    	// get a reference to the event text area
+			    	var textarea = d3.select("#_" + d.instance_id + "_eventSummary");
+				    
+			    	// remove all instances of the current text messages
+			    	textarea.selectAll("text").remove();
+			    				    
+			    	// test/debug array
+				    var eventMsgs = [d.datetime + " - " + d.raw_data, "extra 1", "extra 2"];
+				    
+				    // if the event text area is not expanded only output the latest message 
+				    if(msgRect.style('height') != "75px")
+			    	{
+			    		textarea
+				    	.append("text")
+					    .text(function(d) { return eventMsgs[0]; });
+			    	}
+				    // else output the top 5
+				    else
+				    {
+				    	// loop through the messages
+					    eventMsgs.forEach(function(info, i)
+					    	{
+					    		// output the text
+					    		textarea
+							    	.append("text")
+							    	.attr("transform", "translate(0, " + i * 10 +")")
+								    .text(function(d) { return info; });
+					    	});
+				    }
+			    }
+			    /*
+
+			    // output a place holder for the eventual event summary
+	      		var lastEventText = container
+	      				.append("text")
+						.attr("class", "eventSummary")
+						.attr("fill", "gray")
+				    	.text(d.datetime + " -  Advisory: " + d.advisory_number + ", Storm: " + d.storm + ", Message: " +  d.message);
+
+			    
+			    
+			    var msgdata = [1,2,3];
+			    
 			    // update the summary indicator
 			    d3.select("#_" + d.instance_id + "_eventSummary")
+			    .data(msgdata)
+			    .enter()
+				    .append("g")
+					    .append("text")
+						    .text(function (d) {return "test: " + d;});
+			    	
+			    // original
+			    d3.select("#_" + d.instance_id + "_eventSummary")
 			    	.text(d.datetime + " -  Advisory: " + d.advisory_number + ", Storm: " + d.storm + ", Message: " +  d.message)
-		      		.attr("fill", "black")
+		      		.attr("fill", "black");
 
-			
-				// get a reference to this element
-				var g = d3.select(this);
-			    
-				// instance view is expanded flag 
-				var isExpanded = true;
+			     */
 				
 				// setup the bar graph details
 				var rangez = ranges.call(this, d, i).slice().sort(d3.descending);

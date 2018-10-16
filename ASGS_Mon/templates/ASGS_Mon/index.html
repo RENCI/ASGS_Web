@@ -9,6 +9,10 @@
 	<script src="https://d3js.org/d3-time-format.v2.min.js"></script>
 	<script src="{% static 'ASGS_Mon/utilview.js' %}"></script>
 	<script type="text/javascript">
+	
+		// set the exited run type id
+		var _CONST_EXIT_MSG_TYPE = 9;
+		
 		// create a table for the title area
 		var tbl = d3.select("body")
 					.append("table")
@@ -102,8 +106,8 @@
 								.attr("id", function(d) {return "_" + d.instance_id;} )
 								.attr("class", "siteInstanceView")
 								.attr("width", width + 30)
-								.attr("height", function(d) { 
-									if(d.instance_status == 9) 
+								.attr("height", function(d) { // if this is an exited run collapse it by default
+									if(d.instance_status == _CONST_EXIT_MSG_TYPE) 
 										return '14px'; 
 									else 
 										return '75px';
@@ -125,27 +129,35 @@
 						.attr("y", -9)
 						.on("click", function(d) 
 						{
-							// get a ref to the site instance
+							// get a ref to the site instance rect (main rect for each instance)
 							si = d3.select("#_" + d.instance_id);
 							
+							// get the size of the event message summary rect
+							msgRect = d3.select("#_" + d.instance_id + "_rect");
+							
+							// reset the event message area
+							msgRect.transition()
+								.duration(300)
+									.attr("height", "14px")
+
 							// if it is large
-							if(si.style('height') == "75px")
+							if(parseInt(si.style('height')) >= 75)
 							{
 								// make it small, showing only the header
 								si.transition()
 									.duration(300)
-										.attr("height", "14px")
+										.attr("height", "14px");
 								
 								// adjust the direction image
 								d3.select(this).attr({"xlink:href": "{% static 'ASGS_Mon/images/up2.gif' %}"});
 							}
 							else
 							{
-								// make it ful size
+								// make it full size
 								si.transition()
 									.duration(300)
-										.attr("height", "75px")
-								
+										.attr("height", "75px");
+																
 								// adjust the direction image
 								d3.select(this).attr({"xlink:href": "{% static 'ASGS_Mon/images/down2.gif' %}"});
 							}
@@ -185,24 +197,62 @@
 
 					// create a rect for the event summary text
 					var lastEventBox = svg.append("g")
-			      		.attr("transform", "translate(0, 35)")
-						.append("rect")
-						.attr("class", "eventBox")
-						.attr("height", 14)
-						.attr("width", 0)
-						.transition()
+			      		.attr("transform", "translate(0, 35)");
+					
+					// load the event messages rectangle
+					lastEventBox.append("rect")
+							.attr("id", function(d) { return "_" + d.instance_id + "_rect"; })
+							.attr("class", "eventBox")
+							.attr("height", 14)
+							.attr("width", 0)
+							.on("click", function(d) 
+							{
+								// get a ref to the rectangle the event msg is in
+								msgRect = d3.select("#_" + d.instance_id + "_rect");
+
+								// get a ref to the site instance
+								si = d3.select("#_" + d.instance_id);
+								
+								// if it is large
+								if(msgRect.style('height') == "75px")
+								{
+									// make it regular size
+									msgRect.transition()
+										.duration(300)
+											.attr("height", "14px")		
+											
+									// make it full size
+									si.transition()
+										.duration(300)
+											.attr("height", "75px")
+											
+							    	// get a reference to the event text area
+							    	var textarea = d3.select("#_" + d.instance_id + "_eventSummary");
+								    
+							    	// remove all instances of the current text messages
+							    	textarea.selectAll("text").remove();
+								}
+								else
+								{
+									// make it small, showing only the header
+									msgRect.transition()
+										.duration(300)
+											.attr("height", "75px")
+									
+									// make it full size
+									si.transition()
+										.duration(300)
+											.attr("height", "135px")
+								}
+							})							
+							.transition()
 							.duration(1500)
 								.attr("width", width);
 
 					// output a place holder for the eventual event summary
-		      		var lastEventText = svg.append("g")						
-			      		.attr("transform", "translate(3, 45)")
-						.append("text")
-							.attr("class", "eventSummary")
-							.attr("id", function(d) { return "_" + d.instance_id + "_eventSummary"; })
-							.text("textarea")
-				      		.attr("fill", "gray")
-							.text("Working...")
+		      		lastEventBox.append("g")				
+			      		.attr("transform", "translate(3, 11)")
+						.attr("id", function(d) { return "_" + d.instance_id + "_eventSummary"; });
 				});
 				
 	 	 		// parse the incoming data object
