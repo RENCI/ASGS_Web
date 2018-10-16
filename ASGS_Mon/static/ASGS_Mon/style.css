@@ -62,6 +62,6 @@ img {
 .siteInstanceView .message { font: 12px sans-serif; fill: #999; }
 .siteInstanceView .stateSm { font: 9px sans-serif; font-weight: bold; font-style: italic;}
 .siteInstanceView .state { font: 10px sans-serif; }
-.siteInstanceView .eventSummary { font: 9px sans-serif; font-style: italic; }
+.siteInstanceView .eventSummary { font: 6px sans-serif; font-style: italic; }
 .siteInstanceView .params { font: 8px sans-serif; font-style: italic;}
 

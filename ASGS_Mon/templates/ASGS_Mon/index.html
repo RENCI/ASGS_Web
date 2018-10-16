@@ -120,7 +120,7 @@
 				  	var title = svg.append("g")
 				      	.attr("transform", "translate(0, -5)");
 				
-					// append the expand/collapse image
+					// handle the expand/collapse image area that controls each view instance
 					title.append("image")
 					    .attr("xlink:href","{% static 'ASGS_Mon/images/down2.gif' %}")
 					    .attr("width", 10)
@@ -197,7 +197,7 @@
 
 					// create a rect for the event summary text
 					var lastEventBox = svg.append("g")
-			      		.attr("transform", "translate(0, 35)");
+			      		.attr("transform", "translate(-10, 35)");
 					
 					// load the event messages rectangle
 					lastEventBox.append("rect")
@@ -212,7 +212,16 @@
 
 								// get a ref to the site instance
 								si = d3.select("#_" + d.instance_id);
-								
+																
+						    	// get a reference to the event text area
+						    	var textarea = d3.select("#_" + d.instance_id + "_eventSummary");
+							  
+						    	// remove all instances of the current text messages
+						    	textarea.selectAll("text").remove();
+
+						    	// get the event messages
+							    var eventMsgs = d.event_raw_msgs;
+
 								// if it is large
 								if(msgRect.style('height') == "75px")
 								{
@@ -226,11 +235,10 @@
 										.duration(300)
 											.attr("height", "75px")
 											
-							    	// get a reference to the event text area
-							    	var textarea = d3.select("#_" + d.instance_id + "_eventSummary");
-								    
-							    	// remove all instances of the current text messages
-							    	textarea.selectAll("text").remove();
+						    		textarea
+							    	.append("text")
+									.attr("class", "eventSummary")
+								    .text(function(d) { return eventMsgs[0].event_summary.substring(0, 175); });
 								}
 								else
 								{
@@ -242,16 +250,27 @@
 									// make it full size
 									si.transition()
 										.duration(300)
-											.attr("height", "135px")
+											.attr("height", "135px")											
+											
+							    	// loop through the messages
+								    eventMsgs.forEach(function(info, i)
+								    	{
+								    		// output the text
+								    		textarea
+										    	.append("text")
+										    	.attr("class", "eventSummary")
+										    	.attr("transform", "translate(0, " + i * 10 +")")
+											    .text(function(d) { return info.event_summary.substring(0, 175); });
+								    	});
 								}
 							})							
 							.transition()
-							.duration(1500)
-								.attr("width", width);
+								.duration(1000)
+								.attr("width", 500);
 
 					// output a place holder for the eventual event summary
 		      		lastEventBox.append("g")				
-			      		.attr("transform", "translate(3, 11)")
+			      		.attr("transform", "translate(3, 9)")
 						.attr("id", function(d) { return "_" + d.instance_id + "_eventSummary"; });
 				});
 				

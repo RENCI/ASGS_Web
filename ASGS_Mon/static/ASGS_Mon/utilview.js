@@ -35,7 +35,7 @@
 
 				// update the operation message text
 				d3.select("#_" + d.instance_id + "_operation")
-					.text(d.event_message)
+					.text(d.event_operation)
 		      		.attr("fill", "black");
 							      
 			    // update the site state indicator text
@@ -58,15 +58,16 @@
 			    	// remove all instances of the current text messages
 			    	textarea.selectAll("text").remove();
 			    				    
-			    	// test/debug array
-				    var eventMsgs = [d.datetime + " - " + d.raw_data, "extra 1", "extra 2"];
+			    	// get the event messages
+				    var eventMsgs = d.event_raw_msgs;
 				    
 				    // if the event text area is not expanded only output the latest message 
 				    if(msgRect.style('height') != "75px")
 			    	{
 			    		textarea
-				    	.append("text")
-					    .text(function(d) { return eventMsgs[0]; });
+					    	.append("text")
+							.attr("class", "eventSummary")
+						    .text(function(d) { return eventMsgs[0].event_summary.substring(0, 175); });
 			    	}
 				    // else output the top 5
 				    else
@@ -77,38 +78,12 @@
 					    		// output the text
 					    		textarea
 							    	.append("text")
+							    	.attr("class", "eventSummary")
 							    	.attr("transform", "translate(0, " + i * 10 +")")
-								    .text(function(d) { return info; });
+								    .text(function(d) { return info.event_summary.substring(0, 175); });
 					    	});
 				    }
 			    }
-			    /*
-
-			    // output a place holder for the eventual event summary
-	      		var lastEventText = container
-	      				.append("text")
-						.attr("class", "eventSummary")
-						.attr("fill", "gray")
-				    	.text(d.datetime + " -  Advisory: " + d.advisory_number + ", Storm: " + d.storm + ", Message: " +  d.message);
-
-			    
-			    
-			    var msgdata = [1,2,3];
-			    
-			    // update the summary indicator
-			    d3.select("#_" + d.instance_id + "_eventSummary")
-			    .data(msgdata)
-			    .enter()
-				    .append("g")
-					    .append("text")
-						    .text(function (d) {return "test: " + d;});
-			    	
-			    // original
-			    d3.select("#_" + d.instance_id + "_eventSummary")
-			    	.text(d.datetime + " -  Advisory: " + d.advisory_number + ", Storm: " + d.storm + ", Message: " +  d.message)
-		      		.attr("fill", "black");
-
-			     */
 				
 				// setup the bar graph details
 				var rangez = ranges.call(this, d, i).slice().sort(d3.descending);
