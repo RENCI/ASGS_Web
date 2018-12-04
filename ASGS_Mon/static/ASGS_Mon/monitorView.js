@@ -18,6 +18,7 @@
 	    var width = 380;
 	    var height = 30;
 	    var tickFormat = null;
+	    var margin = {top: 15, right: 15, bottom: 20, left: 15};
 
 		// render a site instance
 		function siteInstanceView(g) 
@@ -71,15 +72,15 @@
 					    		textarea
 							    	.append("text")
 							    	.attr("class", "eventSummary")
-							    	.attr("transform", "translate(0, " + i * 10 +")")
+							    	.attr("transform", "translate(0, " + ((i * 10) + 1) +")")
 								    .text(function(d) 
 								    	{ 
 								    		var ellipsis = '';
 								    		
-								    		if(eventMsgs[0].event_summary.length > 175)
+								    		if(info.event_summary.length > 125)
 								    			ellipsis = '...';
 							    			
-								    		return info.event_summary.substring(0, 175) + ellipsis; 
+								    		return info.event_summary.substring(0, 125) + ellipsis; 
 								    	});
 					    	});
 			    	}
@@ -93,10 +94,10 @@
 					    	{ 
 					    		var ellipsis = '';
 					    		
-					    		if(eventMsgs[0].event_summary.length > 175)
+					    		if(eventMsgs[0].event_summary.length > 125)
 					    			ellipsis = '...';
 					    			
-					    		return eventMsgs[0].event_summary.substring(0, 175); 
+					    		return eventMsgs[0].event_summary.substring(0, 125); 
 					    	});
 				    }
 			    }
@@ -304,6 +305,14 @@
 		{
 			if (!arguments.length) return height;
 				height = x;
+			
+			return siteInstanceView;
+		};
+		
+		siteInstanceView.margin = function(x) 
+		{
+			if (!arguments.length) return margin;
+				margin = x;
 			
 			return siteInstanceView;
 		};

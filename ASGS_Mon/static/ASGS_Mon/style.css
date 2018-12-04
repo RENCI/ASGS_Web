@@ -16,52 +16,54 @@ h2 span {
 
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  margin: auto;    
+  margin: 8px;    
   border-radius: 4px;  
   padding-top: 40px;
   position: relative;
-  width: 95%;
-  border: 1px solid black;
+  width: 98%;
 }
 
 #pagehdr {  
-	width: 98%;
-    margin-right: 10px;
-  	margin-top: -35px; 
-  	margin-bottom: 5px; 
-  	margin-left: 5px;
+	width: 97%;
   	border: 1px solid black;
     border-radius: 4px;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
   	text-align: center; 
-  	font-size: 17pt;
+  	font-size: 20pt;
 }
 
 img {
     border: 1px solid #000;
     border-radius: 4px;
     padding: 1px;
-    width: 35px;
-    height: 30px;
+    width: 75px;
+    height: 60px;
     margin-left: 10px;
     margin-right: auto;
     margin-top: 5px;
+    margin-bottom: 2px;
     align: left;
 }
 
 .eventBox {fill: azure; stroke: black; stroke-width: .5px; opacity: 0.4}
 
-.siteInstanceView { font: 10px sans-serif; border: 1px solid black; border-radius: 4px; margin-left: 5px;}
+.siteInstanceView { font: 14px sans-serif; border: 1px solid black; border-radius: 4px; margin-left: 5px;}
 .siteInstanceView .tick line { stroke: gray; stroke-width: .5px; }
 .siteInstanceView .marker { stroke: #000; stroke-width: 2px; }
 .siteInstanceView .range.s0 { fill: #eee; stroke: gray; stroke-width: .5px;}
 .siteInstanceView .range.s1 { fill: #ddd; stroke: gray; stroke-width: .5px;}
 .siteInstanceView .range.s2 { fill: #ccc; stroke: gray; stroke-width: .5px;}
 .siteInstanceView .measure { }
-.siteInstanceView .title { font-size: 10px; font-weight: bold; }
+.siteInstanceView .title { font-size: 14px; font-weight: bold; }
 .siteInstanceView .subtitle { fill: #999; }
-.siteInstanceView .message { font: 12px sans-serif; fill: #999; }
-.siteInstanceView .stateSm { font: 9px sans-serif; font-weight: bold; font-style: italic;}
+.siteInstanceView .message { font: 16px sans-serif; fill: #999; }
+.siteInstanceView .stateSm { font: 13px sans-serif; font-weight: bold; font-style: italic;}
 .siteInstanceView .state { font: 10px sans-serif; }
-.siteInstanceView .eventSummary { font: 6px sans-serif; font-style: italic; }
-.siteInstanceView .params { font: 8px sans-serif; font-style: italic;}
+.siteInstanceView .eventSummary { 
+	font: 10px sans-serif; 
+	font-style: italic;    
+}
+.siteInstanceView .params { font: 10px sans-serif; font-style: italic;}
 
