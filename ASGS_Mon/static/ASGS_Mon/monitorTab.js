@@ -155,7 +155,7 @@ function renderMonitorTab(siteInstance)
 						.append("text")
 							.attr("id", function(d) { return "_" + d.instance_id + "_params"; })
 							.attr("class", "params")
-							.text(function(d) { return "Run params: " + d.run_params; });					 	 		
+							.text(function(d) { return "Params: " + d.run_params; });					 	 		
 
 				// create a rect for the event summary text
 				var lastEventBox = svg.append("g")
@@ -244,7 +244,7 @@ function renderMonitorTab(siteInstance)
 						})							
 						.transition()
 							.duration(1000)
-							.attr("width", 600);
+							.attr("width", 595);
 
 				// output a place holder for the eventual event summary
 	      		lastEventBox.append("g")				

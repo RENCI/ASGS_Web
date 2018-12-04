@@ -83,16 +83,24 @@ WSGI_APPLICATION = 'ASGS_Web.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'asgs_dashboard',
-        'USER': 'asgs',
+        'NAME': 'asgs_testdb',
+        'USER': 'asgstest',
+        'PASSWORD': 'Z1ppityD0Da',
+        'HOST': 'asgs-monitordb.edc.renci.org',
+        'PORT': '',
+    },
+    'dev': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'asgs_testdb',
+        'USER': 'asgstest',
         'PASSWORD': 'Z1ppityD0Da',
         'HOST': 'asgs-monitordb.edc.renci.org',
         'PORT': '',
     },
     'productiondb': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'asgs_testdb',
-        'USER': 'asgstest',
+        'NAME': 'asgs_dashboard',
+        'USER': 'asgs',
         'PASSWORD': 'Z1ppityD0Da',
         'HOST': 'asgs-monitordb.edc.renci.org',
         'PORT': '',
