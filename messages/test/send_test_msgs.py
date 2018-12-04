@@ -1,11 +1,13 @@
 import sys
 import pika
 import json
+import time
+from configparser import ConfigParser
 
 def queue_message(message):
 
     # set up AMQP credentials and connect to asgs queue
-    credentials = pikadatabase.PlainCredentials(parser.get('pika', 'username'),
+    credentials = pika.PlainCredentials(parser.get('pika', 'username'),
                                                 parser.get('pika', 'password'))
     parameters = pika.ConnectionParameters(parser.get('pika', 'host'),
                                            parser.get('pika', 'port'),
@@ -20,7 +22,7 @@ def queue_message(message):
 
 # retrieve configuration settings
 parser = ConfigParser()
-parser.read('msg_settings.ini')
+parser.read('./msg_settings.ini')
 
 # open messages file
 f = open('message_log.txt')
@@ -28,5 +30,6 @@ f = open('message_log.txt')
 # while there are messages in the file
 for line in f:
     msg_obj = line 
-    msg = json.dumps(msg_obj)
-    queue_message(msg)
+    queue_message(msg_obj)
+    print(msg_obj)
+    time.sleep(2.5)
