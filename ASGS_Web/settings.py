@@ -83,8 +83,8 @@ WSGI_APPLICATION = 'ASGS_Web.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'asgs_testdb',
-        'USER': 'asgstest',
+        'NAME': 'asgs_dashboard',
+        'USER': 'asgs',
         'PASSWORD': 'Z1ppityD0Da',
         'HOST': 'asgs-monitordb.edc.renci.org',
         'PORT': '',
@@ -150,3 +150,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     '/static/',
 ]
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
