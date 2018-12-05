@@ -61,10 +61,14 @@
 
 	    	if (val !== "-1") {
 		    	$("#selectedCluster").show(1000);
+		    	var audio = document.getElementById("audioExpand");
+		        audio.play();
 		    }
 		    else 
 		    {
 		    	$("#selectedCluster").hide(1000);
+		    	var audio = document.getElementById("audioCollapse");
+		        audio.play();
 		    }
 		}
 		
@@ -78,10 +82,14 @@
 
 	    	if (val !== "-1") {
 		    	$("#selectedUserAdmin").show(1000);
+		    	var audio = document.getElementById("audioExpand");
+		        audio.play();
 		    }
 		    else 
 		    {
 		    	$("#selectedUserAdmin").hide(1000);
+		    	var audio = document.getElementById("audioCollapse");
+		        audio.play();
 		    }
 		}
 	</script>
@@ -161,6 +169,8 @@
 								<div class="panel-body">
 									<form role="form" method="post" action="">
 										<div class="input-group">
+											<audio id="audioExpand" src="/static/ASGS_Mon/expanded.wav" ></audio>
+											<audio id="audioCollapse" src="/static/ASGS_Mon/collapse.wav" ></audio>
 										    <span class="input-group-addon">Cluster</span>
 											<select id="clusterName" class="form-control" onchange="loadJobSubmit(this.value)">
 												<option value="-1">Select a cluster</option>
