@@ -50,25 +50,25 @@
 			    // get the event msg rectangle
 			    var msgRect = d3.select("#_" + d.instance_id + "_rect");
 			    
-			    // if the rectangle is there process the event text
+			    // if the rectangle is there process the event message text
 			    if(msgRect[0][0] != null)
 			    {		
-			    	// get a reference to the event text area
+			    	// get a reference to the event message text area
 			    	var textarea = d3.select("#_" + d.instance_id + "_eventSummary");
 				    
-			    	// remove all instances of the current text messages
+			    	// remove all instances of the current event text messages
 			    	textarea.selectAll("text").remove();
 			    				    
 			    	// get the event messages
 				    var eventMsgs = d.event_raw_msgs;
 				    
-				    // if the event text area is not expanded only output the latest message 
+				    // if the event message text area is expanded output all the latest message 
 				    if(parseInt(msgRect.node().getBoundingClientRect().height) >= 75)
 			    	{
 				    	// loop through the messages
 					    eventMsgs.forEach(function(info, i)
 					    	{
-					    		// output the text
+					    		// output the event message text
 					    		textarea
 							    	.append("text")
 							    	.attr("class", "eventSummary")
@@ -84,7 +84,7 @@
 								    	});
 					    	});
 			    	}
-				    // else output the top 7
+				    // else output the most recent one
 				    else
 				    {
 			    		textarea

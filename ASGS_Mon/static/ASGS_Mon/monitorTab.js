@@ -2,7 +2,7 @@
 /*****
  * Renders all site/instance elements
  * 
- * @returns nothing. It renders the tab contents or it doesnt.
+ * @returns nothing. It renders the tab contents or it doesn't.
  */
 function renderMonitorTab(siteInstance)
 {
@@ -61,22 +61,22 @@ function renderMonitorTab(siteInstance)
 				}
 				
 			  	// render the svg region for all individual site instances
-			  	var svg = d3.select("#monitorTab").selectAll("svg")
+			  	var svg = d3.select("#siteInstancesTarget").selectAll("svg")
 				    .data(data)
 				    .enter()
-				    	.append("svg")
-							.attr("id", function(d) {return "_" + d.instance_id;} )
-							.attr("class", "siteInstanceView")
-							.attr("width", siteInstance.width() + 30)
-							.attr("height", function(d) { // if this is an exited run collapse it by default
-								if(d.instance_status == _CONST_EXIT_MSG_TYPE) 
-									return '14'; 
-								else 
-									return '75';
-								} )
-							.append("g")
-								.attr("transform", "translate(" + siteInstance.margin().left + "," + siteInstance.margin().top + ")")
-								.call(siteInstance);				  		
+			    	.append("svg")
+						.attr("id", function(d) {return "_" + d.instance_id;} )
+						.attr("class", "siteInstanceView")
+						.attr("width", siteInstance.width() + 30)
+						.attr("height", function(d) { // if this is an exited run collapse it by default
+							if(d.instance_status == _CONST_EXIT_MSG_TYPE) 
+								return '15'; 
+							else 
+								return '75';
+							} )
+						.append("g")
+							.attr("transform", "translate(" + siteInstance.margin().left + "," + siteInstance.margin().top + ")")
+							.call(siteInstance);				  		
 				
 				// create a region for the textual information
 			  	var title = svg.append("g")
@@ -85,10 +85,10 @@ function renderMonitorTab(siteInstance)
 				// handle the expand/collapse image area that controls each view instance
 				title.append("image")
 				    .attr("xlink:href", "/static/ASGS_Mon/images/down2.gif")
-				    .attr("width", 10)
-				    .attr("height", 10)
-					.attr("x", -13)
-					.attr("y", -9)
+				    .attr("width", 13)
+				    .attr("height", 13)
+					.attr("x", -14)
+					.attr("y", -11)
 					.on("click", function(d) 
 					{
 						// get a ref to the site instance rect (main rect for each instance)
@@ -100,25 +100,26 @@ function renderMonitorTab(siteInstance)
 						// reset the event message area
 						msgRect.transition()
 							.duration(300)
-								.attr("height", "20")
+								.attr("height", "15")
 
-						// if it is large
+						// if the entire control is large
 						if(parseInt(si.style('height')) >= 75)
 						{
 							// make it small, showing only the header
 							si.transition()
 								.duration(300)
-									.attr("height", "20");
+									.attr("height", "21");
 							
 							// adjust the direction image
 							d3.select(this).attr({"xlink:href": "/static/ASGS_Mon/images/up2.gif"});
 						}
+						// shrink the entire control
 						else
 						{
 							// make it full size
 							si.transition()
 								.duration(300)
-									.attr("height", "75");
+								.attr("height", "75");
 															
 							// adjust the direction image
 							d3.select(this).attr({"xlink:href": "/static/ASGS_Mon/images/down2.gif"});
@@ -132,7 +133,7 @@ function renderMonitorTab(siteInstance)
 			  	  
 				// append the process run state. colored RGB later
 				title.append("text")
-					.text("Working...")
+					.text("Loading...")
 					.attr("id", function(d) { return "_" + d.instance_id + "_state"; })
 					.attr("class", "stateSm")
 		      		.attr("fill", "gray")
@@ -141,21 +142,21 @@ function renderMonitorTab(siteInstance)
 				// append the event operation message text that goes inside the bar graph
 				svg.append("g")
 					.attr("transform", "translate(6," + siteInstance.height() / 2 + ")")
-						.append("text")
-							.text("Working...")
-							.attr("id", function(d) { return "_" + d.instance_id + "_operation"; })
-				      		.attr("fill", "gray")
-							.attr("class", "state")
-							.attr("dy", ".35em");
+					.append("text")
+						.text("Loading...")
+						.attr("id", function(d) { return "_" + d.instance_id + "_operation"; })
+			      		.attr("fill", "gray")
+						.attr("class", "state")
+						.attr("dy", ".35em");
 
 				// append the run parameters text
 				svg.append("g")
 			      	.style("text-anchor", "end")
 					.attr("transform", "translate(" + siteInstance.width() + ", -5)")
-						.append("text")
-							.attr("id", function(d) { return "_" + d.instance_id + "_params"; })
-							.attr("class", "params")
-							.text(function(d) { return "Params: " + d.run_params; });					 	 		
+					.append("text")
+						.attr("id", function(d) { return "_" + d.instance_id + "_params"; })
+						.attr("class", "params")
+						.text(function(d) { return "Params: " + d.run_params; });					 	 		
 
 				// create a rect for the event summary text
 				var lastEventBox = svg.append("g")
@@ -163,41 +164,42 @@ function renderMonitorTab(siteInstance)
 				
 				// load the event messages rectangle
 				lastEventBox.append("rect")
-						.attr("id", function(d) { return "_" + d.instance_id + "_rect"; })
-						.attr("class", "eventBox")
-						.attr("height", 15)
-						.attr("width", 0)
-						.on("click", function(d) 
+					.attr("id", function(d) { return "_" + d.instance_id + "_rect"; })
+					.attr("class", "eventBox")
+					.attr("height", 15)
+					.attr("width", 0)
+					.on("click", function(d) 
+					{
+						// get a ref to the rectangle the event msg is in
+						msgRect = d3.select("#_" + d.instance_id + "_rect");
+
+						// get a ref to the site instance
+						si = d3.select("#_" + d.instance_id);
+														
+				    	// get a reference to the event text area
+				    	var textarea = d3.select("#_" + d.instance_id + "_eventSummary");
+					  
+				    	// remove all instances of the current text messages
+				    	textarea.selectAll("text").remove();
+
+				    	// get the event messages
+					    var eventMsgs = d.event_raw_msgs;
+
+						// if it is large, make it small
+						if(parseInt(msgRect.node().getBoundingClientRect().height) >= 75)
 						{
-							// get a ref to the rectangle the event msg is in
-							msgRect = d3.select("#_" + d.instance_id + "_rect");
+							// make the entire control full size
+							si.transition()
+								.duration(300)
+								.attr("height", "75")
 
-							// get a ref to the site instance
-							si = d3.select("#_" + d.instance_id);
-															
-					    	// get a reference to the event text area
-					    	var textarea = d3.select("#_" + d.instance_id + "_eventSummary");
-						  
-					    	// remove all instances of the current text messages
-					    	textarea.selectAll("text").remove();
-
-					    	// get the event messages
-						    var eventMsgs = d.event_raw_msgs;
-
-							// if it is large
-							if(parseInt(msgRect.node().getBoundingClientRect().height) >= 75)
-							{
-								// make it regular size
-								msgRect.transition()
-									.duration(300)
-										.attr("height", "15")		
-										
-								// make it full size
-								si.transition()
-									.duration(300)
-										.attr("height", "75")
-										
-					    		textarea
+							// make the event message area small
+							msgRect.transition()
+								.duration(300)
+								.attr("height", "15")		
+																			
+							// insert the event area message text
+				    		textarea
 						    	.append("text")
 								.attr("class", "eventSummary")
 							    .text(function(d) 
@@ -209,44 +211,45 @@ function renderMonitorTab(siteInstance)
 							    			
 							    		return eventMsgs[0].event_summary.substring(0, 125) + ellipsis; 
 							    	});
-							}
-							else
-							{
-								// make it small, showing only the header
-								msgRect.transition()
-									.duration(300)
-										.attr("height", "75")
-								
-								// make it full size
-								si.transition()
-									.duration(300)
-										.attr("height", "135")											
-										
-						    	// loop through the messages
-							    eventMsgs.forEach(function(info, i)
-							    	{
-							    		// output the text
-							    		textarea
-									    	.append("text")
-									    	.attr("class", "eventSummary")
-									    	.attr("transform", "translate(0, " + ((i * 10) + 1) + ")")
-										    .text(function(d) 
-										    	{
-										    		var ellipsis = '';
-										    		
-										    		if(info.event_summary.length > 125)
-										    			ellipsis = '...';
-									    			
-										    		return info.event_summary.substring(0, 125) + ellipsis; 
-										    	});
-							    	});
-							}
-						})							
-						.transition()
-							.duration(1000)
-							.attr("width", 595);
+						}
+						// if the message area is small, make it large
+						else
+						{
+							// make the entire control full size
+							si.transition()
+								.duration(300)
+								.attr("height", "135")											
 
-				// output a place holder for the eventual event summary
+									// make the message area large, showing all messages
+							msgRect.transition()
+								.duration(300)
+								.attr("height", "75")						
+									
+					    	// loop through the messages and display them
+						    eventMsgs.forEach(function(info, i)
+						    	{
+						    		// output the text
+						    		textarea
+								    	.append("text")
+								    	.attr("class", "eventSummary")
+								    	.attr("transform", "translate(0, " + ((i * 10) + 1) + ")")
+									    .text(function(d) 
+									    	{
+									    		var ellipsis = '';
+									    		
+									    		if(info.event_summary.length > 125)
+									    			ellipsis = '...';
+								    			
+									    		return info.event_summary.substring(0, 125) + ellipsis; 
+									    	});
+						    	});
+						}
+					})							
+					.transition()
+						.duration(1000)
+						.attr("width", 595);
+
+				// output a place holder for the eventual event summary text
 	      		lastEventBox.append("g")				
 		      		.attr("transform", "translate(3, 11)")
 					.attr("id", function(d) { return "_" + d.instance_id + "_eventSummary"; });
@@ -259,7 +262,7 @@ function renderMonitorTab(siteInstance)
 			if(theMsg.utilization != "None")
 			{
 	 	 		// get a reference to the visualization component
-	 			var svg = d3.select("#monitorTab").selectAll("svg");
+	 			var svg = d3.select("#siteInstancesTarget").selectAll("svg");
 	 			
 	 	 		// reload the visualization with the new data
 	 			svg.data(theMsg.utilization).call(siteInstance.duration(1500));
