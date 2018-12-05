@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'ASGS_Web.wsgi.application'
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    'productiondb': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'asgs_testdb',
         'USER': 'asgstest',
@@ -97,7 +97,7 @@ DATABASES = {
         'HOST': 'asgs-monitordb.edc.renci.org',
         'PORT': '',
     },
-    'productiondb': {
+    'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'asgs_dashboard',
         'USER': 'asgs',
