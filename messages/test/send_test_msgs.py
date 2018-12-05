@@ -32,4 +32,4 @@ for line in f:
     msg_obj = line 
     queue_message(msg_obj)
     print(msg_obj)
-    time.sleep(2.5)
+    time.sleep(2)
