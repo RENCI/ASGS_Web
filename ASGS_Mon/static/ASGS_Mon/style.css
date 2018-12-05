@@ -101,7 +101,7 @@ img {
   	background-color: azure;
 }
 
-#monitorTab, #prefsTab, #submitTab, #adminTab
+#monitorTab, #prefsTab, #submitTab, #adminTab, #priorResultsTab
 {
 	margin-top: 5px;
 	margin-left: 5px;
@@ -128,3 +128,8 @@ img {
 .siteInstanceView .eventSummary { font: 10px sans-serif; font-style: italic; }
 .siteInstanceView .params { font: 8px sans-serif; font-style: italic;}
 
+img : hover
+{
+	transform: scale(5,5);
+	-webkit-transform: scale(5,5); /* Safari and Chrome */
+}

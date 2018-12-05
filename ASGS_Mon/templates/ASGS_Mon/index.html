@@ -61,14 +61,14 @@
 
 	    	if (val !== "-1") {
 		    	$("#selectedCluster").show(1000);
-		    	var audio = document.getElementById("audioExpand");
-		        audio.play();
+// 		    	var audio = document.getElementById("audioExpand");
+// 		        audio.play();
 		    }
 		    else 
 		    {
 		    	$("#selectedCluster").hide(1000);
-		    	var audio = document.getElementById("audioCollapse");
-		        audio.play();
+// 		    	var audio = document.getElementById("audioCollapse");
+// 		        audio.play();
 		    }
 		}
 		
@@ -82,20 +82,23 @@
 
 	    	if (val !== "-1") {
 		    	$("#selectedUserAdmin").show(1000);
-		    	var audio = document.getElementById("audioExpand");
-		        audio.play();
+// 		    	var audio = document.getElementById("audioExpand");
+// 		        audio.play();
 		    }
 		    else 
 		    {
 		    	$("#selectedUserAdmin").hide(1000);
-		    	var audio = document.getElementById("audioCollapse");
-		        audio.play();
+// 		    	var audio = document.getElementById("audioCollapse");
+// 		        audio.play();
 		    }
 		}
 	</script>
 
 	<body>	
 	<div id="bodyView">
+<!-- 		<audio id="audioExpand" src="/static/ASGS_Mon/expanded.wav" ></audio> -->
+<!-- 		<audio id="audioCollapse" src="/static/ASGS_Mon/collapse.wav" ></audio> -->
+
 		<table id="pagehdr">
 			<tr>
 				<td align="left"><img src="/static/ASGS_Mon/images/logo.jpg"/></td>
@@ -106,6 +109,7 @@
 		<div class="panel-body">
 			<ul class="nav nav-tabs">
 				<li class="active"><a data-toggle="tab" href="#monitorTab">Monitor</a></li>
+				<li><a data-toggle="tab" href="#priorResultsTab">Prior Results</a></li>
 				<li><a data-toggle="tab" href="#prefsTab">Preferences</a></li>
 				<li><a data-toggle="tab" href="#submitTab">Job Submission</a></li>
 				<li><a data-toggle="tab" href="#adminTab">Administration</a></li>
@@ -120,6 +124,16 @@
 								<div class="panel-body">
 									<div id="siteInstancesTarget"></div>
 								</div>
+							</div>					
+						</div>
+					</div>
+				</div>
+				<div id="priorResultsTab" class="tab-pane fade">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="panel panel-default">
+								<div class="panel-heading">Prior run results</div>
+								<img class="imgView" src="/static/ASGS_Mon/images/logo.jpg" alt="" width="75" height="75"> RENCI result: 12-05-2018</img>
 							</div>					
 						</div>
 					</div>
@@ -169,8 +183,6 @@
 								<div class="panel-body">
 									<form role="form" method="post" action="">
 										<div class="input-group">
-											<audio id="audioExpand" src="/static/ASGS_Mon/expanded.wav" ></audio>
-											<audio id="audioCollapse" src="/static/ASGS_Mon/collapse.wav" ></audio>
 										    <span class="input-group-addon">Cluster</span>
 											<select id="clusterName" class="form-control" onchange="loadJobSubmit(this.value)">
 												<option value="-1">Select a cluster</option>

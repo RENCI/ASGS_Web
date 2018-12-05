@@ -27,10 +27,12 @@
 			g.each(function(d, i) 
 			{
 				// get the color of the state indicator for the cluster text
-				if(d.cluster_state_id == "6" || d.cluster_state_id == "3" || d.instance_status == 9)
+				if(d.cluster_state_id == "3")
 					stateTextColor = "red"
 			    else if(d.cluster_state_id == "2" || d.cluster_state_id == "4")
 			    	stateTextColor = "goldenrod";
+			    else if(d.cluster_state_id == "6" || d.instance_status == 9)
+			    	stateColorText = "gray";
 			    else
 			    	stateTextColor = "green";
 
@@ -147,10 +149,12 @@
 						.attr("height", height);
 	
 				// get the color of the state indicator for the event group progress bar
-				if(d.group_state_id == "6" || d.group_state_id == "3")
+				if(d.group_state_id == "3")
 					measureColor = "#F08080"
 				else if(d.group_state_id == "2" || d.group_state_id == "4")
 					measureColor = "goldenrod";
+				else if(d.group_state_id == "6")
+					measureColor = "gray"
 				else
 					measureColor = "darkseagreen";      
 	
