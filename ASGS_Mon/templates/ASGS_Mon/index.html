@@ -55,21 +55,22 @@
 	<script type="text/javascript">
 		function loadJobSubmit(val)
 		{
-	    	$("#selectedCluster").hide(500);
+	    	$("#selectedCluster").hide(100);
+			
+		    rndAvail = Math.floor(Math.random() * 100) + 15;
+		    rndInUse = Math.floor(Math.random() * 100) + 15;
+		    
+		    $('#clusterVal').text("Current " + val + " cluster utilization. " + (rndAvail + rndInUse) + " total nodes.");
 
-		    $('#clusterVal').text("Current " + val + " cluster utilization");
-
-	    	if (val !== "-1") {
+		    elInUse = '<div style="width: ' + rndInUse * 4 + 'px; margin-bottom: 5px; margin-left: 5px;">' + rndInUse + ' nodes in use</div>'
+		    elAvail = '<div style="width: ' + rndAvail * 4 + 'px; margin-bottom: 5px; margin-left: 5px;">' + rndAvail + ' nodes available</div>';
+			
+			$('#chartID').html(elInUse + elAvail);
+			
+	    	if (val !== "-1")
 		    	$("#selectedCluster").show(1000);
-// 		    	var audio = document.getElementById("audioExpand");
-// 		        audio.play();
-		    }
 		    else 
-		    {
 		    	$("#selectedCluster").hide(1000);
-// 		    	var audio = document.getElementById("audioCollapse");
-// 		        audio.play();
-		    }
 		}	
 		
 		function loadUser(val)
@@ -80,248 +81,239 @@
 
 		    $('#userVal').html('<span class="userViewtext">User name: ' + val + '</span><br><span class="userViewtext">Last login: ' + theDate + '</span><br><span class="userViewtext">Role: User');
 
-	    	if (val !== "-1") {
+	    	if (val !== "-1")
 		    	$("#selectedUserAdmin").show(1000);
-// 		    	var audio = document.getElementById("audioExpand");
-// 		        audio.play();
-		    }
 		    else 
-		    {
 		    	$("#selectedUserAdmin").hide(1000);
-// 		    	var audio = document.getElementById("audioCollapse");
-// 		        audio.play();
-		    }
 		}
 	</script>
 
 	<body>	
-	<div id="bodyView">
-<!-- 		<audio id="audioExpand" src="/static/ASGS_Mon/expanded.wav" ></audio> -->
-<!-- 		<audio id="audioCollapse" src="/static/ASGS_Mon/collapse.wav" ></audio> -->
-
-		<table id="pagehdr">
-			<tr>
-				<td align="left"><img class="imgLogo" src="/static/ASGS_Mon/images/logo.jpg" style="width: 60px; height: 55px;"/></td>
-				<td style="text-align: middle;">ASGS Operational Awareness Dashboard</td>
-			</tr>		
-		</table>
-	
-		<div class="panel-body">
-			<ul class="nav nav-tabs">
-				<li class="active"><a data-toggle="tab" href="#monitorTab">Monitor</a></li>
-				<li><a data-toggle="tab" href="#priorResultsTab">Prior Results</a></li>
-				<li><a data-toggle="tab" href="#prefsTab">Preferences</a></li>
-				<li><a data-toggle="tab" href="#submitTab">Job Submission</a></li>
-				<li><a data-toggle="tab" href="#adminTab">Administration</a></li>
-			</ul>
+		<div id="bodyView">
+			<table id="pagehdr">
+				<tr>
+					<td align="left"><img class="imgASGSLogo" src="/static/ASGS_Mon/images/ASGSlogo.jpg" style="width: 70px; height: 55px;"/></td>
+					<td style="text-align: middle;">ASGS Operational Awareness Dashboard</td>
+					<td align="right"><img class="imgRENCILogo" src="/static/ASGS_Mon/images/RENCIlogo.jpg" style="width: 90px; height: 55px;"/></td>
+				</tr>		
+			</table>
 		
-			<div class="tab-content">
-				<div id="monitorTab" class="tab-pane fade in active">
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="panel panel-default">
-								<div class="panel-heading">Site instances</div>
-								<div class="panel-body">
-									<div id="siteInstancesTarget"></div>
-								</div>
-							</div>					
-						</div>
-					</div>
-				</div>
-				<div id="priorResultsTab" class="tab-pane fade">
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="panel panel-default">
-								<div class="panel-heading">Prior run results - Sorted by most recent</div>
-								<div id="prevRun_17" class="modal fade" role='dialog'>
-								    <div class="modal-dialog modal-lg">
-										<div class="modal-content">
-											<div class="modal-header">
-												<h4 class="modal-title">RENCI run 17 "Storm Delta" - 12-05-2018</h4>
-											</div>
-											<div class="modal-body">
-												<img src="/static/ASGS_Mon/images/cera_img.JPG">       
-												<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Delta<br> File Name: RENCI_img17.jpg<br> Processing time: 23 minutes.</div>    
-											</div>
-										</div>
-								  	</div>
-								</div>
-								<div id="prevRun_16" class="modal fade" role='dialog'>
-								    <div class="modal-dialog modal-lg">
-										<div class="modal-content">
-											<div class="modal-header">
-												<h4 class="modal-title">RENCI run 16 "Storm Charlie" - 12/04/2018</h4>
-											</div>
-											<div class="modal-body">
-												<img src="/static/ASGS_Mon/images/cera_img.JPG"> 
-												<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Charlie<br> File Name: RENCI_img16.jpg<br> Processing time: 32 minutes.</div>    
-											</div>
-										</div>
-								  	</div>
-								</div>
-								<div id="prevRun_15" class="modal fade" role='dialog'>
-								    <div class="modal-dialog modal-lg">
-										<div class="modal-content">
-											<div class="modal-header">
-												<h4 class="modal-title">RENCI run 15 "Storm Beta" - 12/03/2018</h4>
-											</div>
-											<div class="modal-body">
-												<img src="/static/ASGS_Mon/images/cera_img.JPG"> 
-												<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Beta<br> File Name: RENCI_img15.jpg<br> Processing time: 61 minutes.</div>    
-											</div>
-										</div>
-								  	</div>
-								</div>
-								<div id="prevRun_14" class="modal fade" role='dialog'>
-								    <div class="modal-dialog modal-lg">
-										<div class="modal-content">
-											<div class="modal-header">
-												<h4 class="modal-title">RENCI run 14 "Storm Alpha" - 12/02/2018</h4>
-											</div>
-											<div class="modal-body">
-												<img src="/static/ASGS_Mon/images/cera_img.JPG"> 
-												<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Alpha<br> File Name: RENCI_img14.jpg<br> Processing time: 45 minutes.</div>    
-											</div>
-										</div>
-								  	</div>
-								</div>
-								<div style="margin-top: 5px; margin-bottom: 5px;">
-									<a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_17">RENCI run 17 "Storm Delta" - 12/05/2018</a>,
-									<a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_16">RENCI run 16 "Storm Charlie" - 12/04/2018</a>,
-									<a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_15">RENCI run 15 "Storm Beta" - 12/03/2018</a>,
-									<a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_14">RENCI run 14 "Storm Alpha" - 12/02/2018</a>
-								</div>								
-							</div>					
-						</div>
-					</div>
-				</div>
-				<div id="prefsTab" class="tab-pane fade">
-					<div class="row">
-						<div class="col-lg-4">
-							<div class="panel panel-default">
-								<div class="panel-heading">Set your preferences</div>
-								<div class="panel-body">
-									<form role="form" method="post" action="">
-									  	<div class="input-group">
-										    <span class="input-group-addon">Cluster</span>
-											<select id="clusterPref" class="form-control">
-												<option value="-1">Select a preferred cluster</option>
-												<option value="George Mason">George Mason</option>
-												<option value="LSU">LSU</option>
-												<option value="Penguin">Penguin</option>
-												<option value="RENCI">RENCI</option>
-												<option value=TACC>TACC</option>
-												<option value="UCF">UCF</option>
-											</select>
-										</div>		
-										<br>									
-									  	<div class="input-group">
-									    	<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-									    	<input id="email" type="text" class="form-control" name="email" placeholder="Email">
-									  	</div>
-										<div class="checkbox">
-											<label><input type="checkbox" value="">Receive notification e-mails</label>
-										</div>									  	
-									  	<div class="input-group">
-									    	<button type="submit" class="btn btn-primary">Submit</button>			
-									    </div>						  
-									</form>
-								</div>
+			<div class="panel-body">
+				<ul class="nav nav-tabs">
+					<li class="active"><a data-toggle="tab" href="#monitorTab">Monitor</a></li>
+					<li><a data-toggle="tab" href="#priorResultsTab">Prior Results</a></li>
+					<li><a data-toggle="tab" href="#prefsTab">Preferences</a></li>
+					<li><a data-toggle="tab" href="#submitTab">Job Submission</a></li>
+					<li><a data-toggle="tab" href="#adminTab">Administration</a></li>
+				</ul>
+			
+				<div class="tab-content">
+					<div id="monitorTab" class="tab-pane fade in active">
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="panel panel-default">
+									<div class="panel-heading">Site instances</div>
+									<div class="panel-body">
+										<div id="siteInstancesTarget"></div>
+									</div>
+								</div>					
 							</div>
 						</div>
-					</div>					
-				</div>
-				
-				<div id="submitTab" class="tab-pane fade">
-					<div class="row">
-						<div class="col-lg-4">
-							<div class="panel panel-default">
-								<div class="panel-heading">Enter job submission parameters</div>
-								<div class="panel-body">
-									<form role="form" method="post" action="">
-										<div class="input-group">
-										    <span class="input-group-addon">Cluster</span>
-											<select id="clusterName" class="form-control" onchange="loadJobSubmit(this.value)">
-												<option value="-1">Select a cluster</option>
-												<option value="George Mason">George Mason</option>
-												<option value="LSU">LSU</option>
-												<option value="Penguin">Penguin</option>
-												<option value="RENCI">RENCI</option>
-												<option value=TACC>TACC</option>
-												<option value="UCF">UCF</option>
-											</select>											
-										</div>
-										<div id="selectedCluster" style="display: none;">
-											<div id="clusterUtilArea">
-												<span id="clusterVal" style="margin-left: 5px;"></span>
-												<div class="chart">
-													<div style="width: 100px; margin-bottom: 5px; margin-left: 5px;">4 nodes available</div>
-													<div style="width: 300px; margin-bottom: 5px; margin-left: 5px;">12 nodes in use</div>
+					</div>
+					<div id="priorResultsTab" class="tab-pane fade">
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="panel panel-default">
+									<div class="panel-heading">Prior run results - Sorted by most recent</div>
+									<div id="prevRun_17" class="modal fade" role='dialog'>
+									    <div class="modal-dialog modal-lg">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h4 class="modal-title">RENCI run 17 "Storm Delta" - 12-05-2018</h4>
 												</div>
-											</div>	
-											<br>
+												<div class="modal-body">
+													<img src="/static/ASGS_Mon/images/cera_img.JPG">       
+													<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Delta<br> File Name: RENCI_img17.jpg<br> Processing time: 23 minutes.</div>    
+												</div>
+											</div>
+									  	</div>
+									</div>
+									<div id="prevRun_16" class="modal fade" role='dialog'>
+									    <div class="modal-dialog modal-lg">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h4 class="modal-title">RENCI run 16 "Storm Charlie" - 12/04/2018</h4>
+												</div>
+												<div class="modal-body">
+													<img src="/static/ASGS_Mon/images/cera_img.JPG"> 
+													<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Charlie<br> File Name: RENCI_img16.jpg<br> Processing time: 32 minutes.</div>    
+												</div>
+											</div>
+									  	</div>
+									</div>
+									<div id="prevRun_15" class="modal fade" role='dialog'>
+									    <div class="modal-dialog modal-lg">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h4 class="modal-title">RENCI run 15 "Storm Beta" - 12/03/2018</h4>
+												</div>
+												<div class="modal-body">
+													<img src="/static/ASGS_Mon/images/cera_img.JPG"> 
+													<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Beta<br> File Name: RENCI_img15.jpg<br> Processing time: 61 minutes.</div>    
+												</div>
+											</div>
+									  	</div>
+									</div>
+									<div id="prevRun_14" class="modal fade" role='dialog'>
+									    <div class="modal-dialog modal-lg">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h4 class="modal-title">RENCI run 14 "Storm Alpha" - 12/02/2018</h4>
+												</div>
+												<div class="modal-body">
+													<img src="/static/ASGS_Mon/images/cera_img.JPG"> 
+													<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Alpha<br> File Name: RENCI_img14.jpg<br> Processing time: 45 minutes.</div>    
+												</div>
+											</div>
+									  	</div>
+									</div>
+									<div style="margin-top: 5px; margin-bottom: 5px;">
+										<a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_17">RENCI run 17 "Storm Delta" - 12/05/2018</a>,
+										<a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_16">RENCI run 16 "Storm Charlie" - 12/04/2018</a>,
+										<a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_15">RENCI run 15 "Storm Beta" - 12/03/2018</a>,
+										<a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_14">RENCI run 14 "Storm Alpha" - 12/02/2018</a>
+									</div>								
+								</div>					
+							</div>
+						</div>
+					</div>
+					<div id="prefsTab" class="tab-pane fade">
+						<div class="row">
+							<div class="col-lg-4">
+								<div class="panel panel-default">
+									<div class="panel-heading">Set your preferences</div>
+									<div class="panel-body">
+										<form role="form" method="post" action="">
 										  	<div class="input-group">
-										    	<span class="input-group-addon">Run parameters</span>
-										    	<input id="msg" type="text" class="form-control" name="msg" placeholder="Enter the run parameters">
+											    <span class="input-group-addon">Cluster</span>
+												<select id="clusterPref" class="form-control">
+													<option value="-1">Select a preferred cluster</option>
+													<option value="George Mason">George Mason</option>
+													<option value="LSU">LSU</option>
+													<option value="Penguin">Penguin</option>
+													<option value="RENCI">RENCI</option>
+													<option value=TACC>TACC</option>
+													<option value="UCF">UCF</option>
+												</select>
+											</div>		
+											<br>									
+										  	<div class="input-group">
+										    	<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+										    	<input id="email" type="text" class="form-control" name="email" placeholder="Email">
 										  	</div>
-										  	<br>
-										  	<div class="input-group">
-												<button type="submit" class="btn btn-primary" value="Submit">Submit</button>
-											</div>
-										</div>									
-									</form>
-								</div>
-							</div>
-						</div>
-					</div>					
-				</div>	
-						
-				<div id="adminTab" class="tab-pane fade">
-					<div class="row">
-						<div class="col-lg-4">
-							<div class="panel panel-default">
-								<div class="panel-heading">Site Administration</div>
-								<div class="panel-body">
-									<form role="form" method="post" action="">
-									  	<div class="input-group">
-										    <span class="input-group-addon">User</span>
-											<select class="form-control" id="userName" onchange="loadUser(this.value)">
-												<option value="-1">Select a user</option>
-												<option value="JSmith">John Smith</option>
-												<option value="MJones">Mark Jones</option>
-												<option value="FWhite">Fred White</option>
-												<option value="MJames">Mark James</option>												
-											</select>											
-										</div>
-										<div id="selectedUserAdmin" style="display: none;">
-											<div id="userAdminArea">										
-												<span id="userVal" style="margin-top: 10px;"></span>	
-											</div>
-											<br>
-											<div class="input-group">			
-										    	<span class="input-group-addon">Role</span>
-												<select class="form-control" id="userRole">
-													<option value="-1">Select a new role</option>
-													<option value="Administrator">Administrator</option>
-													<option value="Job Submitter">Job Submitter</option>
-													<option value="User" selected>User</option>
-												</select>											
-											</div>														
 											<div class="checkbox">
-												<label><input type="checkbox" value="">Disable user</label>
-											</div>								  												
+												<label><input type="checkbox" value="">Receive notification e-mails</label>
+											</div>									  	
 										  	<div class="input-group">
-												<button type="submit" class="btn btn-primary" value="Submit">Submit</button>
-											</div>
-										</div>
-									</form>
+										    	<button type="button" class="btn btn-primary">Submit</button>			
+										    </div>						  
+										</form>
+									</div>
 								</div>
 							</div>
-						</div>
-					</div>					
-				</div>			
+						</div>					
+					</div>
+					
+					<div id="submitTab" class="tab-pane fade">
+						<div class="row">
+							<div class="col-lg-4">
+								<div class="panel panel-default">
+									<div class="panel-heading">Enter job submission parameters</div>
+									<div class="panel-body">
+										<form role="form" method="post" action="">
+											<div class="input-group">
+											    <span class="input-group-addon">Cluster</span>
+												<select id="clusterName" class="form-control" onchange="loadJobSubmit(this.value)">
+													<option value="-1">Select a cluster</option>
+													<option value="George Mason">George Mason</option>
+													<option value="LSU">LSU</option>
+													<option value="Penguin">Penguin</option>
+													<option value="RENCI">RENCI</option>
+													<option value=TACC>TACC</option>
+													<option value="UCF">UCF</option>
+												</select>											
+											</div>
+											<div id="selectedCluster" style="display: none;">
+												<div id="clusterUtilArea">
+													<span id="clusterVal" style="margin-left: 5px;"></span>
+													<div id="chartID" class="chart">
+<!-- 														<div id="chartAvail" style="margin-bottom: 5px; margin-left: 5px;"></div> -->
+<!-- 														<div id="chartInUse" style="margin-bottom: 5px; margin-left: 5px;"></div> -->
+													</div>
+												</div>	
+												<br>
+											  	<div class="input-group">
+											    	<span class="input-group-addon">Run parameters</span>
+											    	<input id="msg" type="text" class="form-control" name="msg" placeholder="Enter the run parameters">
+											  	</div>
+											  	<br>
+											  	<div class="input-group">
+													<button type="button" class="btn btn-primary" value="Submit">Submit</button>
+												</div>
+											</div>									
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>					
+					</div>	
+							
+					<div id="adminTab" class="tab-pane fade">
+						<div class="row">
+							<div class="col-lg-4">
+								<div class="panel panel-default">
+									<div class="panel-heading">Site Administration</div>
+									<div class="panel-body">
+										<form role="form" method="post" action="">
+										  	<div class="input-group">
+											    <span class="input-group-addon">User</span>
+												<select class="form-control" id="userName" onchange="loadUser(this.value)">
+													<option value="-1">Select a user</option>
+													<option value="JSmith">John Smith</option>
+													<option value="MJones">Mark Jones</option>
+													<option value="FWhite">Fred White</option>
+													<option value="MJames">Mark James</option>												
+												</select>											
+											</div>
+											<div id="selectedUserAdmin" style="display: none;">
+												<div id="userAdminArea">										
+													<span id="userVal" style="margin-top: 10px;"></span>	
+												</div>
+												<br>
+												<div class="input-group">			
+											    	<span class="input-group-addon">Role</span>
+													<select class="form-control" id="userRole">
+														<option value="-1">Select a new role</option>
+														<option value="Administrator">Administrator</option>
+														<option value="Job Submitter">Job Submitter</option>
+														<option value="User" selected>User</option>
+													</select>											
+												</div>														
+												<div class="checkbox">
+													<label><input type="checkbox" value="">Disable user</label>
+												</div>								  												
+											  	<div class="input-group">
+													<button type="button" class="btn btn-primary" value="Submit">Submit</button>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>					
+					</div>			
+				</div>
 			</div>
-		</div>
 		</div>
 	</body>
 </html>
