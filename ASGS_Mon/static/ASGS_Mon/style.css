@@ -25,17 +25,22 @@ h2 span {
    padding: 12px; 
 }
 
-img {
+.imgLogo {
     border: 1px solid #000;
     border-radius: 5px;
     padding: 1px;
-    width: 70px;
-    height: 55px;
     margin-right: auto;
     margin-left: 8px;
     margin-top: 5px;
     margin-bottom: 5px;
     align: left;
+}
+
+.priorResult
+{
+	margin-top: 5px;
+	margin-left: 10px;
+	width: 200px;
 }
 
 .chart div {
@@ -101,7 +106,7 @@ img {
   	background-color: azure;
 }
 
-#monitorTab, #prefsTab, #submitTab, #adminTab, #priorResultsTab
+#monitorTab, #priorResultsTab, #prefsTab, #submitTab, #adminTab
 {
 	margin-top: 5px;
 	margin-left: 5px;
