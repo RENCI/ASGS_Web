@@ -68,9 +68,17 @@
 			$('#chartID').html(elInUse + elAvail);
 			
 	    	if (val !== "-1")
+	    	{
 		    	$("#selectedCluster").show(1000);
+		    	var audio = document.getElementById("audioExpand");
+		        audio.play();
+	    	}
 		    else 
+		    {
 		    	$("#selectedCluster").hide(1000);
+		    	var audio = document.getElementById("audioCollapse");
+		        audio.play();
+		    }
 		}	
 		
 		function loadUser(val)
@@ -82,13 +90,24 @@
 		    $('#userVal').html('<span class="userViewtext">User name: ' + val + '</span><br><span class="userViewtext">Last login: ' + theDate + '</span><br><span class="userViewtext">Role: User');
 
 	    	if (val !== "-1")
+	    	{
 		    	$("#selectedUserAdmin").show(1000);
+		    	var audio = document.getElementById("audioExpand");
+		        audio.play();
+	    	}
 		    else 
-		    	$("#selectedUserAdmin").hide(1000);
+		    {
+		    	$("#selectedUserAdmin").hide(1000);		    
+	    		var audio = document.getElementById("audioCollapse");
+	        	audio.play();
+		    }
 		}
 	</script>
 
 	<body>	
+		<audio id="audioExpand" src="/static/ASGS_Mon/sounds/expand.wav" ></audio>
+		<audio id="audioCollapse" src="/static/ASGS_Mon/sounds/collapse.wav" ></audio>
+
 		<div id="bodyView">
 			<table id="pagehdr">
 				<tr>
