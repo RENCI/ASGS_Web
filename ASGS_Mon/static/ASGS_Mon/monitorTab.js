@@ -70,7 +70,7 @@ function renderMonitorTab(siteInstance)
 						.attr("width", siteInstance.width() + 30)
 						.attr("height", function(d) { // if this is an exited run collapse it by default
 							if(d.instance_status == _CONST_EXIT_MSG_TYPE) 
-								return '15'; 
+								return '21'; 
 							else 
 								return '75';
 							} )
@@ -188,7 +188,7 @@ function renderMonitorTab(siteInstance)
 						// if it is large, make it small
 						if(parseInt(msgRect.node().getBoundingClientRect().height) >= 75)
 						{
-							// make the entire control full size
+							// make the entire control small size
 							si.transition()
 								.duration(300)
 								.attr("height", "75")
