@@ -31,7 +31,7 @@
 					stateTextColor = "red"
 			    else if(d.cluster_state_id == "2" || d.cluster_state_id == "4")
 			    	stateTextColor = "goldenrod";
-			    else if(d.cluster_state_id == "6" || d.instance_status == 9)
+			    else if(d.cluster_state_id == "6" || d.instance_status == "9")
 			    	stateTextColor = "gray";
 			    else
 			    	stateTextColor = "green";
