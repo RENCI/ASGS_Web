@@ -70,6 +70,7 @@
 				    	// loop through the messages
 					    eventMsgs.forEach(function(info, i)
 					    	{
+					    	
 					    		// output the event message text
 					    		textarea
 							    	.append("text")
@@ -81,7 +82,9 @@
 								    		
 								    		if(info.event_summary.length > 125)
 								    			ellipsis = '...';
-							    			
+								    		
+								    		console.log('big view id: ' + d.instance_id + ' in View: ' + info.event_summary);
+								    		
 								    		return info.event_summary.substring(0, 125) + ellipsis; 
 								    	});
 					    	});
@@ -98,7 +101,9 @@
 					    		
 					    		if(eventMsgs[0].event_summary.length > 125)
 					    			ellipsis = '...';
-					    			
+
+					    		console.log('little view id: ' + d.instance_id + ' single in View: ' + eventMsgs[0].event_summary);
+
 					    		return eventMsgs[0].event_summary.substring(0, 125); 
 					    	});
 				    }

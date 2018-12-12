@@ -208,9 +208,12 @@ function renderMonitorTab(siteInstance)
 							    		
 							    		if(eventMsgs[0].event_summary.length > 125)
 							    			ellipsis = '...';
-							    			
+							    		
+							    		console.log('big view id: ' + d.instance_id + ' in tab: ' + eventMsgs[0].event_summary);
+
 							    		return eventMsgs[0].event_summary.substring(0, 125) + ellipsis; 
-							    	});
+							    	})
+								;
 						}
 						// if the message area is small, make it large
 						else
@@ -239,9 +242,12 @@ function renderMonitorTab(siteInstance)
 									    		
 									    		if(info.event_summary.length > 125)
 									    			ellipsis = '...';
-								    			
+									    		
+									    		console.log('little view id: ' + d.instance_id + ' single in tab: ' + info.event_summary);
+
 									    		return info.event_summary.substring(0, 125) + ellipsis; 
-									    	});
+									    	})
+								    	;
 						    	});
 						}
 					})							
