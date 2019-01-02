@@ -134,6 +134,7 @@
 					<li><a data-toggle="tab" href="#priorResultsTab">Prior Results</a></li>
 					<li><a data-toggle="tab" href="#prefsTab">Preferences</a></li>
 					<li><a data-toggle="tab" href="#submitTab">Job Submission</a></li>
+					<li><a data-toggle="tab" href="#configTab">Run Configurations</a></li>
 					<li><a data-toggle="tab" href="#adminTab">Administration</a></li>
 				</ul>
 			
@@ -150,11 +151,12 @@
 							</div>
 						</div>
 					</div>
+					
 					<div id="priorResultsTab" class="tab-pane fade">
 						<div class="row">
 							<div class="col-lg-6">
 								<div class="panel panel-default">
-									<div class="panel-heading">Prior run results - Sorted by most recent</div>
+									<div class="panel-heading">Prior run results, sorted by most recent</div>
 									<div id="prevRun_17" class="modal fade" role='dialog'>
 									    <div class="modal-dialog modal-lg">
 											<div class="modal-content">
@@ -208,15 +210,18 @@
 									  	</div>
 									</div>
 									<div style="margin-top: 5px; margin-bottom: 5px;">
-										<a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_17">RENCI run 17 "Storm Delta" - 12/05/2018</a>,
-										<a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_16">RENCI run 16 "Storm Charlie" - 12/04/2018</a>,
-										<a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_15">RENCI run 15 "Storm Beta" - 12/03/2018</a>,
-										<a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_14">RENCI run 14 "Storm Alpha" - 12/02/2018</a>
+										<ul>
+											<li><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_17">RENCI run 17 "Storm Delta" - 12/05/2018</a></li>
+											<li><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_16">RENCI run 16 "Storm Charlie" - 12/04/2018</a></li>
+											<li><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_15">RENCI run 15 "Storm Beta" - 12/03/2018</a></li>
+											<li><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_14">RENCI run 14 "Storm Alpha" - 12/02/2018</a></li>
+										</ul>
 									</div>								
 								</div>					
 							</div>
 						</div>
 					</div>
+					
 					<div id="prefsTab" class="tab-pane fade">
 						<div class="row">
 							<div class="col-lg-4">
@@ -297,6 +302,24 @@
 						</div>					
 					</div>	
 							
+					<div id="configTab" class="tab-pane fade">
+						<div class="row">
+							<div class="col-lg-6">
+								<div class="panel panel-default">
+									<div class="panel-heading">Run configurations, sorted by most recent</div>
+									<div style="margin-top: 5px; margin-bottom: 5px;">
+										<ul>
+											<li><a href="javascript:void(0);">Configuration 17, "Storm Delta" - 12/05/2018</a></li>
+											<li><a href="javascript:void(0);">Configuration 16, "Storm Charlie" - 12/04/2018</a></li>
+											<li><a href="javascript:void(0);">Configuration 15, "Storm Beta" - 12/03/2018</a></li>
+											<li><a href="javascript:void(0);">Configuration 14, "Storm Alpha" - 12/02/2018</a></li>
+										</ul>
+									</div>								
+								</div>					
+							</div>
+						</div>
+					</div>
+					
 					<div id="adminTab" class="tab-pane fade">
 						<div class="row">
 							<div class="col-lg-4">

@@ -116,7 +116,7 @@ h2 span {
   	background-color: azure;
 }
 
-#monitorTab, #priorResultsTab, #prefsTab, #submitTab, #adminTab
+#monitorTab, #priorResultsTab, #prefsTab, #submitTab, #configTab, #adminTab
 {
 	margin-top: 5px;
 	margin-left: 5px;
