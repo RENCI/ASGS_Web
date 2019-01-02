@@ -182,8 +182,8 @@ function renderMonitorTab(siteInstance)
 				    	// remove all instances of the current text messages
 				    	textarea.selectAll("text").remove();
 
-				    	// get the event messages
-					    var eventMsgs = d.event_raw_msgs;
+				    	// get the event messages from the site instance. this is the latest.
+					    var eventMsgs = si[0][0].__data__.event_raw_msgs; //d.event_raw_msgs;
 
 						// if it is large, make it small
 						if(parseInt(msgRect.node().getBoundingClientRect().height) >= 75)
@@ -206,12 +206,10 @@ function renderMonitorTab(siteInstance)
 							    	{
 							    		var ellipsis = '';
 							    		
-							    		if(eventMsgs[0].event_summary.length > 125)
+							    		if(eventMsgs[0].event_summary.length > 120)
 							    			ellipsis = '...';
-							    		
-							    		//console.log('big view id: ' + d.instance_id + ' in tab: ' + eventMsgs[0].event_summary);
 
-							    		return eventMsgs[0].event_summary.substring(0, 125) + ellipsis; 
+							    		return eventMsgs[0].event_summary.substring(0, 120) + ellipsis; 
 							    	})
 								;
 						}
@@ -235,17 +233,15 @@ function renderMonitorTab(siteInstance)
 						    		textarea
 								    	.append("text")
 								    	.attr("class", "eventSummary")
-								    	.attr("transform", "translate(0, " + ((i * 10) + 1) + ")")
+								    	.attr("transform", "translate(0, " + (i * 10) + ")")
 									    .text(function(d) 
 									    	{
 									    		var ellipsis = '';
 									    		
-									    		if(info.event_summary.length > 125)
+									    		if(info.event_summary.length > 120)
 									    			ellipsis = '...';
-									    		
-									    		//console.log('little view id: ' + d.instance_id + ' single in tab: ' + info.event_summary);
 
-									    		return info.event_summary.substring(0, 125) + ellipsis; 
+									    		return info.event_summary.substring(0, 120) + ellipsis; 
 									    	})
 								    	;
 						    	});

@@ -75,17 +75,15 @@
 					    		textarea
 							    	.append("text")
 							    	.attr("class", "eventSummary")
-							    	.attr("transform", "translate(0, " + ((i * 10) + 1) +")")
+							    	.attr("transform", "translate(0, " + (i * 10) +")")
 								    .text(function(d) 
 								    	{ 
 								    		var ellipsis = '';
 								    		
-								    		if(info.event_summary.length > 125)
+								    		if(info.event_summary.length > 120)
 								    			ellipsis = '...';
 								    		
-								    		//console.log('big view id: ' + d.instance_id + ' in View: ' + info.event_summary);
-								    		
-								    		return info.event_summary.substring(0, 125) + ellipsis; 
+								    		return info.event_summary.substring(0, 120) + ellipsis; 
 								    	});
 					    	});
 			    	}
@@ -99,12 +97,10 @@
 					    	{ 
 					    		var ellipsis = '';
 					    		
-					    		if(eventMsgs[0].event_summary.length > 125)
+					    		if(eventMsgs[0].event_summary.length > 120)
 					    			ellipsis = '...';
 
-					    		//console.log('little view id: ' + d.instance_id + ' single in View: ' + eventMsgs[0].event_summary);
-
-					    		return eventMsgs[0].event_summary.substring(0, 125); 
+					    		return eventMsgs[0].event_summary.substring(0, 120); 
 					    	});
 				    }
 			    }
