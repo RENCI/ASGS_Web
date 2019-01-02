@@ -93,7 +93,7 @@ BEGIN
 			INNER JOIN (SELECT max(id) AS id from "ASGS_Mon_event" group by event_group_id) AS meid ON meid.id=e.id
 			INNER JOIN (SELECT max(id) AS id, instance_id from "ASGS_Mon_event_group" group by instance_id) AS megid ON megid.id=e.event_group_id AND megid.instance_id=i.id	
 			WHERE inst_state_type_id < CASE WHEN end_ts + INTERVAL '1 day' > now() THEN inst_state_type_id+1 ELSE 9 END
-			ORDER BY i.id
+			ORDER BY i.id DESC
 		) items;
 
 END;
@@ -144,7 +144,7 @@ BEGIN
 			JOIN "ASGS_Mon_event_group" eg ON eg.instance_id=i.id
 			INNER JOIN (SELECT max(id) AS id, instance_id from "ASGS_Mon_event_group" group by instance_id) AS megid ON megid.id=eg.id AND megid.instance_id=i.id	
 			WHERE inst_state_type_id < CASE WHEN end_ts + INTERVAL '1 day' > now() THEN inst_state_type_id+1 ELSE 9 END
-			ORDER BY i.id
+			ORDER BY i.id DESC
 			) AS items;
 END;
 
