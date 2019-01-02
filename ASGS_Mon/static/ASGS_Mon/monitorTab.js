@@ -20,11 +20,11 @@ function renderMonitorTab(siteInstance)
 
 			// create/init the shells for all the site instances
 			d3.json("dataReq/?type=init", function(error, data)
-			{
+			{				
 				// erase all the site instances on error
 				if (error || data.length == 0) 
 				{
-					curRendered = d3.selectAll(".siteInstanceView").remove();
+					d3.selectAll(".siteInstanceView").remove();
 					return;
 				}
 					
