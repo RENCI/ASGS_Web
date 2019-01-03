@@ -19,10 +19,10 @@ function renderMonitorTab(siteInstance)
 			var _CONST_EXIT_MSG_TYPE = 9;
 
 			// create/init the shells for all the site instances
-			d3.json("dataReq/?type=init", function(error, data)
+			d3.json("dataReq/?type=init", function(error, initData)
 			{				
 				// erase all the site instances on error
-				if (error || data.length == 0) 
+				if (error || initData.length == 0) 
 				{
 					d3.selectAll(".siteInstanceView").remove();
 					return;
@@ -41,10 +41,10 @@ function renderMonitorTab(siteInstance)
 						bfound = false;
 						
 						// for each id in the incoming data
-						for(j=0; j<data.length; j++)
+						for(j=0; j<initData.length; j++)
 						{
 							// was it previously rendered
-							if(curRendered[i].parentNode.id == "_" + data[j].instance_id)
+							if(curRendered[i].parentNode.id == "_" + initData[j].instance_id)
 							{
 								// set the flag
 								bfound = true;
@@ -60,9 +60,9 @@ function renderMonitorTab(siteInstance)
 					}
 				}
 				
-			  	// render the svg region for all individual site instances
+			  	// save this data in the object and render the svg region for all individual site instances
 			  	var svg = d3.select("#siteInstancesTarget").selectAll("svg")
-				    .data(data)
+				    .data(initData)
 				    .enter()
 			    	.append("svg")
 						.attr("id", function(d) {return "_" + d.instance_id;} )
