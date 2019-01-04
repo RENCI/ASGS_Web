@@ -59,5 +59,12 @@ class Event(models.Model):
     process = models.CharField(max_length = 100)
     raw_data = models.CharField(max_length = 4000)
 
+
+class Instance_config(models.Model):
+    id = models.AutoField(primary_key=True)
+    instance = models.ForeignKey(Instance, on_delete=models.PROTECT)
+    adcirc_config = models.TextField()
+    asgs_config = models.TextField()
+
 class Json(models.Model):
     data = models.CharField(max_length = 4000)
