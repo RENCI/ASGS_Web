@@ -15,7 +15,7 @@ logging.info("Started receive_msg_service")
 
 # retrieve configuration settings
 parser = ConfigParser()
-parser.read('/home/asgs/ASGS_Web/messages/msg_settings.ini')
+parser.read('/srv/django/ASGS_Web/messages/msg_settings.ini')
 
 # set up AMQP credentials and connect to asgs queue
 credentials = pika.PlainCredentials(parser.get('pika', 'username'),
@@ -39,7 +39,7 @@ def get_existing_event_group_id(conn, inst_id):
 
     # see if there are any event groups yet that have this instance_id
     # this could be caused by a new install that does not have any data in the DB yet
-    query = 'SELECT id FROM "ASGS_Mon_event_group" WHERE instance_id=' + str(inst_id)
+    query = 'SELECT id FROM "ASGS_Mon_event_group" WHERE instance_id=' + str(inst_id) + ' ORDER BY id DESC'
     logging.debug("query=" + query)
     cur = conn.cursor()
     cur.execute(query)
@@ -70,8 +70,10 @@ def get_existing_instance_id(conn, site_id , msg_obj):
     query = 'SELECT id FROM "ASGS_Mon_instance" WHERE site_id=' + str(site_id) + \
                                              " AND process_id=" + str(process_id) + \
                                              " AND instance_name='" + instance_name + "'" + \
-                                             " AND inst_state_type_id!=9"
+                                             " AND inst_state_type_id!=9" + \
+                                             " ORDER BY id DESC"
 # TODO +++++++++++++++FIX THIS++++++++++++++++++++Add query to get correct stat id for Defunct++++++++++++++++++++++++
+# TODO +++++++++++++++FIX THIS++++++++++++++++++++Add day to query too? (to account for rollover of process ids)++++++++++++++++++++++++
 
     logging.debug("query=" + query)
     cur = conn.cursor()
@@ -205,11 +207,12 @@ def insert_event(conn, site_id, event_group_id, event_type_id, state_type, msg_o
     # ignore intermediary cluster job completion percentage
     sql_fields += "pct_complete, "
     pct_complete = get_pctcomplete(conn, event_type_id)
+    sql_values += str(pct_complete) + ", "
 
-    if ((state_type =="CMPL") or (int(pct_complete) < 20)):
-        sql_values += str(pct_complete) + ", "
-    else: #this should still be the previous pct amount - 20 less - until completion of the event
-        sql_values += str(int(pct_complete)-20) + ", "
+    #if ((state_type =="CMPL") or (int(pct_complete) < 20)):
+        #sql_values += str(pct_complete) + ", "
+    #else: #this should still be the previous pct amount - 20 less - until completion of the event
+        #sql_values += str(int(pct_complete)-20) + ", "
                 
     #pctcomplete = "0"
     #if (msg_obj.get("pctcomplete") is not None and len(msg_obj["pctcomplete"]) > 0):
@@ -505,22 +508,6 @@ def callback(ch, method, properties, body):
             return
     else:
         # don't need a new event group
-        ## get last message from this site in order to retrieve current event group id
-        #query = 'SELECT m.event_group_id FROM (SELECT MAX(id) AS maxid FROM "ASGS_Mon_event" e WHERE e.site_id=' + str(site_id) + \
-                 #') t JOIN "ASGS_Mon_event" m ON m.id = t.maxid'
-        #logging.info("query=" + query)
-        #cur = conn.cursor()
-        #try:
-            #cur.execute(query)
-        #except Exception as ex:
-            #template = "An exception of type {0} occurred. Arguments:\n{1!r}"
-            #message = template.format(type(ex).__name__, ex.args)
-            #logging.info(message)
-            #logging.info("After MAX query")
-            #event = cur.fetchone()
-            #if (event is None):
-                #logging.info("event is None")
-            #event_group_id = event[0] 
         logging.info("event_group_id=" + str(event_group_id))
 
         # update event group with this latest state
