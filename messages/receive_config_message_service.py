@@ -11,7 +11,7 @@ from configparser import ConfigParser
 
 # set up logging
 logfile = "rcv_cfg_svc.log"
-logging.basicConfig(filename=logfile, format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.DEBUG)
+logging.basicConfig(filename=logfile, format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.INFO)
 logging.info("Started receive config service")
 
 # retrieve configuration settings
