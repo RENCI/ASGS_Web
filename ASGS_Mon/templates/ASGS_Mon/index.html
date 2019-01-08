@@ -112,7 +112,58 @@
 			ctrl.fadeIn(2000);
 			ctrl.fadeOut(1000);
 		}
+				
+		function initConfigTabList()
+		{
+			// get the list and render the html
+			d3.json("dataReq/?type=config_list", function(error, configList) 
+			{
+				// init the output
+				var output = '<ul>';
+				
+				// go through all listings
+				configList.forEach(function(info, i)
+				{
+					// tack on each entry
+					output += '<li>' + info.instance_name + ' with ID ' + info.instance_id + ', started on: ' + info.start_ts + '. <a href="javascript:getConfigDetails(' + info.instance_id + ', \'asgs\')">View ASGS</a>&nbsp; or &nbsp;<a href="javascript:getConfigDetails(' + info.instance_id + ', \'adcirc\')">View ADCIRC</a></li><div style="display:none; border:1px solid black; margin-left: 10px; margin-top: 5px; margin-right: 5px;" id="configdetail_' + info.instance_id + '"></div>';
+				});
+				
+				// finish off the list
+				output += '</ul>';
+				
+				// output the result
+				$("#configTabList").html(output);
+			});
+		}
 		
+		function getConfigDetails(id, type)
+		{
+			// if anything is visible hide it
+			if($('#configdetail_' + id).is(':visible'))
+			{
+				$('#configdetail_' + id).hide(1000);
+			}
+			// else render the selection
+			else 
+			{
+				// get the render the configuration params
+				d3.json("dataReq/?type=config_detail&param=" + id, function(error, configDetail) 
+				{	
+					// storage for the target data
+					var theData = null;
+					
+					// get the type of data to display
+					if(type == "asgs")
+						data = configDetail.asgs_config
+					else
+						data = configDetail.adcirc_config
+											
+					// render the data
+					$('#configdetail_' + id).html(data);
+					$('#configdetail_' + id).show(1500);
+				});
+			}
+		}
 	</script>
 
 	<body>	
@@ -134,7 +185,7 @@
 					<li><a data-toggle="tab" href="#priorResultsTab">Prior Results</a></li>
 					<li><a data-toggle="tab" href="#prefsTab">Preferences</a></li>
 					<li><a data-toggle="tab" href="#submitTab">Job Submission</a></li>
-					<li><a data-toggle="tab" href="#configTab">Run Configurations</a></li>
+					<li><a data-toggle="tab" href="#configTab" onclick="initConfigTabList();">Run Configurations</a></li>
 					<li><a data-toggle="tab" href="#adminTab">Administration</a></li>
 				</ul>
 			
@@ -307,14 +358,7 @@
 							<div class="col-lg-6">
 								<div class="panel panel-default">
 									<div class="panel-heading">Run configurations, sorted by most recent</div>
-									<div style="margin-top: 5px; margin-bottom: 5px;">
-										<ul>
-											<li><a href="javascript:void(0);">Configuration 17, "Storm Delta" - 12/05/2018</a></li>
-											<li><a href="javascript:void(0);">Configuration 16, "Storm Charlie" - 12/04/2018</a></li>
-											<li><a href="javascript:void(0);">Configuration 15, "Storm Beta" - 12/03/2018</a></li>
-											<li><a href="javascript:void(0);">Configuration 14, "Storm Alpha" - 12/02/2018</a></li>
-										</ul>
-									</div>								
+									<div id="configTabList" style="margin-top: 5px; margin-bottom: 5px;"></div>								
 								</div>					
 							</div>
 						</div>
