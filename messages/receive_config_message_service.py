@@ -113,27 +113,32 @@ def process_msg_thread(logging, conn, site_id, msg_obj, timeout=30):
             instance_id = instance[0]
             logging.debug("insert_instance_config: instance_id=" + str(instance_id))
 
-            # now insert this intance config record for the found instance id
-            sql_fields = 'INSERT INTO "ASGS_Mon_instance_config" ('
+            # now insert this instance config record for the found instance id
+            sql_fields = 'INSERT INTO "ASGS_Mon_instance_config" (instance_id, asgs_config, adcirc_config)'
             sql_values = " VALUES ("
     
-            sql_fields += "instance_id, "
             sql_values += str(instance_id) + ", "
 
             config_type = ""
             if (msg_obj.get("name") is not None and len(msg_obj["name"]) > 0):
                 config_type = msg_obj.get("name")
 
-            if (config_type == "asgs"):
-                sql_fields += "asgs_config"
-            else:
-                sql_fields += "adcirc_config"
-    
+            config = "N/A"
             if (msg_obj.get("message") is not None and len(msg_obj["message"]) > 0):
-                sql_values += "'" + msg_obj["message"] + "'"
-            else:
-                sql_values += "'N/A'"
+                config = msg_obj["message"]
 
+
+            if (config_type == "asgs"):
+                sql_values += "'" + config + "', "
+                sql_values += "'N/A')"
+            elif (config_type == "adcirc"):
+                sql_values += "'N/A', "
+                sql_values += "'" + config + "')"
+            else:
+                logging.error("FAILURE - Illegal config type '" + config_type + "' expecting 'asgs' or 'adcirc'")
+                logging.error("FAILURE - Discarding config for instance: " + str(instance_id))
+                return
+    
             sql_stmt = sql_fields + sql_values
             sql_stmt += " RETURNING id"
 
@@ -148,9 +153,9 @@ def process_msg_thread(logging, conn, site_id, msg_obj, timeout=30):
                 conn.close()
             except:
                 e = sys.exc_info()[0]
-                logging.warn("FAILURE - Cannot commit and save to DB" + str(e))
+                logging.error("FAILURE - Cannot commit and save to DB" + str(e))
 
-            logging.debug(" Inserted instance config record")
+            logging.debug("Inserted instance config record")
 
             # Done! thread finished task
             return
@@ -170,7 +175,7 @@ def fix_message_param(msg_body):
     value_str = msg_body[value_start : value_end]
 
     tmp_value = value_str.replace('"', '\\"')
-    new_value = tmp_value.replace("'", "\\'")
+    new_value = tmp_value.replace("\\'", "''")
     new_msg_body = msg_body.replace(value_str, new_value)
 
     return new_msg_body
