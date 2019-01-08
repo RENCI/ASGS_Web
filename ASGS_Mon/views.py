@@ -33,6 +33,7 @@ def dataReq(request):
         if data == "None":
             data = '"None"'
             
+            
         # events need a wrapper
         if reqType == 'event':
             data = 'retry:3000\ndata: {"utilization" : ' + data +'} \n\n'
