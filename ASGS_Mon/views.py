@@ -13,6 +13,8 @@ def index(request):
 def dataReq(request): 
     # get the request type         
     reqType = request.GET.get('type')
+    
+    # get any params if there are any
     param = request.GET.get('param')
     
     # if there was no param passed just init the paramval used to an empty string
