@@ -25,7 +25,6 @@ def dataReq(request):
         
     # only legal commands can pass
     if reqType in theLegalReqTypes:
-        
         # create the SQL. raw SQL calls using the django db model need an ID
         theSQL = 'SELECT 1 AS ''id'', public.get_' + reqType + '_json(' + paramVal + ') AS ''data'';'
             
