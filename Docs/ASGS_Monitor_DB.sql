@@ -26,6 +26,9 @@ DROP TABLE IF EXISTS ASGS_Mon_event_group CASCADE
 DROP TABLE IF EXISTS ASGS_Mon_event_type_lu CASCADE
 ;
 
+DROP TABLE IF EXISTS ASGS_Mon_Instance_config CASCADE
+;
+
 DROP TABLE IF EXISTS ASGS_Mon_instance CASCADE
 ;
 
@@ -115,6 +118,15 @@ CREATE TABLE ASGS_Mon_state_type_lu
 )
 ;
 
+CREATE TABLE ASGS_Mon_Instance_config
+(
+	id integer NOT NULL,
+	instance_id integer NOT NULL,
+	adcirc_config text NULL,
+	asgs_config text NULL
+)
+;
+
 /* Create Primary Keys, Indexes, Uniques, Checks */
 
 ALTER TABLE ASGS_Mon_event ADD CONSTRAINT PK_event
@@ -145,6 +157,10 @@ ALTER TABLE ASGS_Mon_state_type_lu ADD CONSTRAINT PK_event_type_lu
 	PRIMARY KEY (id)
 ;
 
+ALTER TABLE ASGS_Mon_Instance_config ADD CONSTRAINT PK_event_type_lu
+	PRIMARY KEY (id)
+;
+
 /* Create Foreign Key Constraints */
 
 ALTER TABLE ASGS_Mon_event ADD CONSTRAINT FK_ASGS_Mon_event_ASGS_Mon_event_group
@@ -161,6 +177,10 @@ ALTER TABLE ASGS_Mon_event_group ADD CONSTRAINT FK_ASGS_Mon_event_group_ASGS_Mon
 
 ALTER TABLE ASGS_Mon_instance ADD CONSTRAINT FK_ASGS_Mon_instance_ASGS_Mon_instance_state_type_lu
 	FOREIGN KEY (inst_state_type) REFERENCES ASGS_Mon_instance_state_type_lu (id) ON DELETE No Action ON UPDATE No Action
+;
+
+ALTER TABLE ASGS_Mon_Instance_config ADD CONSTRAINT FK_ASGS_Mon_Instance_config_ASGS_Mon_Instance
+	FOREIGN KEY (instance_id) REFERENCES ASGS_Mon_Instance (id) ON DELETE No Action ON UPDATE No Action
 ;
 
 /* Create Table Comments, Sequences for Autonumber Columns */
