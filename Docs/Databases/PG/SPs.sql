@@ -155,3 +155,66 @@ GRANT EXECUTE ON FUNCTION public.get_init_json() TO asgs;
 COMMENT ON FUNCTION public.get_init_json()
     IS 'Returns a recordset (json) of the running ASGS cluster instances.';
     
+
+
+-- FUNCTION: public.get_config_list_json(integer)
+
+-- DROP FUNCTION public.get_config_list_json(integer);
+
+CREATE OR REPLACE FUNCTION public.get_config_list_json()
+    RETURNS TABLE(document jsonb) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+
+BEGIN
+  -- gather the records and return them in json format
+	RETURN QUERY
+	
+	SELECT jsonb_agg(r)
+	FROM (
+		SELECT c.instance_id, i.instance_name, TO_CHAR(i.start_ts, 'Mon DD, HH24:MI:SS') AS start_ts
+		FROM public."ASGS_Mon_instance_config" c
+                JOIN "ASGS_Mon_instance" i ON i.id=c.instance_id
+		GROUP BY c.instance_id, i.instance_name, i.start_ts
+		ORDER BY c.instance_id DESC
+		LIMIT 7) r;
+END;
+
+$BODY$;
+
+
+
+-- FUNCTION: public.get_config_detail_json(integer)
+
+-- DROP FUNCTION public.get_config_detail_json(integer);
+
+CREATE OR REPLACE FUNCTION public.get_config_detail_json(
+	_instance_id integer)
+    RETURNS TABLE(document json) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+
+BEGIN
+  -- gather the records and return them in json format
+	RETURN QUERY
+	
+	SELECT to_json(r)
+	FROM (
+		SELECT c.instance_id, i.instance_name, TO_CHAR(i.start_ts, 'Mon DD, HH24:MI:SS') AS start_ts, c.adcirc_config, REPLACE(REPLACE(REPLACE(c.asgs_config, '\"', '&quot;'), '''', '&apos;'), '\n', '</br>') AS asgs_config
+		FROM public."ASGS_Mon_instance_config" c
+                JOIN "ASGS_Mon_instance" i ON i.id=c.instance_id
+		WHERE c.instance_id=_instance_id
+		GROUP BY c.instance_id, i.instance_name, i.start_ts, c.adcirc_config, c.asgs_config 
+		ORDER BY c.instance_id DESC
+		LIMIT 7) r;
+END;
+
+$BODY$;
