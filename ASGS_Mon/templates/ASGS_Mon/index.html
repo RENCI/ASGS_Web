@@ -135,7 +135,7 @@
 		{
 			if($('#configdetail_' + id).is(':visible'))
 			{
-				$('#configdetail_' + id).hide();
+				$('#configdetail_' + id).hide(1500);
 			}
 			else 
 			{
@@ -143,7 +143,7 @@
 				d3.json("dataReq/?type=config_detail&param=" + id, function(error, configDetail) 
 				{
 					$('#configdetail_' + id).html(configDetail.asgs_config);
-					$('#configdetail_' + id).show();
+					$('#configdetail_' + id).show(1500);
 				});
 			}
 		}
