@@ -13,35 +13,46 @@ def index(request):
 def dataReq(request): 
     # get the request type         
     reqType = request.GET.get('type')
+                
+    # init the return data
+    retVal = '';
     
-    # get any params if there are any
-    param = request.GET.get('param')
-    
-    # if there was no param passed just init the paramval used to an empty string
-    if param is None: 
-        paramVal = '' 
-    else:
-        paramVal = param
-        
     # only legal commands can pass
-    if reqType in theLegalReqTypes:
-        # create the SQL. raw SQL calls using the django db model need an ID
-        theSQL = 'SELECT 1 AS ''id'', public.get_' + reqType + '_json(' + paramVal + ') AS ''data'';'
-            
-        # get the data
-        data = str(models.Json.objects.raw(theSQL)[0].data).replace("'", "\"")
-    
-        if data == "None":
-            data = '"None"'
-                        
-        # events need a wrapper
-        if reqType == 'event':
-            data = 'retry:3000\ndata: {"utilization" : ' + data +'} \n\n'
+    if reqType in theLegalReqTypes:   
+        # init the param value
+        paramVal = ''
+                     
+        # config details need a parameter
+        if reqType == 'config_detail':            
+            # get any params if there are any
+            param = request.GET.get('param')
+        
+            # its a failure if there was no param passed for this type
+            if param is None:
+                retVal = 'Invalid or missing parameter.' 
+            else:
+                paramVal = param
+
+        # if no errors continue
+        if retVal == '':
+            # create the SQL. raw SQL calls using the django db model need an ID
+            theSQL = 'SELECT 1 AS ''id'', public.get_' + reqType + '_json(' + paramVal + ') AS ''data'';'
+                
+            # get the data
+            retVal = str(models.Json.objects.raw(theSQL)[0].data).replace("'", "\"")
+        
+            # reformat empty data sets
+            if retVal == "None":
+                retVal = '"None"'
+                            
+            # events need a wrapper
+            if reqType == 'event':
+                retVal = 'retry:3000\ndata: {"utilization" : ' + retVal +'} \n\n'
     else:
-        data = ''
+        retVal = 'Invalid or illegal data request.'
                
     # load the response and it type
-    response = HttpResponse(data, content_type='text/event-stream')
+    response = HttpResponse(retVal, content_type='text/event-stream')
     response['Cache-Control'] = 'no-cache'
     
     # return the resultant JSON to the caller
