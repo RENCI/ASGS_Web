@@ -26,5 +26,5 @@ urlpatterns = [
    url(r'^dataReq', app_view.dataReq, name='dataReq'),
    url(r'^logout/$', auth_views.logout, {'template_name': 'core/logout.html'}, name='logout'),
    url(r'^admin/', admin.site.urls),
-   url(r'^/ASGS_Mon', app_view.index),
+   url(r'^ASGS_Mon', app_view.index),
 ]
