@@ -6,7 +6,6 @@ import json
 import datetime
 import thread
 import logging
-#from threading import thread
 from configparser import ConfigParser
 
 # set up logging
@@ -62,14 +61,8 @@ def get_site_id(conn, msg_obj):
     return site_id
 
 
-# ++++++++++++++++WORRY++++++++++++++++++++++++++++++++++++++++
-# there may be a problem with timing when an instance gets created and when an instance config message is sent
-# does this mean that a create instance for regular messages always creates an empty instance config record, and the this process
-# just updates the config message field?? Need to think about this
-# SOLVED WITH THREADING!!!
 # This thread will keep check for an existing instance id until a given timeout is reached
 # then the insert will be abandoned, and the error will be logged
-
 def process_msg_thread(logging, conn, site_id, msg_obj, timeout=30):
     from time import time, sleep
 
@@ -140,7 +133,6 @@ def process_msg_thread(logging, conn, site_id, msg_obj, timeout=30):
                 return
     
             sql_stmt = sql_fields + sql_values
-            sql_stmt += " RETURNING id"
 
             logging.debug("About to insert instance config record: " + sql_stmt)
             cur = conn.cursor()
@@ -165,6 +157,82 @@ def process_msg_thread(logging, conn, site_id, msg_obj, timeout=30):
             sleep(1)
 
 
+def update_instance_config(conn, site_id, msg_obj):
+    
+    logging.debug("Checking to see if instance config needs to be updated")
+    ret_id = None
+
+    # look for this instance id
+    instance_name = "N/A"
+    if (msg_obj.get("instance_name") is not None and len(str(msg_obj["instance_name"])) > 0):
+        instance_name = str(msg_obj["instance_name"])
+
+    process_id = 0
+    if (msg_obj.get("uid") is not None and len(str(msg_obj["uid"])) > 0):
+        process_id = int(msg_obj["uid"])
+
+    # see if there are any instances yet that have this site_id and instance_name
+    query = 'SELECT id FROM "ASGS_Mon_instance" WHERE site_id=' + str(site_id) + \
+                                                 " AND process_id=" + str(process_id) + \
+                                                 " AND instance_name='" + instance_name + "'" + \
+                                                 " AND inst_state_type_id!=9" + \
+                                                 " ORDER BY id DESC"
+        
+    logging.debug("update_instance_config: query: " + query)
+    cur = conn.cursor()
+    cur.execute(query)
+    # has this instance been created yet??
+    instance = cur.fetchone()
+    if (instance is not None):
+        instance_id = instance[0]
+        logging.debug("update_instance_config: instance_id=" + str(instance_id))
+
+        # try update of instance_config
+        # now insert this instance config record for the found instance id
+        sql_stmt = 'UPDATE "ASGS_Mon_instance_config" SET '
+
+        config_type = ""
+        if (msg_obj.get("name") is not None and len(msg_obj["name"]) > 0):
+            config_type = msg_obj.get("name")
+
+        config_text  = ""
+        if (msg_obj.get("message") is not None and len(msg_obj["message"]) > 0):
+            config_text = msg_obj["message"]
+
+        if (config_type == "asgs"):
+            sql_stmt += "asgs_config = '" + config_text + "'"
+        elif (config_type == "adcirc"):
+            sql_stmt += "adcirc_config = '" + config_text + "'"
+        else:
+            logging.error("FAILURE - Illegal config type '" + config_type + "' expecting 'asgs' or 'adcirc'")
+            logging.error("FAILURE - Discarding update of config for instance: " + str(instance_id))
+            logging.debug("update_instance_config: returning: " + str(ret_id))
+            return ret_id
+
+        sql_stmt += " WHERE instance_id = " + str(instance_id)
+        sql_stmt += " RETURNING id"
+
+        logging.debug("About to insert instance config record: " + sql_stmt)
+        cur = conn.cursor()
+        cur.execute(sql_stmt)
+        ret_id = cur.fetchone()[0]
+
+        # now commit and save
+        try:
+            conn.commit()
+            cur.close()
+            conn.close()
+        except:
+            e = sys.exc_info()[0]
+            logging.error("FAILURE - Cannot commit and save to DB in update_instance_config" + str(e))
+
+        logging.debug("Updated instance config record")
+        # Done! thread finished task
+
+    logging.debug("update_instance_config: returning: " + str(ret_id))
+    return ret_id
+
+
 def fix_message_param(msg_body):
 
     logging.debug("Fixing message variable in msg body: " + str(msg_body))
@@ -177,6 +245,8 @@ def fix_message_param(msg_body):
     tmp_value = value_str.replace('"', '\\"')
     new_value = tmp_value.replace("\\'", "''")
     new_msg_body = msg_body.replace(value_str, new_value)
+
+    logging.debug("Returning new body: " + new_msg_body)
 
     return new_msg_body
 
@@ -205,6 +275,11 @@ def callback(ch, method, properties, body):
     # if no valid site found, ignore message
     if (site_id < 0):
       return
+
+    # now see if we already have a config entry for this instance
+    # if so - update it and return
+    if (update_instance_config(conn, site_id, msg_obj)):
+        return
 
     # launch thread to check for the existance of this instance
     thread.start_new_thread(process_msg_thread, (logging, conn, site_id, msg_obj) )
