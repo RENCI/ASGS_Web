@@ -1,13 +1,26 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
+from django.contrib.auth.views import login
+
 from ASGS_Mon import models
     
 # define legal request types
 theLegalReqTypes = ['init', 'event', 'config_list', 'config_detail']
 
+# redirect to the correct place when authenticated. otherwise go to the login page
+def custom_login(request):
+    if request.user.is_authenticated:
+        return HttpResponseRedirect('/index')
+    else:
+        return login(request, template_name='core/login.html')
+    
 # main entry point
 def index(request):
-    return render(request, 'ASGS_Mon/index.html', {})
+    if request.user.is_authenticated:
+        return render(request, 'ASGS_Mon/index.html', {})
+    else:
+        return login(request, template_name='core/login.html')    
 
 # gets the running instances
 def dataReq(request): 
@@ -18,7 +31,7 @@ def dataReq(request):
     retVal = '';
     
     # only legal commands can pass
-    if reqType in theLegalReqTypes:   
+    if reqType in theLegalReqTypes and request.user.is_authenticated:   
         # init the param value
         paramVal = ''
                      
