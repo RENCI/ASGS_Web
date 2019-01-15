@@ -31,19 +31,17 @@
 			<table id="pagehdr">
 				<tr>
 					<td align="left"><img class="imgASGSLogo" src="/static/ASGS_Mon/images/ASGSlogo.jpg" style="width: 70px; height: 55px;"/></td>
-					<td style="text-align: middle;">ASGS Operational Awareness Dashboard</td>
-					<td align="right"><img class="imgRENCILogo" src="/static/ASGS_Mon/images/RENCIlogo.jpg" style="width: 90px; height: 55px;"/></td>
+					<td style="text-align: center;">ASGS Operational Awareness Dashboard
+						{% if user.is_authenticated %}
+							<div style="margin-right: 20px; margin-top: 5px; text-align: center;"><span style="font-size: 16px; font-style: italic">Good day {{ user.first_name }} {{ user.last_name }}.</span>&nbsp;&nbsp;&nbsp;<span style="font-size: 16px;"><a href="{% url 'logout' %}">Log out</a></span></div>
+						{% else %}
+						{% endif %}
+					</td>
+					<td align="right"><a href="https://renci.org/"><img class="imgRENCILogo" src="/static/ASGS_Mon/images/RENCIlogo.jpg" style="width: 90px; height: 55px;"/></a></td>
 				</tr>		
 			</table>
 		</header>
-	
-		{% if user.is_authenticated %}
-			<div style="margin-right: 20px; margin-top: 5px; text-align: right;">
-				Good day {{ user.first_name }} {{ user.last_name }}!&nbsp;<a href="{% url 'logout' %}">logout</a>
-			</div>
-		{% else %}
-		{% endif %}
-	  
+		  
 		{% block content %}
 		{% endblock %}
 	</body>
