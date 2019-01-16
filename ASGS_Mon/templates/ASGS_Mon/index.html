@@ -40,7 +40,7 @@
 					<li><a data-toggle="tab" href="#prefsTab">Preferences</a></li>
 					<li><a data-toggle="tab" href="#submitTab">Job Submission</a></li>
 					<li><a data-toggle="tab" href="#configTab" onclick="initConfigTabList();">Run Configurations</a></li>
-					<li><a data-toggle="tab" href="#adminTab">Administration</a></li>
+					{% if user.is_superuser %}<li><a data-toggle="tab" href="#adminTab">Administration</a></li>{% endif %}
 				</ul>
 			
 				<div class="tab-content">
@@ -218,6 +218,7 @@
 						</div>
 					</div>
 					
+					{% if user.is_superuser %}
 					<div id="adminTab" class="tab-pane fade">
 						<div class="row">
 							<div class="col-lg-4">
@@ -262,7 +263,9 @@
 								</div>
 							</div>
 						</div>					
-					</div>			
+					</div>		
+					{% endif %}
+						
 				</div>
 			</div>
 		</div>

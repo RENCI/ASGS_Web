@@ -17,6 +17,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
+from django.urls import path
 
 from ASGS_Mon import views as app_view
 
@@ -26,5 +27,5 @@ urlpatterns = [
    url(r'^dataReq', app_view.dataReq, name='dataReq'),
    url(r'^logout/$', auth_views.logout, {'template_name': 'core/logout.html'}, name='logout'),
    url(r'^admin/', admin.site.urls),
-   url(r'^ASGS_Mon', app_view.index),
+   path('', app_view.custom_login),
 ]
