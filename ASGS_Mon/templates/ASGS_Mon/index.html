@@ -32,12 +32,11 @@
 		<audio id="audioCollapse" src="/static/ASGS_Mon/sounds/collapse.wav" ></audio>
 	
 		<div id="bodyView">
-		
 			<div class="panel-body">
 				<ul class="nav nav-tabs">
 					<li class="active"><a data-toggle="tab" href="#monitorTab">Monitor</a></li>
-					<li><a data-toggle="tab" href="#priorResultsTab">Prior Results</a></li>
 					<li><a data-toggle="tab" href="#prefsTab">Preferences</a></li>
+					<li><a data-toggle="tab" href="#priorResultsTab">Prior Results</a></li>
 					<li><a data-toggle="tab" href="#submitTab">Job Submission</a></li>
 					<li><a data-toggle="tab" href="#configTab" onclick="initConfigTabList();">Run Configurations</a></li>
 					{% if user.is_superuser %}<li><a data-toggle="tab" href="#adminTab">Administration</a></li>{% endif %}
@@ -55,6 +54,49 @@
 								</div>					
 							</div>
 						</div>
+					</div>
+					
+					<div id="prefsTab" class="tab-pane fade">
+						<div class="row">
+							<div class="col-lg-4">
+								<div class="panel panel-default">
+									<div class="panel-heading">Set your preferences</div>
+									<div class="panel-body">
+										<form role="form" method="post" action="">
+										  	<div class="input-group">
+											    <span class="input-group-addon">Cluster</span>
+												<select id="clusterPref" class="form-control">
+													<option value="-1">Select a preferred cluster</option>
+													<option value="George Mason">George Mason</option>
+													<option value="LSU">LSU</option>
+													<option value="Penguin">Penguin</option>
+													<option value="RENCI">RENCI</option>
+													<option value=TACC>TACC</option>
+													<option value="UCF">UCF</option>
+												</select>
+											</div>																					
+										  	<br>
+										  	<div class="input-group">
+										    	<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+										    	<input id="email" type="text" class="form-control" name="email" placeholder="Email">
+										  	</div>
+											<div class="checkbox">
+												<label><input type="checkbox" value="">Receive notification e-mails</label>
+											</div>	
+											</br>
+											<div>
+												<span style="font-size: 16px;"><a href="{% url 'change_password' %}">Change Password</a></span>
+											</div>								  	
+										  	</br>
+										  	<div class="input-group">
+										    	<button type="button" class="btn btn-info" onclick="updateMsg('prMsg');">Submit</button>			
+												<div style="margin-top: 5px"><span id="prMsg" style="display: none; color: darkgreen;"></span></div>
+										    </div>						  
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>					
 					</div>
 					
 					<div id="priorResultsTab" class="tab-pane fade">
@@ -125,44 +167,6 @@
 								</div>					
 							</div>
 						</div>
-					</div>
-					
-					<div id="prefsTab" class="tab-pane fade">
-						<div class="row">
-							<div class="col-lg-4">
-								<div class="panel panel-default">
-									<div class="panel-heading">Set your preferences</div>
-									<div class="panel-body">
-										<form role="form" method="post" action="">
-										  	<div class="input-group">
-											    <span class="input-group-addon">Cluster</span>
-												<select id="clusterPref" class="form-control">
-													<option value="-1">Select a preferred cluster</option>
-													<option value="George Mason">George Mason</option>
-													<option value="LSU">LSU</option>
-													<option value="Penguin">Penguin</option>
-													<option value="RENCI">RENCI</option>
-													<option value=TACC>TACC</option>
-													<option value="UCF">UCF</option>
-												</select>
-											</div>		
-											<br>									
-										  	<div class="input-group">
-										    	<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-										    	<input id="email" type="text" class="form-control" name="email" placeholder="Email">
-										  	</div>
-											<div class="checkbox">
-												<label><input type="checkbox" value="">Receive notification e-mails</label>
-											</div>									  	
-										  	<div class="input-group">
-										    	<button type="button" class="btn btn-info" onclick="updateMsg('prMsg');">Submit</button>			
-												<div style="margin-top: 5px"><span id="prMsg" style="display: none; color: darkgreen;"></span></div>
-										    </div>						  
-										</form>
-									</div>
-								</div>
-							</div>
-						</div>					
 					</div>
 					
 					<div id="submitTab" class="tab-pane fade">

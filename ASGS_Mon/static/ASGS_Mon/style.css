@@ -148,3 +148,9 @@ img : hover
 	transform: scale(5,5);
 	-webkit-transform: scale(5,5); /* Safari and Chrome */
 }
+
+.errorlist
+{
+	color: white;
+	background-color: red;
+}

@@ -1,17 +1,35 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.http import HttpResponseRedirect
+
 from django.contrib.auth.views import login
 
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+
 from ASGS_Mon import models
-    
-# define legal request types
-theLegalReqTypes = ['init', 'event', 'config_list', 'config_detail']
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        
+        if form.is_valid():
+            user = form.save()
+            
+            update_session_auth_hash(request, user)  # Important!
+             
+            return redirect('index')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+        
+    return render(request, 'core/changepassword.html', {'form': form})
 
 # redirect to the correct place when authenticated. otherwise go to the login page
 def custom_login(request):
     if request.user.is_authenticated:
-        return HttpResponseRedirect('/index')
+        return render(request, 'ASGS_Mon/index.html', {})
     else:
         return login(request, template_name='core/login.html')
     
@@ -24,6 +42,9 @@ def index(request):
 
 # gets the running instances
 def dataReq(request): 
+    # define legal request types
+    theLegalReqTypes = ['init', 'event', 'config_list', 'config_detail']
+
     # get the request type         
     reqType = request.GET.get('type')
                 

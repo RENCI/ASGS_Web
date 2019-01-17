@@ -19,13 +19,14 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path
 
-from ASGS_Mon import views as app_view
+from ASGS_Mon import views as app_views
 
 urlpatterns = [
-   url(r'^login/$', app_view.custom_login),
-   url(r'^index', app_view.index, name='index'),
-   url(r'^dataReq', app_view.dataReq, name='dataReq'),
-   url(r'^logout/$', auth_views.logout, {'template_name': 'core/logout.html'}, name='logout'),
+   url(r'^login/$', app_views.custom_login),
+   url(r'^index', app_views.index, name='index'),
+   url(r'^dataReq', app_views.dataReq, name='dataReq'),
+   url(r'^password/$', app_views.change_password, name='change_password'),
    url(r'^admin/', admin.site.urls),
-   path('', app_view.custom_login),
+   url(r'^logout/$', auth_views.logout, {'template_name': 'core/logout.html'}, name='logout'),
+   path('', app_views.custom_login),
 ]
