@@ -29,6 +29,6 @@ urlpatterns = [
    url(r'^changepasswordcomplete/$', app_views.change_password_complete, name='change_password_complete'),
    url(r'^dataReq', app_views.dataReq, name='dataReq'),
    url(r'^index', app_views.index, name='index'),
-   url(r'^login/$', app_views.custom_login),
+   url(r'^login/$', app_views.custom_login, name='login'),
    url(r'^logout/$', auth_views.logout, {'template_name': 'core/logout.html'}, name='logout'),
 ]

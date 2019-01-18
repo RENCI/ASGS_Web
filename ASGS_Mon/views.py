@@ -38,7 +38,7 @@ def change_password(request):
         return render(request, 'core/changepassword.html', {'form': form})
     else:
         # head over to the login page
-        return login(request, template_name='core/login.html')
+        return redirect('login')
 
 # renders the change password complete form
 def change_password_complete(request):
@@ -48,7 +48,7 @@ def change_password_complete(request):
         return render(request, 'core/changepasswordcomplete.html', {})
     else:
         # head over to the login page
-        return login(request, template_name='core/login.html')
+        return redirect('login')
 
 # redirect to the correct place when authenticated. otherwise go to the login page
 def custom_login(request):
@@ -68,7 +68,7 @@ def index(request):
         return render(request, 'ASGS_Mon/index.html', {})
     else:
         # head over to the login page
-        return login(request, template_name='core/login.html')    
+        return redirect('login')
 
 # abount propaganda
 def about(request):
@@ -130,5 +130,5 @@ def dataReq(request):
         return response
     else:
         # head over to the login page
-        return login(request, template_name='core/login.html')    
+        return redirect('login')
         
