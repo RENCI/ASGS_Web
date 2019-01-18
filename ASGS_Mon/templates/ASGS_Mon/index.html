@@ -62,7 +62,7 @@
 								<div class="panel panel-default">
 									<div class="panel-heading">Set your preferences</div>
 									<div class="panel-body">
-										<form role="form" method="post" action="">
+										<form role="form"  method="POST" action="/login/">
 <!-- 										  	<div class="input-group"> -->
 <!-- 											    <span class="input-group-addon">Cluster</span> -->
 <!-- 												<select id="clusterPref" class="form-control"> -->
@@ -77,20 +77,21 @@
 <!-- 											</div> -->
 <!-- 										  	<br> -->
 											<div>
-												<span style="font-size: 16px;"><a href="{% url 'change_password' %}">Click to Change your Password</a></span>
+												<span style="font-size: 16px;"><a href="{% url 'change_password' %}">Change your Password</a></span>
 											</div>								  	
-											<hr>
-										  	<div class="input-group">
-										    	<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-										    	<input id="email" type="text" class="form-control" name="email" placeholder="Change your email">
-										  	</div>
-											<div class="checkbox">
-												<label><input type="checkbox" value="">Receive notification e-mails</label>
-											</div>	
-										  	<div class="input-group">
-										    	<button type="button" class="btn btn-info" onclick="updateMsg('prMsg');">Submit</button>			
-												<div style="margin-top: 5px"><span id="prMsg" style="display: none; color: darkgreen;"></span></div>
-										    </div>						  
+<!-- 											<hr> -->
+<!-- 										  	<div class="input-group"> -->
+<!-- 										    	<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span> -->
+<!-- 										    	<input id="email" type="text" class="form-control" name="email" placeholder="Change your email" value="{{ user.username }}"> -->
+<!-- 										  	<br> -->
+<!-- 										  	</div> -->
+<!-- 											<div class="checkbox"> -->
+<!-- 												<label><input type="checkbox" value="">Receive notification e-mails</label> -->
+<!-- 											</div> -->
+<!-- 										  	<div class="input-group"> -->
+<!-- 										    	<button type="submit" class="btn btn-info" >Submit</button>			 -->
+<!-- 												<div style="margin-top: 5px"><span id="prMsg" style="display: none; color: darkgreen;"></span></div> -->
+<!-- 										    </div>						   -->
 										</form>
 									</div>
 								</div>
