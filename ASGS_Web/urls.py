@@ -23,6 +23,7 @@ from ASGS_Mon import views as app_views
 
 urlpatterns = [
    path('', app_views.custom_login),
+   url(r'^about', app_views.about, name='about'),
    url(r'^admin/', admin.site.urls),
    url(r'^changepassword/$', app_views.change_password, name='change_password'),
    url(r'^changepasswordcomplete/$', app_views.change_password_complete, name='change_password_complete'),

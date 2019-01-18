@@ -70,6 +70,11 @@ def index(request):
         # head over to the login page
         return login(request, template_name='core/login.html')    
 
+# abount propaganda
+def about(request):
+    # render the about page
+    return render(request, 'ASGS_Mon/about.html', {})
+
 # gets the running instances
 def dataReq(request): 
     # only allow access to authenticated users

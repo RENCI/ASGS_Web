@@ -30,7 +30,7 @@
 	  	<header>
 			<table id="pagehdr">
 				<tr>
-					<td align="left"><img class="imgASGSLogo" src="/static/ASGS_Mon/images/ASGSlogo.jpg" style="width: 70px; height: 55px;"/></td>
+					<td align="left"><a href="{% url 'about' %}"><img class="imgASGSLogo" src="/static/ASGS_Mon/images/ASGSlogo.jpg" style="width: 70px; height: 55px;"/></a></td>
 					<td style="text-align: center;">ASGS Operational Awareness Dashboard
 						{% if user.is_authenticated %}
 							<div style="margin-right: 20px; margin-top: 5px; text-align: center;"><span style="font-size: 16px; font-style: italic">Good day {{ user.first_name }} {{ user.last_name }}.</span>&nbsp;&nbsp;&nbsp;<span style="font-size: 16px;"><a href="{% url 'logout' %}">Log out</a></span>
