@@ -10,21 +10,30 @@ from django.contrib.auth.forms import PasswordChangeForm
 from ASGS_Mon import models
 
 def change_password(request):
-    if request.method == 'POST':
-        form = PasswordChangeForm(request.user, request.POST)
-        
-        if form.is_valid():
-            user = form.save()
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = PasswordChangeForm(request.user, request.POST)
             
-            update_session_auth_hash(request, user)  # Important!
-             
-            return redirect('index')
+            if form.is_valid():
+                user = form.save()
+                
+                update_session_auth_hash(request, user)  # Important!
+                 
+                return redirect('change_password_complete')
+            else:
+                messages.error(request, 'Please correct the error below.')
         else:
-            messages.error(request, 'Please correct the error below.')
+            form = PasswordChangeForm(request.user)
+    
+        return render(request, 'core/changepassword.html', {'form': form})
     else:
-        form = PasswordChangeForm(request.user)
-        
-    return render(request, 'core/changepassword.html', {'form': form})
+        return login(request, template_name='core/login.html')
+
+def change_password_complete(request):
+    if request.user.is_authenticated:
+        return render(request, 'core/changepasswordcomplete.html', {})
+    else:
+        return login(request, template_name='core/login.html')
 
 # redirect to the correct place when authenticated. otherwise go to the login page
 def custom_login(request):

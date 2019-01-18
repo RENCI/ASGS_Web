@@ -22,11 +22,12 @@ from django.urls import path
 from ASGS_Mon import views as app_views
 
 urlpatterns = [
-   url(r'^login/$', app_views.custom_login),
-   url(r'^index', app_views.index, name='index'),
-   url(r'^dataReq', app_views.dataReq, name='dataReq'),
-   url(r'^password/$', app_views.change_password, name='change_password'),
-   url(r'^admin/', admin.site.urls),
-   url(r'^logout/$', auth_views.logout, {'template_name': 'core/logout.html'}, name='logout'),
    path('', app_views.custom_login),
+   url(r'^admin/', admin.site.urls),
+   url(r'^changepassword/$', app_views.change_password, name='change_password'),
+   url(r'^changepasswordcomplete/$', app_views.change_password_complete, name='change_password_complete'),
+   url(r'^dataReq', app_views.dataReq, name='dataReq'),
+   url(r'^index', app_views.index, name='index'),
+   url(r'^login/$', app_views.custom_login),
+   url(r'^logout/$', auth_views.logout, {'template_name': 'core/logout.html'}, name='logout'),
 ]
