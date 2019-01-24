@@ -35,8 +35,8 @@
 			<ul class="nav nav-tabs">
 				<li class="active"><a data-toggle="tab" href="#monitorTab">Monitor</a></li>
 				<li><a data-toggle="tab" href="#prefsTab">Preferences</a></li>
-				<li><a data-toggle="tab" href="#priorResultsTab">Prior Results</a></li>
-				<li><a data-toggle="tab" href="#submitTab">Job Submission</a></li>
+				{% if user.is_superuser %}<li><a data-toggle="tab" href="#priorResultsTab">Prior Results</a></li>{% endif %}
+				{% if user.is_superuser %}<li><a data-toggle="tab" href="#submitTab">Job Submission</a></li>{% endif %}
 				<li><a data-toggle="tab" href="#configTab" onclick="initConfigTabList();">Run Configurations</a></li>
 				{% if user.is_superuser %}<li><a data-toggle="tab" href="#adminTab">Administration</a></li>{% endif %}
 			</ul>
