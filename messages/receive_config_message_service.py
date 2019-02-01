@@ -187,47 +187,56 @@ def update_instance_config(conn, site_id, msg_obj):
         instance_id = instance[0]
         logging.debug("update_instance_config: instance_id=" + str(instance_id))
 
-        # try update of instance_config
-        # now insert this instance config record for the found instance id
-        sql_stmt = 'UPDATE "ASGS_Mon_instance_config" SET '
-
-        config_type = ""
-        if (msg_obj.get("name") is not None and len(msg_obj["name"]) > 0):
-            config_type = msg_obj.get("name")
-
-        config_text  = ""
-        if (msg_obj.get("message") is not None and len(msg_obj["message"]) > 0):
-            config_text = msg_obj["message"]
-
-        if (config_type == "asgs"):
-            sql_stmt += "asgs_config = '" + config_text + "'"
-        elif (config_type == "adcirc"):
-            sql_stmt += "adcirc_config = '" + config_text + "'"
-        else:
-            logging.error("FAILURE - Illegal config type '" + config_type + "' expecting 'asgs' or 'adcirc'")
-            logging.error("FAILURE - Discarding update of config for instance: " + str(instance_id))
-            logging.debug("update_instance_config: returning: " + str(ret_id))
-            return ret_id
-
-        sql_stmt += " WHERE instance_id = " + str(instance_id)
-        sql_stmt += " RETURNING id"
-
-        logging.debug("About to insert instance config record: " + sql_stmt)
+        # now see if an instance config already exists
+        query = 'SELECT id FROM "ASGS_Mon_instance_config" WHERE instance_id=' + str(instance_id)
         cur = conn.cursor()
-        cur.execute(sql_stmt)
-        ret_id = cur.fetchone()[0]
+        cur.execute(query)
+        # has this instance been created yet??
+        config = cur.fetchone()
+        if (config is not None):
+            config_id = config[0]
+            logging.debug("update_instance_config: config_id=" + str(config_id))
 
-        # now commit and save
-        try:
-            conn.commit()
-            cur.close()
-            conn.close()
-        except:
-            e = sys.exc_info()[0]
-            logging.error("FAILURE - Cannot commit and save to DB in update_instance_config" + str(e))
+            # try update of instance_config
+            # now insert this instance config record for the found instance id
+            sql_stmt = 'UPDATE "ASGS_Mon_instance_config" SET '
 
-        logging.debug("Updated instance config record")
-        # Done! thread finished task
+            config_type = ""
+            if (msg_obj.get("name") is not None and len(msg_obj["name"]) > 0):
+                config_type = msg_obj.get("name")
+
+            config_text  = ""
+            if (msg_obj.get("message") is not None and len(msg_obj["message"]) > 0):
+                config_text = msg_obj["message"]
+
+            if (config_type == "asgs"):
+                sql_stmt += "asgs_config = '" + config_text + "'"
+            elif (config_type == "adcirc"):
+                sql_stmt += "adcirc_config = '" + config_text + "'"
+            else:
+                logging.error("FAILURE - Illegal config type '" + config_type + "' expecting 'asgs' or 'adcirc'")
+                logging.error("FAILURE - Discarding update of config for instance: " + str(instance_id))
+                logging.debug("update_instance_config: returning: " + str(ret_id))
+                return ret_id
+
+            sql_stmt += " WHERE id = " + str(config_id)
+            sql_stmt += " RETURNING id"
+
+            logging.debug("About to insert instance config record: " + sql_stmt)
+            cur = conn.cursor()
+            cur.execute(sql_stmt)
+            ret_id = cur.fetchone()[0]
+
+            # now commit and save
+            try:
+                conn.commit()
+                cur.close()
+                conn.close()
+            except:
+                e = sys.exc_info()[0]
+                logging.error("FAILURE - Cannot commit and save to DB in update_instance_config" + str(e))
+
+            logging.debug("Updated instance config record")
 
     logging.debug("update_instance_config: returning: " + str(ret_id))
     return ret_id
@@ -269,20 +278,36 @@ def callback(ch, method, properties, body):
         logging.error("FAILURE - Cannot connect to DB: " + str(e))
         return
 
-    # get site_id for this msg site
-    site_id = get_site_id(conn, msg_obj)
-
-    # if no valid site found, ignore message
-    if (site_id < 0):
-      return
-
-    # now see if we already have a config entry for this instance
-    # if so - update it and return
-    if (update_instance_config(conn, site_id, msg_obj)):
+    try:
+        # get site_id for this msg site
+        site_id = get_site_id(conn, msg_obj)
+    except:
+        e = sys.exc_info()[0]
+        logging.error("FAILURE - Cannot retrieve site id: " + str(e))
         return
 
-    # launch thread to check for the existance of this instance
-    thread.start_new_thread(process_msg_thread, (logging, conn, site_id, msg_obj) )
+        # if no valid site found, ignore message
+        if (site_id < 0):
+            return
+
+    try:
+        # now see if we already have a config entry for this instance
+        # if so - update it and return
+        config = update_instance_config(conn, site_id, msg_obj)
+        if (config is not None):
+            return
+    except:
+        e = sys.exc_info()[0]
+        logging.error("FAILURE - Cannot check for existing config: " + str(e))
+        return
+
+    try:
+        # launch thread to check for the existance of this instance
+        thread.start_new_thread(process_msg_thread, (logging, conn, site_id, msg_obj) )
+    except:
+        e = sys.exc_info()[0]
+        logging.error("FAILURE - Error launching thread " + str(e))
+        return
 
 
 channel.basic_consume(callback,
