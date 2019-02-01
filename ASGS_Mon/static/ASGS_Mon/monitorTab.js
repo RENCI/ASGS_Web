@@ -1,4 +1,3 @@
-
 /*****
  * Renders all site/instance elements
  * 

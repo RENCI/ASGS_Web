@@ -36,7 +36,8 @@ h2 span {
     align: left;
 }
 
-.imgRENCILogo {
+.imgRENCILogo 
+{
     border: 01px solid #000;
     border-radius: 5px;
     padding: 1px;
@@ -53,7 +54,17 @@ h2 span {
 	white-space: nowrap; 
 }
 
-.chart div {
+.aboutbody
+{
+	text-align: center;
+  	border: 1px solid;
+  	border-color: #92d3ed;
+    border-radius: 5px;	
+    margin-top: 5px;
+}
+
+.chart div 
+{
 	font: 10px sans-serif;
     border: 1px solid #000;
     border-radius: 1px;
@@ -147,4 +158,10 @@ img : hover
 {
 	transform: scale(5,5);
 	-webkit-transform: scale(5,5); /* Safari and Chrome */
+}
+
+.errorlist
+{
+	color: white;
+	background-color: red;
 }

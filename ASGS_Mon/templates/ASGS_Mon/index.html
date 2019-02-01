@@ -1,416 +1,274 @@
-{% load static %}
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		
-		<!-- Site components -->
-		<title>ASGS Monitor</title>		
-		<link rel="shortcut icon" href="{% static 'ASGS_Mon/images/favicon.png' %}" type="image/png">
-		<link rel="icon" href="{% static 'ASGS_Mon/images/favicon.png' %}" type="image/png">
-
-		<!-- JQuery components -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-		
-		<!-- Bootstrap components -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-		
-		<!-- D3 components -->
-		<script src="https://d3js.org/d3.v3.min.js"></script>
-		<script src="https://d3js.org/d3-time-format.v2.min.js"></script>
-			
-		<!-- View components -->
-		<link rel="stylesheet" href="{% static 'ASGS_Mon/style.css' %}" type="text/css">					
-		<script src="{% static 'ASGS_Mon/monitorView.js' %}"></script>
-		<script src="{% static 'ASGS_Mon/monitorTab.js' %}"></script>		
-	</head>
-
-	<script type="text/javascript">
-		$(document).ready(function()
-		{
-			// set the exited run type id
-			var _CONST_EXIT_MSG_TYPE = 9;
-		
-			// set the location of the individual site component
-			var margin = {top: 20, right: 15, bottom: 20, left: 15};
-			
-			// set the width of the individual site instance component
-			var width = margin.left + 550 + margin.right;
-			
-			// set the height of the individual site instance component
-			var height = 55 - margin.top - margin.bottom;
-		
-			// create the site instance visualization component
-			var siteInstance = d3.siteInstanceView()
-		    	.width(width)
-		    	.height(height)
-		    	.margin(margin);
-			
-			// fire up the tab view
-			renderMonitorTab(siteInstance);
-		})
-	</script>		
-
-	<script type="text/javascript">
-		function loadJobSubmit(val)
-		{
-	    	$("#selectedCluster").hide(100);
-
-		    rndInUse = Math.floor(Math.random() * 100) + 25;
-		    rndAvail = Math.floor(Math.random() * 100) + 25;
-		    
-		    $('#clusterVal').text("Current " + val + " cluster utilization. " + (rndAvail + rndInUse) + " total nodes.");
-
-		    elInUse = '<div style="width: ' + (rndInUse * 4) + 'px; margin-bottom: 5px; margin-left: 5px;">' + rndInUse + ' nodes in use</div>'
-		    elAvail = '<div style="width: ' + (rndAvail * 4) + 'px; margin-bottom: 5px; margin-left: 5px;">' + rndAvail + ' nodes available</div>';
-			
-			$('#chartID').html(elInUse + elAvail);
-			
-	    	if (val !== "-1")
-	    	{
-		    	$("#selectedCluster").show(1000);
-		    	var audio = document.getElementById("audioExpand");
-		        audio.play();
-	    	}
-		    else 
-		    {
-		    	$("#selectedCluster").hide(1000);
-		    	var audio = document.getElementById("audioCollapse");
-		        audio.play();
-		    }
-		}	
-		
-		function loadUser(val)
-		{
-	    	$("#selectedUserAdmin").hide(100);
-	    	
-	    	var theDate = new Date().toLocaleString();
-
-		    $('#userVal').html('<span class="userViewtext">User name: ' + val + '</span><br><span class="userViewtext">Last login: ' + theDate + '</span><br><span class="userViewtext">Role: User');
-
-	    	if (val !== "-1")
-	    	{
-		    	$("#selectedUserAdmin").show(1000);
-		    	var audio = document.getElementById("audioExpand");
-		        audio.play();
-	    	}
-		    else 
-		    {
-		    	$("#selectedUserAdmin").hide(1000);		    
-	    		var audio = document.getElementById("audioCollapse");
-	        	audio.play();
-		    }
-		}
-		
-		function updateMsg(val)
-		{
-			var ctrl = $('#' + val);
-			
-			ctrl.text('Update successful.');
-			
-			ctrl.fadeIn(2000);
-			ctrl.fadeOut(1000);
-		}
-				
-		function initConfigTabList()
-		{
-			// get the list and render the html
-			d3.json("dataReq/?type=config_list", function(error, configList) 
+{% extends 'base.html' %}
+	{% block title %}ASGS Monitor{% endblock %}
+	
+	{% block content %}
+		<script type="text/javascript">
+			$(document).ready(function()
 			{
-				// init the output
-				var output = '<ul>';
+				// set the exited run type id
+				var _CONST_EXIT_MSG_TYPE = 9;
+			
+				// set the location of the individual site component
+				var margin = {top: 20, right: 15, bottom: 20, left: 15};
 				
-				// go through all listings
-				configList.forEach(function(info, i)
-				{
-					// tack on each entry
-					output += '<li>' + info.instance_name + ' with ID ' + info.instance_id + ', started on: ' + info.start_ts + '. <a href="javascript:getConfigDetails(' + info.instance_id + ', \'asgs\')">View ASGS</a>&nbsp; or &nbsp;<a href="javascript:getConfigDetails(' + info.instance_id + ', \'adcirc\')">View ADCIRC</a></li><div style="display:none; border:1px solid black; margin-left: 10px; margin-top: 5px; margin-right: 5px;" id="configdetail_' + info.instance_id + '"></div>';
-				});
+				// set the width of the individual site instance component
+				var width = margin.left + 550 + margin.right;
 				
-				// finish off the list
-				output += '</ul>';
+				// set the height of the individual site instance component
+				var height = 55 - margin.top - margin.bottom;
+			
+				// create the site instance visualization component
+				var siteInstance = d3.siteInstanceView()
+			    	.width(width)
+			    	.height(height)
+			    	.margin(margin);
 				
-				// output the result
-				$("#configTabList").html(output);
-			});
-		}
-		
-		function getConfigDetails(id, type)
-		{
-			// if anything is visible hide it
-			if($('#configdetail_' + id).is(':visible'))
-			{
-				$('#configdetail_' + id).hide(1000);
-			}
-			// else render the selection
-			else 
-			{
-				// get the render the configuration params
-				d3.json("dataReq/?type=config_detail&param=" + id, function(error, configDetail) 
-				{	
-					// storage for the target data
-					var theData = null;
-					
-					// get the type of data to display
-					if(type == "asgs")
-						data = configDetail.asgs_config
-					else
-						data = configDetail.adcirc_config
-											
-					// render the data
-					$('#configdetail_' + id).html(data);
-					$('#configdetail_' + id).show(1500);
-				});
-			}
-		}
-	</script>
-
-	<body>	
+				// fire up the tab view
+				renderMonitorTab(siteInstance);
+			})
+		</script>		
+	
 		<audio id="audioExpand" src="/static/ASGS_Mon/sounds/expand.wav" ></audio>
 		<audio id="audioCollapse" src="/static/ASGS_Mon/sounds/collapse.wav" ></audio>
-
-		<div id="bodyView">
-			<table id="pagehdr">
-				<tr>
-					<td align="left"><img class="imgASGSLogo" src="/static/ASGS_Mon/images/ASGSlogo.jpg" style="width: 70px; height: 55px;"/></td>
-					<td style="text-align: middle;">ASGS Operational Awareness Dashboard</td>
-					<td align="right"><img class="imgRENCILogo" src="/static/ASGS_Mon/images/RENCIlogo.jpg" style="width: 90px; height: 55px;"/></td>
-				</tr>		
-			</table>
+	
+		<div class="panel-body">
+			<ul class="nav nav-tabs">
+				<li class="active"><a data-toggle="tab" href="#monitorTab">Monitor</a></li>
+				<li><a data-toggle="tab" href="#prefsTab">Preferences</a></li>
+				{% if user.is_superuser %}<li><a data-toggle="tab" href="#priorResultsTab">Prior Results</a></li>{% endif %}
+				{% if user.is_superuser %}<li><a data-toggle="tab" href="#submitTab">Job Submission</a></li>{% endif %}
+				<li><a data-toggle="tab" href="#configTab" onclick="initConfigTabList();">Run Configurations</a></li>
+				{% if user.is_superuser %}<li><a data-toggle="tab" href="#adminTab">Administration</a></li>{% endif %}
+			</ul>
 		
-			<div class="panel-body">
-				<ul class="nav nav-tabs">
-					<li class="active"><a data-toggle="tab" href="#monitorTab">Monitor</a></li>
-					<li><a data-toggle="tab" href="#priorResultsTab">Prior Results</a></li>
-					<li><a data-toggle="tab" href="#prefsTab">Preferences</a></li>
-					<li><a data-toggle="tab" href="#submitTab">Job Submission</a></li>
-					<li><a data-toggle="tab" href="#configTab" onclick="initConfigTabList();">Run Configurations</a></li>
-					<li><a data-toggle="tab" href="#adminTab">Administration</a></li>
-				</ul>
-			
-				<div class="tab-content">
-					<div id="monitorTab" class="tab-pane fade in active">
-						<div class="row">
-							<div class="col-lg-12">
-								<div class="panel panel-default">
-									<div class="panel-heading">Site instances</div>
-									<div class="panel-body">
-										<div id="siteInstancesTarget"></div>
-									</div>
-								</div>					
-							</div>
+			<div class="tab-content">
+				<div id="monitorTab" class="tab-pane fade in active">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="panel panel-default">
+								<div class="panel-heading">Site instances</div>
+								<div class="panel-body">
+									<div id="siteInstancesTarget"></div>
+								</div>
+							</div>					
 						</div>
 					</div>
-					
-					<div id="priorResultsTab" class="tab-pane fade">
-						<div class="row">
-							<div class="col-lg-6">
-								<div class="panel panel-default">
-									<div class="panel-heading">Prior run results, sorted by most recent</div>
-									<div id="prevRun_17" class="modal fade" role='dialog'>
-									    <div class="modal-dialog modal-lg">
-											<div class="modal-content">
-												<div class="modal-header">
-													<h4 class="modal-title">RENCI run 17 "Storm Delta" - 12-05-2018</h4>
-												</div>
-												<div class="modal-body">
-													<img src="/static/ASGS_Mon/images/cera_img.JPG">       
-													<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Delta<br> File Name: RENCI_img17.jpg<br> Processing time: 23 minutes.</div>    
-												</div>
-											</div>
-									  	</div>
-									</div>
-									<div id="prevRun_16" class="modal fade" role='dialog'>
-									    <div class="modal-dialog modal-lg">
-											<div class="modal-content">
-												<div class="modal-header">
-													<h4 class="modal-title">RENCI run 16 "Storm Charlie" - 12/04/2018</h4>
-												</div>
-												<div class="modal-body">
-													<img src="/static/ASGS_Mon/images/cera_img.JPG"> 
-													<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Charlie<br> File Name: RENCI_img16.jpg<br> Processing time: 32 minutes.</div>    
-												</div>
-											</div>
-									  	</div>
-									</div>
-									<div id="prevRun_15" class="modal fade" role='dialog'>
-									    <div class="modal-dialog modal-lg">
-											<div class="modal-content">
-												<div class="modal-header">
-													<h4 class="modal-title">RENCI run 15 "Storm Beta" - 12/03/2018</h4>
-												</div>
-												<div class="modal-body">
-													<img src="/static/ASGS_Mon/images/cera_img.JPG"> 
-													<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Beta<br> File Name: RENCI_img15.jpg<br> Processing time: 61 minutes.</div>    
-												</div>
-											</div>
-									  	</div>
-									</div>
-									<div id="prevRun_14" class="modal fade" role='dialog'>
-									    <div class="modal-dialog modal-lg">
-											<div class="modal-content">
-												<div class="modal-header">
-													<h4 class="modal-title">RENCI run 14 "Storm Alpha" - 12/02/2018</h4>
-												</div>
-												<div class="modal-body">
-													<img src="/static/ASGS_Mon/images/cera_img.JPG"> 
-													<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Alpha<br> File Name: RENCI_img14.jpg<br> Processing time: 45 minutes.</div>    
-												</div>
-											</div>
-									  	</div>
-									</div>
-									<div style="margin-top: 5px; margin-bottom: 5px;">
-										<ul>
-											<li><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_17">RENCI run 17 "Storm Delta" - 12/05/2018</a></li>
-											<li><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_16">RENCI run 16 "Storm Charlie" - 12/04/2018</a></li>
-											<li><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_15">RENCI run 15 "Storm Beta" - 12/03/2018</a></li>
-											<li><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_14">RENCI run 14 "Storm Alpha" - 12/02/2018</a></li>
-										</ul>
-									</div>								
-								</div>					
-							</div>
-						</div>
-					</div>
-					
-					<div id="prefsTab" class="tab-pane fade">
-						<div class="row">
-							<div class="col-lg-4">
-								<div class="panel panel-default">
-									<div class="panel-heading">Set your preferences</div>
-									<div class="panel-body">
-										<form role="form" method="post" action="">
-										  	<div class="input-group">
-											    <span class="input-group-addon">Cluster</span>
-												<select id="clusterPref" class="form-control">
-													<option value="-1">Select a preferred cluster</option>
-													<option value="George Mason">George Mason</option>
-													<option value="LSU">LSU</option>
-													<option value="Penguin">Penguin</option>
-													<option value="RENCI">RENCI</option>
-													<option value=TACC>TACC</option>
-													<option value="UCF">UCF</option>
-												</select>
-											</div>		
-											<br>									
-										  	<div class="input-group">
-										    	<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-										    	<input id="email" type="text" class="form-control" name="email" placeholder="Email">
-										  	</div>
-											<div class="checkbox">
-												<label><input type="checkbox" value="">Receive notification e-mails</label>
-											</div>									  	
-										  	<div class="input-group">
-										    	<button type="button" class="btn btn-primary" onclick="updateMsg('prMsg');">Submit</button>			
-												<div><span id="prMsg" style="display: none; color: darkgreen;"></span></div>
-										    </div>						  
-										</form>
-									</div>
-								</div>
-							</div>
-						</div>					
-					</div>
-					
-					<div id="submitTab" class="tab-pane fade">
-						<div class="row">
-							<div class="col-lg-6">
-								<div class="panel panel-default">
-									<div class="panel-heading">Enter job submission parameters</div>
-									<div class="panel-body">
-										<form role="form" method="post" action="">
-											<div class="input-group">
-											    <span class="input-group-addon">Cluster</span>
-												<select id="clusterName" class="form-control" onchange="loadJobSubmit(this.value)">
-													<option value="-1">Select a cluster</option>
-													<option value="George Mason">George Mason</option>
-													<option value="LSU">LSU</option>
-													<option value="Penguin">Penguin</option>
-													<option value="RENCI">RENCI</option>
-													<option value=TACC>TACC</option>
-													<option value="UCF">UCF</option>
-												</select>											
-											</div>
-											<div id="selectedCluster" style="display: none;">
-												<div id="clusterUtilArea">
-													<span id="clusterVal" style="margin-left: 5px;"></span>
-													<div id="chartID" class="chart"></div>
-												</div>	
-												<br>
-											  	<div class="input-group">
-											    	<span class="input-group-addon">Run parameters</span>
-											    	<input id="msg" type="text" class="form-control" name="msg" placeholder="Enter the run parameters">
-											  	</div>
-											  	<br>
-											  	<div class="input-group">
-													<button type="button" class="btn btn-primary" value="Submit" onclick="updateMsg('jsMsg');">Submit</button>
-													<div><span id="jsMsg" style="display: none; color: darkgreen;"></span></div>													
-												</div>
-											</div>									
-										</form>
-									</div>
-								</div>
-							</div>
-						</div>					
-					</div>	
-							
-					<div id="configTab" class="tab-pane fade">
-						<div class="row">
-							<div class="col-lg-6">
-								<div class="panel panel-default">
-									<div class="panel-heading">Run configurations, sorted by most recent</div>
-									<div id="configTabList" style="margin-top: 5px; margin-bottom: 5px;"></div>								
-								</div>					
-							</div>
-						</div>
-					</div>
-					
-					<div id="adminTab" class="tab-pane fade">
-						<div class="row">
-							<div class="col-lg-4">
-								<div class="panel panel-default">
-									<div class="panel-heading">Site Administration</div>
-									<div class="panel-body">
-										<form role="form" method="post" action="">
-										  	<div class="input-group">
-											    <span class="input-group-addon">User</span>
-												<select class="form-control" id="userName" onchange="loadUser(this.value)">
-													<option value="-1">Select a user</option>
-													<option value="JSmith">John Smith</option>
-													<option value="MJones">Mark Jones</option>
-													<option value="FWhite">Fred White</option>
-													<option value="MJames">Mark James</option>												
-												</select>											
-											</div>
-											<div id="selectedUserAdmin" style="display: none;">
-												<div id="userAdminArea">										
-													<span id="userVal" style="margin-top: 10px;"></span>	
-												</div>
-												<br>
-												<div class="input-group">			
-											    	<span class="input-group-addon">Role</span>
-													<select class="form-control" id="userRole">
-														<option value="-1">Select a new role</option>
-														<option value="Administrator">Administrator</option>
-														<option value="Job Submitter">Job Submitter</option>
-														<option value="User" selected>User</option>
-													</select>											
-												</div>														
-												<div class="checkbox">
-													<label><input type="checkbox" value="">Disable user</label>
-												</div>								  												
-											  	<div class="input-group">
-													<button type="button" class="btn btn-primary" value="Submit" onclick="updateMsg('saMsg');">Submit</button>
-													<div><span id="saMsg" style="display: none; color: darkgreen;"></span></div>
-												</div>
-											</div>
-										</form>
-									</div>
-								</div>
-							</div>
-						</div>					
-					</div>			
 				</div>
+				
+				<div id="prefsTab" class="tab-pane fade">
+					<div class="row">
+						<div class="col-lg-4">
+							<div class="panel panel-default">
+								<div class="panel-heading">Set your preferences</div>
+								<div class="panel-body">
+									<form role="form"  method="POST" action="/login/">
+<!-- 										  	<div class="input-group"> -->
+<!-- 											    <span class="input-group-addon">Cluster</span> -->
+<!-- 												<select id="clusterPref" class="form-control"> -->
+<!-- 													<option value="-1">Select a preferred cluster</option> -->
+<!-- 													<option value="George Mason">George Mason</option> -->
+<!-- 													<option value="LSU">LSU</option> -->
+<!-- 													<option value="Penguin">Penguin</option> -->
+<!-- 													<option value="RENCI">RENCI</option> -->
+<!-- 													<option value=TACC>TACC</option> -->
+<!-- 													<option value="UCF">UCF</option> -->
+<!-- 												</select> -->
+<!-- 											</div> -->
+<!-- 										  	<br> -->
+										<div>
+											<span style="font-size: 16px;"><a href="{% url 'change_password' %}">Change your Password</a></span>
+										</div>								  	
+<!-- 											<hr> -->
+<!-- 										  	<div class="input-group"> -->
+<!-- 										    	<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span> -->
+<!-- 										    	<input id="email" type="text" class="form-control" name="email" placeholder="Change your email" value="{{ user.username }}"> -->
+<!-- 										  	<br> -->
+<!-- 										  	</div> -->
+<!-- 											<div class="checkbox"> -->
+<!-- 												<label><input type="checkbox" value="">Receive notification e-mails</label> -->
+<!-- 											</div> -->
+<!-- 										  	<div class="input-group"> -->
+<!-- 										    	<button type="submit" class="btn btn-info" >Submit</button>			 -->
+<!-- 												<div style="margin-top: 5px"><span id="prMsg" style="display: none; color: darkgreen;"></span></div> -->
+<!-- 										    </div>						   -->
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>					
+				</div>
+				
+				<div id="priorResultsTab" class="tab-pane fade">
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="panel panel-default">
+								<div class="panel-heading">Prior run results, sorted by most recent</div>
+								<div id="prevRun_17" class="modal fade" role='dialog'>
+								    <div class="modal-dialog modal-lg">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h4 class="modal-title">RENCI run 17 "Storm Delta" - 12-05-2018</h4>
+											</div>
+											<div class="modal-body">
+												<img src="/static/ASGS_Mon/images/cera_img.JPG">       
+												<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Delta<br> File Name: RENCI_img17.jpg<br> Processing time: 23 minutes.</div>    
+											</div>
+										</div>
+								  	</div>
+								</div>
+								<div id="prevRun_16" class="modal fade" role='dialog'>
+								    <div class="modal-dialog modal-lg">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h4 class="modal-title">RENCI run 16 "Storm Charlie" - 12/04/2018</h4>
+											</div>
+											<div class="modal-body">
+												<img src="/static/ASGS_Mon/images/cera_img.JPG"> 
+												<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Charlie<br> File Name: RENCI_img16.jpg<br> Processing time: 32 minutes.</div>    
+											</div>
+										</div>
+								  	</div>
+								</div>
+								<div id="prevRun_15" class="modal fade" role='dialog'>
+								    <div class="modal-dialog modal-lg">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h4 class="modal-title">RENCI run 15 "Storm Beta" - 12/03/2018</h4>
+											</div>
+											<div class="modal-body">
+												<img src="/static/ASGS_Mon/images/cera_img.JPG"> 
+												<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Beta<br> File Name: RENCI_img15.jpg<br> Processing time: 61 minutes.</div>    
+											</div>
+										</div>
+								  	</div>
+								</div>
+								<div id="prevRun_14" class="modal fade" role='dialog'>
+								    <div class="modal-dialog modal-lg">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h4 class="modal-title">RENCI run 14 "Storm Alpha" - 12/02/2018</h4>
+											</div>
+											<div class="modal-body">
+												<img src="/static/ASGS_Mon/images/cera_img.JPG"> 
+												<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Alpha<br> File Name: RENCI_img14.jpg<br> Processing time: 45 minutes.</div>    
+											</div>
+										</div>
+								  	</div>
+								</div>
+								<div style="margin-top: 5px; margin-bottom: 5px;">
+									<ul>
+										<li><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_17">RENCI run 17 "Storm Delta" - 12/05/2018</a></li>
+										<li><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_16">RENCI run 16 "Storm Charlie" - 12/04/2018</a></li>
+										<li><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_15">RENCI run 15 "Storm Beta" - 12/03/2018</a></li>
+										<li><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_14">RENCI run 14 "Storm Alpha" - 12/02/2018</a></li>
+									</ul>
+								</div>								
+							</div>					
+						</div>
+					</div>
+				</div>
+				
+				<div id="submitTab" class="tab-pane fade">
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="panel panel-default">
+								<div class="panel-heading">Enter job submission parameters</div>
+								<div class="panel-body">
+									<form role="form" method="post" action="">
+										<div class="input-group">
+										    <span class="input-group-addon">Cluster</span>
+											<select id="clusterName" class="form-control" onchange="loadJobSubmit(this.value)">
+												<option value="-1">Select a cluster</option>
+												<option value="George Mason">George Mason</option>
+												<option value="LSU">LSU</option>
+												<option value="Penguin">Penguin</option>
+												<option value="RENCI">RENCI</option>
+												<option value=TACC>TACC</option>
+												<option value="UCF">UCF</option>
+											</select>											
+										</div>
+										<div id="selectedCluster" style="display: none;">
+											<div id="clusterUtilArea">
+												<span id="clusterVal" style="margin-left: 5px;"></span>
+												<div id="chartID" class="chart"></div>
+											</div>	
+											<br>
+										  	<div class="input-group">
+										    	<span class="input-group-addon">Run parameters</span>
+										    	<input id="msg" type="text" class="form-control" name="msg" placeholder="Enter the run parameters">
+										  	</div>
+										  	<br>
+										  	<div class="input-group">
+												<button type="button" class="btn btn-info" value="Submit" onclick="updateMsg('jsMsg');">Submit</button>
+												<div style="margin-top: 5px"><span id="jsMsg" style="display: none; color: darkgreen;"></span></div>													
+											</div>
+										</div>									
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>					
+				</div>	
+						
+				<div id="configTab" class="tab-pane fade">
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="panel panel-default">
+								<div class="panel-heading">Run configurations, sorted by most recent</div>
+								<div id="configTabList" style="margin-top: 5px; margin-bottom: 5px;"></div>								
+							</div>					
+						</div>
+					</div>
+				</div>
+				
+				{% if user.is_superuser %}
+				<div id="adminTab" class="tab-pane fade">
+					<div class="row">
+						<div class="col-lg-4">
+							<div class="panel panel-default">
+								<div class="panel-heading">Site Administration</div>
+								<div class="panel-body">
+									<form role="form" method="post" action="">
+									  	<div class="input-group">
+										    <span class="input-group-addon">User</span>
+											<select class="form-control" id="userName" onchange="loadUser(this.value)">
+												<option value="-1">Select a user</option>
+												<option value="JSmith">John Smith</option>
+												<option value="MJones">Mark Jones</option>
+												<option value="FWhite">Fred White</option>
+												<option value="MJames">Mark James</option>												
+											</select>											
+										</div>
+										<div id="selectedUserAdmin" style="display: none;">
+											<div id="userAdminArea">										
+												<span id="userVal" style="margin-top: 10px;"></span>	
+											</div>
+											<br>
+											<div class="input-group">			
+										    	<span class="input-group-addon">Role</span>
+												<select class="form-control" id="userRole">
+													<option value="-1">Select a new role</option>
+													<option value="Administrator">Administrator</option>
+													<option value="Job Submitter">Job Submitter</option>
+													<option value="User" selected>User</option>
+												</select>											
+											</div>														
+											<div class="checkbox">
+												<label><input type="checkbox" value="">Disable user</label>
+											</div>								  												
+										  	<div class="input-group">
+												<button type="button" class="btn btn-info" value="Submit" onclick="updateMsg('saMsg');">Submit</button>
+												<div style="margin-top: 5px"><span id="saMsg" style="display: none; color: darkgreen;"></span></div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>					
+				</div>		
+				{% endif %}
+					
 			</div>
 		</div>
-	</body>
-</html>
+	{% endblock %}
