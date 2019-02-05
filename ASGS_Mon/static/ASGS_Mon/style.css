@@ -8,6 +8,7 @@ body {
 	width: 98%;
 	margin-left: 10px; 
 	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 h2 { 
@@ -131,6 +132,7 @@ h2 span {
 {
 	margin-top: 5px;
 	margin-left: 5px;
+	margin-bottom: -20px;
 }
 
 #siteInstancesTarget

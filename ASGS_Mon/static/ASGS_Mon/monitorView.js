@@ -43,7 +43,7 @@
 							      
 			    // update the site state indicator text
 			    d3.select("#_" + d.instance_id + "_state")
-			    	.text("Process " + d.cluster_state)
+			    	.text(d.cluster_state + "..")
 			    		.transition().duration(0)
 			      		.attr("fill", "green")
 			    	.transition().delay(0).duration(duration)

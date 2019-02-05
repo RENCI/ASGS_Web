@@ -6,7 +6,7 @@
 function renderMonitorTab(siteInstance)
 {
 	// TODO: check for browser support?
- 	if(typeof(EventSource) !== "undefined") 
+ 	if(EventSource !== undefined && typeof(EventSource) !== "undefined") 
  	{
 	 	// define the event endpoint
  		var eSource = new EventSource("dataReq/?type=event");
@@ -136,7 +136,7 @@ function renderMonitorTab(siteInstance)
 					.attr("id", function(d) { return "_" + d.instance_id + "_state"; })
 					.attr("class", "stateSm")
 		      		.attr("fill", "gray")
-					.attr("x", siteInstance.width()/2 - 40);
+					.attr("x", siteInstance.width()/2 - 90);
 
 				// append the event operation message text that goes inside the bar graph
 				svg.append("g")

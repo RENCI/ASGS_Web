@@ -5,26 +5,47 @@
 		<script type="text/javascript">
 			$(document).ready(function()
 			{
-				// set the exited run type id
-				var _CONST_EXIT_MSG_TYPE = 9;
-			
-				// set the location of the individual site component
-				var margin = {top: 20, right: 15, bottom: 20, left: 15};
+				// Internet Explorer 6-11
+				var isIE = /*@cc_on!@*/false || !!document.documentMode;
+
+				// Edge 20+
+				var isEdge = !isIE && !!window.StyleMedia;
 				
-				// set the width of the individual site instance component
-				var width = margin.left + 550 + margin.right;
+				// is this browser supported?
+				if(isIE || isEdge)
+				{
+					$('#navTabs').hide(0);
+					$('#tabContent').hide(0);
+					
+				    rndNum = Math.floor(Math.random() * 3) + 1;
+				    
+					$('#browserError').show(0);					
+					$("#errImage").attr("src", "/static/ASGS_Mon/images/error" + rndNum + ".gif");
+					
+				}
+				else
+				{
+					// set the exited run type id
+					var _CONST_EXIT_MSG_TYPE = 9;
 				
-				// set the height of the individual site instance component
-				var height = 55 - margin.top - margin.bottom;
-			
-				// create the site instance visualization component
-				var siteInstance = d3.siteInstanceView()
-			    	.width(width)
-			    	.height(height)
-			    	.margin(margin);
+					// set the location of the individual site component
+					var margin = {top: 20, right: 15, bottom: 20, left: 15};
+					
+					// set the width of the individual site instance component
+					var width = margin.left + 550 + margin.right;
+					
+					// set the height of the individual site instance component
+					var height = 55 - margin.top - margin.bottom;
 				
-				// fire up the tab view
-				renderMonitorTab(siteInstance);
+					// create the site instance visualization component
+					var siteInstance = d3.siteInstanceView()
+				    	.width(width)
+				    	.height(height)
+				    	.margin(margin);
+					
+					// fire up the tab view
+					renderMonitorTab(siteInstance);
+				}
 			})
 		</script>		
 	
@@ -32,7 +53,7 @@
 		<audio id="audioCollapse" src="/static/ASGS_Mon/sounds/collapse.wav" ></audio>
 	
 		<div class="panel-body">
-			<ul class="nav nav-tabs">
+			<ul id="navTabs" class="nav nav-tabs">
 				<li class="active"><a data-toggle="tab" href="#monitorTab">Monitor</a></li>
 				<li><a data-toggle="tab" href="#prefsTab">Preferences</a></li>
 				{% if user.is_superuser %}<li><a data-toggle="tab" href="#priorResultsTab">Prior Results</a></li>{% endif %}
@@ -41,7 +62,13 @@
 				{% if user.is_superuser %}<li><a data-toggle="tab" href="#adminTab">Administration</a></li>{% endif %}
 			</ul>
 		
-			<div class="tab-content">
+			<div id="browserError" align="center" style="margin-top: -50px; display: none;">
+				<span style="font-style: italic; font-size: 20px; color: red"></br></br>Microsoft browser detected!</span></br></br>
+				<img id="errImage" src=""/>
+				<span style="font-style: italic; font-size: 16px;"></br></br>Microsoft unfortunately does not support a key feature of HTML 5 that is needed to render this website.</br>Please use a different browser, ANY browser.</span>
+			</div>
+			
+			<div id="tabContent" class="tab-content">
 				<div id="monitorTab" class="tab-pane fade in active">
 					<div class="row">
 						<div class="col-lg-12">
