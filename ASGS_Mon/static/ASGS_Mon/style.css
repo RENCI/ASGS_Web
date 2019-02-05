@@ -80,6 +80,7 @@ h2 span {
 
 .panel-default > .panel-heading 
 {
+ 	padding: 3px 15px !important;	
 	background-color: azure;
 }
 
@@ -90,7 +91,7 @@ h2 span {
 
 .nav-tabs
 {
-    border: 1px solid #aaa;
+	border: 1px solid #aaa;
     border-top-color: transparent;
     border-left-color: transparent;    
     border-right-color: transparent;    
@@ -98,8 +99,14 @@ h2 span {
 
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover
 {
+ 	padding: 3px 15px !important;	
 	border: 1px solid #aaa;
     border-bottom-color: transparent;
+}
+
+.nav-tabs>li>a, .nav-tabs>li>a:focus, .nav-tabs>li>a:hover
+{
+ 	padding: 3px 15px !important;	
 }
 
 .userViewtext
