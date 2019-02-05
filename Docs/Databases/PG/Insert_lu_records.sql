@@ -31,6 +31,7 @@ INSERT INTO "ASGS_Mon_state_type_lu" (id, name, description) VALUES (6, 'CMPL', 
 INSERT INTO "ASGS_Mon_state_type_lu" (id, name, description) VALUES (7, 'NONE', 'Running.');
 INSERT INTO "ASGS_Mon_state_type_lu" (id, name, description) VALUES (8, 'WAIT', 'Waiting.');
 INSERT INTO "ASGS_Mon_state_type_lu" (id, name, description) VALUES (9, 'EXIT', 'Exited.');
+INSERT INTO "ASGS_Mon_state_type_lu" (id, name, description) VALUES (10, 'STALLED', 'Stalled.');
 
 delete from "ASGS_Mon_instance_state_type_lu";
 INSERT INTO "ASGS_Mon_instance_state_type_lu" (id, name, description) VALUES (0, 'INIT', 'Operational.');
@@ -43,6 +44,7 @@ INSERT INTO "ASGS_Mon_instance_state_type_lu" (id, name, description) VALUES (6,
 INSERT INTO "ASGS_Mon_instance_state_type_lu" (id, name, description) VALUES (7, 'NONE', 'Running.');
 INSERT INTO "ASGS_Mon_instance_state_type_lu" (id, name, description) VALUES (8, 'WAIT', 'Waiting.');
 INSERT INTO "ASGS_Mon_instance_state_type_lu" (id, name, description) VALUES (9, 'EXIT', 'Exited.');
+INSERT INTO "ASGS_Mon_instance_state_type_lu" (id, name, description) VALUES (10, 'STALLED', 'Stalled.');
 
 -- use this to create python constants ready for cut/paste into the codebase
 select d.const_name from 
