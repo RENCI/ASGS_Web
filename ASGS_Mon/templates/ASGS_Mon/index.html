@@ -107,14 +107,14 @@
 												<a class="card-link" data-toggle="collapse" href="#collapseFilter">View Filtering</a>
 											</div>
 											<div id="collapseFilter" class="collapse" data-parent="#monitorTab" style="margin-top: 5px; margin-left: 5px">
-													<label class="check">All Running<input id="viewAllActive" type="checkbox" checked="checked">
+													<label class="check">All Running<input id="viewAllActive" type="checkbox" checked>
 													  	<span class="checkmark"></span>
 													</label>
 													<label class="check">Include<input  id="viewInclude" type="checkbox">
 													  	<span class="checkmark"></span>
 													</label>
 													
-													<label class="radio">Error<input type="radio" name="is_filterGroup">
+													<label class="radio">Error<input type="radio" name="is_filterGroup" checked>
 													  <span class="checkround"></span>
 													</label>
 													<label class="radio">Pending<input type="radio" name="is_filterGroup">
@@ -126,6 +126,9 @@
 													<label class="radio">Waiting<input type="radio" name="is_filterGroup">
 													  <span class="checkround"></span>
 													</label>
+													
+													<label>Since
+													<input type="date" autocomplete="off" id="sinceDate"></input> </label>												    														
 											</div>
 								        </div>
 									</div>

@@ -21,7 +21,7 @@ function renderMonitorTab(siteInstance)
 			var viewAllSinceFlag = $('#viewAllActive').is(":checked");
 			
 			// get the since date
-			var sinceDate = '1/1/2010'; //($('#sinceDate').val() == '') ? '1/1/2010' : $('#sinceDate').val();
+			var sinceDate = ($('#sinceDate').val() == '') ? '1/1/1970' : $('#sinceDate').val();
 			
 			// get the value of the view exited filter
 			var viewExitedFlag = $('#viewExited').is(":checked");
