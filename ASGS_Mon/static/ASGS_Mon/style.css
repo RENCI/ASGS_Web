@@ -9,6 +9,7 @@ body {
 	margin-left: 10px; 
 	margin-top: 10px;
 	margin-bottom: 10px;
+	font: 15px sans-serif;
 }
 
 h2 { 
@@ -39,7 +40,7 @@ h2 span {
 
 .imgRENCILogo 
 {
-    border: 01px solid #000;
+    border: 1px solid #000;
     border-radius: 5px;
     padding: 1px;
     margin-right: 10px;
@@ -78,35 +79,20 @@ h2 span {
 	color: black;
 }
 
-.panel-default > .panel-heading 
+.card-header 
 {
  	padding: 3px 15px !important;	
 	background-color: azure;
 }
 
-.panel-default 
+.card-body 
 {
     border-color: #aaa;
 }
 
-.nav-tabs
+.card
 {
-	border: 1px solid #aaa;
-    border-top-color: transparent;
-    border-left-color: transparent;    
-    border-right-color: transparent;    
-}
-
-.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover
-{
- 	padding: 3px 15px !important;	
-	border: 1px solid #aaa;
-    border-bottom-color: transparent;
-}
-
-.nav-tabs>li>a, .nav-tabs>li>a:focus, .nav-tabs>li>a:hover
-{
- 	padding: 3px 15px !important;	
+	margin-bottom: 15px;	
 }
 
 .userViewtext
@@ -114,6 +100,15 @@ h2 span {
 	margin-left: 15px;	
 }
 
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover
+{
+ 	padding: 3px 15px !important;	
+}
+
+.nav-tabs>li>a, .nav-tabs>li>a:focus, .nav-tabs>li>a:hover
+{
+  	padding: 3px 15px !important;	
+}
 
 #clusterUtilArea, #userAdminArea
 {
@@ -142,12 +137,18 @@ h2 span {
 	margin-bottom: -20px;
 }
 
-#siteInstancesTarget
+#filterArea
 {
-	margin-left: -5px;
 }
 
-.siteInstanceView { font: 10px sans-serif; border: 1px solid; border-color: silver; border-radius: 4px; margin-left: 5px;}
+#siteInstancesTarget
+{
+	margin-left: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.siteInstanceView { font: 10px sans-serif; border: 1px solid; border-color: silver; border-radius: 4px; margin-left: 5px; margin-top: 3px;}
 .siteInstanceView .tick line { stroke: gray; stroke-width: .5px; }
 .siteInstanceView .marker { stroke: #000; stroke-width: 2px; }
 .siteInstanceView .range.s0 { fill: #eee; stroke: gray; stroke-width: .5px;}
@@ -173,4 +174,26 @@ img : hover
 {
 	color: white;
 	background-color: red;
+}
+
+.custom-control-label {
+	margin-top: 5px !important;
+	margin-left: 5px !important;
+	margin-bottom: 5px !important;
+ }
+
+.custom-control-label::before, .custom-control-label::before
+{
+	top: .05rem !important;	
+}
+
+.custom-switch .custom-control-label::after
+{
+	top: .2rem !important;
+}
+
+.custom-control-input:checked~.custom-control-label::before {
+    color: #fff;
+    border-color: #007b00;
+    background-color: #007b00;
 }

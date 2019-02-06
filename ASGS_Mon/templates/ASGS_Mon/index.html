@@ -14,11 +14,14 @@
 				// is this browser supported?
 				if(isIE || isEdge)
 				{
+					// hide all relevant content
 					$('#navTabs').hide(0);
 					$('#tabContent').hide(0);
 					
+					// generate a random number for the image index
 				    rndNum = Math.floor(Math.random() * 3) + 1;
 				    
+					// show the image area with the image source
 					$('#browserError').show(0);					
 					$("#errImage").attr("src", "/static/ASGS_Mon/images/error" + rndNum + ".gif");
 					
@@ -52,14 +55,37 @@
 		<audio id="audioExpand" src="/static/ASGS_Mon/sounds/expand.wav" ></audio>
 		<audio id="audioCollapse" src="/static/ASGS_Mon/sounds/collapse.wav" ></audio>
 	
-		<div class="panel-body">
-			<ul id="navTabs" class="nav nav-tabs">
-				<li class="active"><a data-toggle="tab" href="#monitorTab">Monitor</a></li>
-				<li><a data-toggle="tab" href="#prefsTab">Preferences</a></li>
-				{% if user.is_superuser %}<li><a data-toggle="tab" href="#priorResultsTab">Prior Results</a></li>{% endif %}
-				{% if user.is_superuser %}<li><a data-toggle="tab" href="#submitTab">Job Submission</a></li>{% endif %}
-				<li><a data-toggle="tab" href="#configTab" onclick="initConfigTabList();">Run Configurations</a></li>
-				{% if user.is_superuser %}<li><a data-toggle="tab" href="#adminTab">Administration</a></li>{% endif %}
+		<div class="card-body">
+			<ul class="nav nav-tabs" id="navTabs" role="tablist">
+				<li class="nav-item">
+					<a class="nav-link active" id="monitor-Tab" data-toggle="tab" href="#monitorTab" role="tab">Monitor</a>
+				</li>
+				
+				<li class="nav-item">
+					<a class="nav-link" id="preferences-tab" data-toggle="tab" href="#prefsTab" role="tab">Preferences</a>
+				</li>
+				
+				{% if user.is_superuser %}
+				<li class="nav-item">
+					<a class="nav-link" id="priorResults-Tab" data-toggle="tab" href="#priorResultsTab" role="tab">Prior Results</a>
+				</li>
+				{% endif %}
+				
+				{% if user.is_superuser %}
+				<li class="nav-item">
+					<a class="nav-link" id="submit-Tab" data-toggle="tab" href="#submitTab" role="tab">Job Submission</a>
+				</li>
+				{% endif %}
+				
+				<li class="nav-item">
+					<a class="nav-link" id="config-Tab" data-toggle="tab" href="#configTab" onclick="initConfigTabList();" role="tab">Run Configurations</a>
+				</li>
+				
+				{% if user.is_superuser %}
+				<li class="nav-item">
+					<a class="nav-link" id="admin-Tab" data-toggle="tab" href="#adminTab" role="tab">Administration</a>
+				</li>
+				{% endif %}
 			</ul>
 		
 			<div id="browserError" align="center" style="margin-top: -50px; display: none;">
@@ -69,55 +95,66 @@
 			</div>
 			
 			<div id="tabContent" class="tab-content">
-				<div id="monitorTab" class="tab-pane fade in active">
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="panel panel-default">
-								<div class="panel-heading">Site instances</div>
-								<div class="panel-body">
-									<div id="siteInstancesTarget"></div>
+				<div id="monitorTab" class="tab-pane fade show active" role="tabpanel">
+					<div class="row">						
+						<div class="col">
+							<div class="card">
+								<div class="card-header">Site instances</div>
+								<div class="card-body">	
+									<div class="col-md-6">
+										<div class="card">
+											<div class="card-header">
+												<a class="card-link" data-toggle="collapse" href="#collapseFilter">View Filtering</a>
+											</div>
+											<div id="collapseFilter" class="collapse" data-parent="#monitorTab">
+												<div class="car-body" style="margin-top: 5px">
+													<div class="custom-control custom-switch">
+												    	<input type="checkbox" class="custom-control-input" id="viewAllActive" checked>
+												    	<label class="custom-control-label" for="viewAllActive">View all active</label>
+													</div>
+													
+													<div class="custom-control custom-switch">
+												    	<input type="checkbox" class="custom-control-input" id="viewAllSince">
+												    	<label class="custom-control-label" for="viewAllSince">View all, since</label>
+													    <input type="date" autocomplete="off" id="sinceDate"></input>												    	
+													</div>
+													
+													<div class="custom-control custom-switch">
+												    	<input type="checkbox" class="custom-control-input" id="viewExited">
+												    	<label class="custom-control-label" for="viewExited">View exited/completed</label>
+													</div>
+													
+													
+													<div class="custom-control custom-switch">
+												    	<input type="checkbox" class="custom-control-input" id="viewStalled">
+												    	<label class="custom-control-label" for="viewStalled">View stalled</label>
+													</div>
+													<div class="col">
+ 													</div>
+												</div>
+								        	</div>
+										</div>
+									</div>
+									
+									<div class="card">
+										<div id="siteInstancesTarget"></div>
+									</div>
 								</div>
-							</div>					
-						</div>
+							</div>
+						</div>					
 					</div>
 				</div>
 				
-				<div id="prefsTab" class="tab-pane fade">
+				<div id="prefsTab" class="tab-pane fade" role="tabpanel">
 					<div class="row">
 						<div class="col-lg-4">
-							<div class="panel panel-default">
-								<div class="panel-heading">Set your preferences</div>
-								<div class="panel-body">
-									<form role="form"  method="POST" action="/login/">
-<!-- 										  	<div class="input-group"> -->
-<!-- 											    <span class="input-group-addon">Cluster</span> -->
-<!-- 												<select id="clusterPref" class="form-control"> -->
-<!-- 													<option value="-1">Select a preferred cluster</option> -->
-<!-- 													<option value="George Mason">George Mason</option> -->
-<!-- 													<option value="LSU">LSU</option> -->
-<!-- 													<option value="Penguin">Penguin</option> -->
-<!-- 													<option value="RENCI">RENCI</option> -->
-<!-- 													<option value=TACC>TACC</option> -->
-<!-- 													<option value="UCF">UCF</option> -->
-<!-- 												</select> -->
-<!-- 											</div> -->
-<!-- 										  	<br> -->
+							<div class="card">
+								<div class="card-header">Set your preferences</div>
+								<div class="card-body">
+									<form role="form" method="POST" action="/login/">
 										<div>
 											<span style="font-size: 16px;"><a href="{% url 'change_password' %}">Change your Password</a></span>
 										</div>								  	
-<!-- 											<hr> -->
-<!-- 										  	<div class="input-group"> -->
-<!-- 										    	<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span> -->
-<!-- 										    	<input id="email" type="text" class="form-control" name="email" placeholder="Change your email" value="{{ user.username }}"> -->
-<!-- 										  	<br> -->
-<!-- 										  	</div> -->
-<!-- 											<div class="checkbox"> -->
-<!-- 												<label><input type="checkbox" value="">Receive notification e-mails</label> -->
-<!-- 											</div> -->
-<!-- 										  	<div class="input-group"> -->
-<!-- 										    	<button type="submit" class="btn btn-info" >Submit</button>			 -->
-<!-- 												<div style="margin-top: 5px"><span id="prMsg" style="display: none; color: darkgreen;"></span></div> -->
-<!-- 										    </div>						   -->
 									</form>
 								</div>
 							</div>
@@ -125,11 +162,11 @@
 					</div>					
 				</div>
 				
-				<div id="priorResultsTab" class="tab-pane fade">
+				<div id="priorResultsTab" class="tab-pane fade" role="tabpanel">
 					<div class="row">
 						<div class="col-lg-6">
-							<div class="panel panel-default">
-								<div class="panel-heading">Prior run results, sorted by most recent</div>
+							<div class="card">
+								<div class="card-header">Prior run results, sorted by most recent</div>
 								<div id="prevRun_17" class="modal fade" role='dialog'>
 								    <div class="modal-dialog modal-lg">
 										<div class="modal-content">
@@ -195,12 +232,12 @@
 					</div>
 				</div>
 				
-				<div id="submitTab" class="tab-pane fade">
+				<div id="submitTab" class="tab-pane fade" role="tabpanel">
 					<div class="row">
 						<div class="col-lg-6">
-							<div class="panel panel-default">
-								<div class="panel-heading">Enter job submission parameters</div>
-								<div class="panel-body">
+							<div class="card">
+								<div class="card-header">Enter job submission parameters</div>
+								<div class="card-body">
 									<form role="form" method="post" action="">
 										<div class="input-group">
 										    <span class="input-group-addon">Cluster</span>
@@ -237,11 +274,11 @@
 					</div>					
 				</div>	
 						
-				<div id="configTab" class="tab-pane fade">
+				<div id="configTab" class="tab-pane fade" role="tabpanel">
 					<div class="row">
 						<div class="col-lg-6">
-							<div class="panel panel-default">
-								<div class="panel-heading">Run configurations, sorted by most recent</div>
+							<div class="card">
+								<div class="card-header">Run configurations, sorted by most recent</div>
 								<div id="configTabList" style="margin-top: 5px; margin-bottom: 5px;"></div>								
 							</div>					
 						</div>
@@ -249,12 +286,12 @@
 				</div>
 				
 				{% if user.is_superuser %}
-				<div id="adminTab" class="tab-pane fade">
+				<div id="adminTab" class="tab-pane fade" role="tabpanel">
 					<div class="row">
 						<div class="col-lg-4">
-							<div class="panel panel-default">
-								<div class="panel-heading">Site Administration</div>
-								<div class="panel-body">
+							<div class="card">
+								<div class="card-header">Site Administration</div>
+								<div class="card-body">
 									<form role="form" method="post" action="">
 									  	<div class="input-group">
 										    <span class="input-group-addon">User</span>

@@ -5,25 +5,43 @@
  */
 function renderMonitorTab(siteInstance)
 {
-	// TODO: check for browser support?
+	// Microsoft browsers do not support EventSource
  	if(EventSource !== undefined && typeof(EventSource) !== "undefined") 
  	{
 	 	// define the event endpoint
- 		var eSource = new EventSource("dataReq/?type=event");
+ 		var eSource = new EventSource("dataReq/?type=wellness");
 	
  		// detect message receipt to a event load
  		eSource.onmessage = function(event) 
  		{		 	 
+			// get the value of the view all since filter
+			var viewAllActiveFlag = $('#viewAllActive').is(":checked");
+			
+			// get the value of the view all since filter
+			var viewAllSinceFlag = $('#viewAllActive').is(":checked");
+			
+			// get the since date
+			var sinceDate = ($('#sinceDate').val() == '') ? '1/1/2010' : $('#sinceDate').val();
+			
+			// get the value of the view exited filter
+			var viewExitedFlag = $('#viewExited').is(":checked");
+	
+			// get the value of the view stalled filter
+			var viewStalledFlag = $('#viewStalled').is(":checked");
+			
 			// set the exited run type id
 			var _CONST_EXIT_MSG_TYPE = 9;
 
 			// create/init the shells for all the site instances
-			d3.json("dataReq/?type=init", function(error, initData)
+			d3.json("dataReq/?type=init" + "&viewAllSinceFlag=" + viewAllActiveFlag + "&viewStalledFlag=" + viewStalledFlag + "&sinceDate=" + sinceDate, function(error, initData)
 			{				
 				// erase all the site instances on error
-				if (error || initData.length == 0) 
+				if (error || initData.length == 0 || initData == 'None') 
 				{
 					d3.selectAll(".siteInstanceView").remove();
+					
+					//d3.select("#siteInstancesTarget").style('color', 'red').text('There is nothing to see here with your filter selections.');
+				
 					return;
 				}
 					
@@ -256,18 +274,22 @@ function renderMonitorTab(siteInstance)
 					.attr("id", function(d) { return "_" + d.instance_id + "_eventSummary"; });
 			});
 			
- 	 		// parse the incoming data object
- 	 		var theMsg = JSON.parse(event.data);
-
-			// did we get data
-			if(theMsg.utilization != "None")
-			{
+			// create/init the shells for all the site instances
+			d3.json("dataReq/?type=event" + "&viewAllSinceFlag=" + viewAllActiveFlag + "&viewStalledFlag=" + viewStalledFlag + "&sinceDate=" + sinceDate, function(error, eventData)
+			{				
+				// erase all the site instances on error
+				if (error || eventData.length == 0) 
+				{
+					d3.selectAll(".siteInstanceView").remove();
+					return;
+				}
+				
 	 	 		// get a reference to the visualization component
 	 			var svg = d3.select("#siteInstancesTarget").selectAll("svg");
 	 			
 	 	 		// reload the visualization with the new data
-	 			svg.data(theMsg.utilization).call(siteInstance.duration(1500));
-			}
+	 			svg.data(eventData).call(siteInstance.duration(1500));
+			});
  		}
  	}
 }

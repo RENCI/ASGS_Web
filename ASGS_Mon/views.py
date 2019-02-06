@@ -29,7 +29,7 @@ def change_password(request):
                 # head over to the password complete page
                 return redirect('change_password_complete')
             else:
-                messages.error(request, 'Please correct the error below.')
+                messages.error(request, 'Please correct the error described below.')
         else:
             # just render the form
             form = PasswordChangeForm(request.user)
@@ -80,7 +80,7 @@ def dataReq(request):
     # only allow access to authenticated users
     if request.user.is_authenticated:
         # define legal request types
-        theLegalReqTypes = ['init', 'event', 'config_list', 'config_detail']
+        theLegalReqTypes = ['init', 'event', 'config_list', 'config_detail', "wellness"]
     
         # get the request type         
         reqType = request.GET.get('type')
@@ -103,22 +103,29 @@ def dataReq(request):
                     retVal = 'Invalid or missing parameter.' 
                 else:
                     paramVal = param
-    
+            elif reqType == 'wellness':
+                retVal = 'retry:3000\ndata: {}\n\n'
+            elif reqType == 'init' or reqType == 'event':
+                # get the query string items 
+                paramVal += request.GET.get('viewAllSinceFlag') + ','
+                paramVal += request.GET.get('viewStalledFlag') + ','
+                #paramVal += request.GET.get('since')
+                paramVal += '\'' + request.GET.get('sinceDate') + '\''
+                
             # if no errors continue
             if retVal == '':
                 # create the SQL. raw SQL calls using the django db model need an ID
                 theSQL = 'SELECT 1 AS ''id'', public.get_' + reqType + '_json(' + paramVal + ') AS ''data'';'
                     
-                # get the data
+                # get the data, account for single quotes
                 retVal = str(models.Json.objects.raw(theSQL)[0].data).replace("'", "\"")
             
                 # reformat empty data sets
                 if retVal == "None":
-                    retVal = '"None"'
-                                
+                    retVal = '"None"'                            
                 # events need a wrapper
-                if reqType == 'event':
-                    retVal = 'retry:3000\ndata: {"utilization" : ' + retVal +'} \n\n'
+                #elif reqType == 'event':
+                #    retVal = '{utilization : ' + retVal +'}'
         else:
             retVal = 'Invalid or illegal data request.'
                    
