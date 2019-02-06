@@ -40,10 +40,12 @@ function renderMonitorTab(siteInstance)
 				{
 					d3.selectAll(".siteInstanceView").remove();
 					
-					//d3.select("#siteInstancesTarget").style('color', 'red').text('There is nothing to see here with your filter selections.');
-				
+					$("#filterMsg").show(1000);
+					
 					return;
 				}
+				else
+					$("#filterMsg").hide(0);
 					
 				// get the current rendered items
 				var curRendered = d3.selectAll(".siteInstanceView").selectAll("svg");
@@ -238,7 +240,7 @@ function renderMonitorTab(siteInstance)
 								.duration(300)
 								.attr("height", "135")											
 
-									// make the message area large, showing all messages
+							// make the message area large, showing all messages
 							msgRect.transition()
 								.duration(300)
 								.attr("height", "75")						
