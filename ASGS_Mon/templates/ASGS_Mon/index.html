@@ -101,39 +101,33 @@
 							<div class="card">
 								<div class="card-header">Site instances</div>
 								<div class="card-body">	
-									<div class="col-md-6">
+									<div class="col-md-2">
 										<div class="card">
 											<div class="card-header">
 												<a class="card-link" data-toggle="collapse" href="#collapseFilter">View Filtering</a>
 											</div>
-											<div id="collapseFilter" class="collapse" data-parent="#monitorTab">
-												<div class="car-body" style="margin-top: 5px">
-													<div class="custom-control custom-switch">
-												    	<input type="checkbox" class="custom-control-input" id="viewAllActive" checked>
-												    	<label class="custom-control-label" for="viewAllActive">View all active</label>
-													</div>
+											<div id="collapseFilter" class="collapse" data-parent="#monitorTab" style="margin-top: 5px; margin-left: 5px">
+													<label class="check">All Running<input id="viewAllActive" type="checkbox" checked="checked">
+													  	<span class="checkmark"></span>
+													</label>
+													<label class="check">Include<input  id="viewInclude" type="checkbox">
+													  	<span class="checkmark"></span>
+													</label>
 													
-													<div class="custom-control custom-switch">
-												    	<input type="checkbox" class="custom-control-input" id="viewAllSince">
-												    	<label class="custom-control-label" for="viewAllSince">View all, since</label>
-													    <input type="date" autocomplete="off" id="sinceDate"></input>												    	
-													</div>
-													
-													<div class="custom-control custom-switch">
-												    	<input type="checkbox" class="custom-control-input" id="viewExited">
-												    	<label class="custom-control-label" for="viewExited">View exited/completed</label>
-													</div>
-													
-													
-													<div class="custom-control custom-switch">
-												    	<input type="checkbox" class="custom-control-input" id="viewStalled">
-												    	<label class="custom-control-label" for="viewStalled">View stalled</label>
-													</div>
-													<div class="col">
- 													</div>
-												</div>
-								        	</div>
-										</div>
+													<label class="radio">Error<input type="radio" name="is_filterGroup">
+													  <span class="checkround"></span>
+													</label>
+													<label class="radio">Pending<input type="radio" name="is_filterGroup">
+													  <span class="checkround"></span>
+													</label>
+													<label class="radio">Stalled<input type="radio" name="is_filterGroup">
+													  <span class="checkround"></span>
+													</label>
+													<label class="radio">Waiting<input type="radio" name="is_filterGroup">
+													  <span class="checkround"></span>
+													</label>
+											</div>
+								        </div>
 									</div>
 									
 									<div class="card">
