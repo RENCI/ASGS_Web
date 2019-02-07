@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
 from django.contrib.auth.views import login
+from django.contrib.auth.views import logout
 
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
@@ -51,14 +52,12 @@ def change_password_complete(request):
         return redirect('login')
 
 # redirect to the correct place when authenticated. otherwise go to the login page
-def custom_login(request):
-    # only allow access to authenticated users
-    if request.user.is_authenticated:
-        # render the main page
-        return render(request, 'ASGS_Mon/index.html', {})
-    else:
-        # head over to the login page
-        return login(request, template_name='core/login.html')
+def custom_login(request):    
+    # if they get here close the session
+    logout(request)
+    
+    # head over to the login page
+    return login(request, template_name='core/login.html')
     
 # main entry point
 def index(request):
@@ -107,10 +106,11 @@ def dataReq(request):
                 retVal = 'retry:3000\ndata: {}\n\n'
             elif reqType == 'init' or reqType == 'event':
                 # get the query string items 
-                paramVal += request.GET.get('viewAllSinceFlag') + ','
-                paramVal += request.GET.get('viewStalledFlag') + ','
-                #paramVal += request.GET.get('since')
-                paramVal += '\'' + request.GET.get('sinceDate') + '\''
+                paramVal += request.GET.get('viewActiveFlag') + ','
+                paramVal += request.GET.get('viewInactiveFlag')
+                
+                if request.GET.get('sinceDate') != '':
+                    paramVal += ',' + request.GET.get('sinceDate')
                 
             # if no errors continue
             if retVal == '':

@@ -15,25 +15,31 @@ function renderMonitorTab(siteInstance)
  		eSource.onmessage = function(event) 
  		{		 	 
 			// get the value of the view all since filter
-			var viewAllActiveFlag = $('#viewAllActive').is(":checked");
-			
-			// get the value of the view all since filter
-			var viewAllSinceFlag = $('#viewAllActive').is(":checked");
+			var viewActiveFlag = $('#viewActive').is(":checked");
 			
 			// get the since date
-			var sinceDate = ($('#sinceDate').val() == '') ? '1/1/1970' : $('#sinceDate').val();
+			var sinceDate = $('#sinceDate').val(); //($('#sinceDate').val() == '') ? 'NULL' : $('#sinceDate').val();
 			
-			// get the value of the view exited filter
-			var viewExitedFlag = $('#viewExited').is(":checked");
-	
-			// get the value of the view stalled filter
-			var viewStalledFlag = $('#viewStalled').is(":checked");
+			// get the value of the view all since filter
+			var viewInactiveFlag = -1;
+			
+			// get the checked radio button
+			if($('#viewInactive').is(":checked"))
+			{
+				$("input[data-val]").each(function () 
+				{
+					if($(this).is(":checked"))
+					{
+						viewInactiveFlag = $(this).data('val');
+					}
+				});
+			}
 			
 			// set the exited run type id
 			var _CONST_EXIT_MSG_TYPE = 9;
 
 			// create/init the shells for all the site instances
-			d3.json("dataReq/?type=init" + "&viewAllSinceFlag=" + viewAllActiveFlag + "&viewStalledFlag=" + viewStalledFlag + "&sinceDate=" + sinceDate, function(error, initData)
+			d3.json("dataReq/?type=init" + "&viewActiveFlag=" + viewActiveFlag + "&viewInactiveFlag=" + viewInactiveFlag + "&sinceDate=" + sinceDate, function(error, initData)
 			{				
 				// erase all the site instances on error
 				if (error || initData.length == 0 || initData == 'None') 
@@ -50,33 +56,47 @@ function renderMonitorTab(siteInstance)
 				// get the current rendered items
 				var curRendered = d3.selectAll(".siteInstanceView").selectAll("svg");
 
-				// do we have a valid site instance defined
+				// do we have a valid site instance already loaded
 				if(Array.isArray(curRendered))
-				{
-					// loop through the rendered site instances and remove ones with no incoming data 
-					for(i=0; i<curRendered.length; i++)
-					{
-						// reset the found flag
-						bfound = false;
-						
-						// for each id in the incoming data
-						for(j=0; j<initData.length; j++)
-						{
-							// was it previously rendered
-							if(curRendered[i].parentNode.id == "_" + initData[j].instance_id)
-							{
-								// set the flag
-								bfound = true;
-								
-								// no need to continue
-								break;
-							}
-						}
-						
-						// if data for this rendered item is not found remove it
-						if(!bfound)
-							curRendered[i].parentNode.remove();
-					}
+				{		
+					var a = [];
+					var b = [];
+					
+					for(i=0; i<initData.length; i++)
+						a.push("_" + initData[i].instance_id);
+					
+					for(j=0; j<curRendered.length; j++)
+						b.push(curRendered[j].parentNode.id);					
+					
+					if($.merge($(a).not(b).get(), $(b).not(a).get()).length != 0)
+						d3.selectAll(".siteInstanceView").remove();
+
+//					// loop through the data instances and remove rendered elements with no incoming data 
+//					for(i=0; i<initData.length; i++)
+//					{
+//						// reset the found flag
+//						bfound = false;
+//						
+//						// for each id in the incoming data
+//						for(j=0; j<curRendered.length; j++)
+//						{
+//							// was it previously rendered
+//							if("_" + initData[i].instance_id == curRendered[j].parentNode.id)
+//							{
+//								// set the flag
+//								bfound = true;
+//								
+//								// no need to continue
+//								break;
+//							}
+//						}
+//						
+//						// if data for this rendered item is not found remove it
+//						if(!bfound && curRendered[j] != undefined)
+//						{
+//							curRendered[j].parentNode.remove();
+//						}
+//					}
 				}
 				
 			  	// save this data in the object and render the svg region for all individual site instances
@@ -277,7 +297,7 @@ function renderMonitorTab(siteInstance)
 			});
 			
 			// create/init the shells for all the site instances
-			d3.json("dataReq/?type=event" + "&viewAllSinceFlag=" + viewAllActiveFlag + "&viewStalledFlag=" + viewStalledFlag + "&sinceDate=" + sinceDate, function(error, eventData)
+			d3.json("dataReq/?type=event" + "&viewActiveFlag=" + viewActiveFlag + "&viewInactiveFlag=" + viewInactiveFlag + "&sinceDate=" + sinceDate, function(error, eventData)
 			{				
 				// erase all the site instances on error
 				if (error || eventData.length == 0) 

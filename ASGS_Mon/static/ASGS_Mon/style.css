@@ -176,14 +176,14 @@ img : hover
 	background-color: red;
 }
 
-/* The radio */
+/* The radio buttons */
 .radio {
     display: block;
     position: relative;
     padding-left: 30px;
     margin-bottom: 12px;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 10px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -200,8 +200,8 @@ img : hover
 /* Create a custom radio button */
 .checkround {
     position: absolute;
-    top: -2px;
-    left: 5px;
+    top: -5px;
+    left: 8px;
     height: 20px;
     width: 20px;
     background-color: #fff ;
@@ -248,7 +248,7 @@ img : hover
     margin-bottom: 12px;
     padding-right: 15px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 12px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -265,7 +265,7 @@ img : hover
 /* Create a custom checkbox */
 .checkmark {
     position: absolute;
-    top: 0px;
+    top: -3px;
     left: 0;
     height: 18px;
     width: 18px;
