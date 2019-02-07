@@ -81,18 +81,20 @@ h2 span {
 
 .card-header 
 {
- 	padding: 3px 15px !important;	
+  	padding: 3px 15px !important;
 	background-color: azure;
 }
 
 .card-body 
 {
     border-color: #aaa;
+    margin: -15px -15px -15px -15px;
+	padding 0rem !important;
 }
 
 .card
 {
-	margin-bottom: 15px;	
+	margin-bottom: 5px;
 }
 
 .userViewtext
@@ -134,7 +136,6 @@ h2 span {
 {
 	margin-top: 5px;
 	margin-left: 5px;
-	margin-bottom: -20px;
 }
 
 #filterArea
@@ -181,9 +182,9 @@ img : hover
     display: block;
     position: relative;
     padding-left: 30px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     cursor: pointer;
-    font-size: 10px;
+    font-size: 12px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -245,7 +246,7 @@ img : hover
     display: block;
     position: relative;
     padding-left: 25px;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     padding-right: 15px;
     cursor: pointer;
     font-size: 12px;

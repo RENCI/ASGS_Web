@@ -101,11 +101,12 @@
 								<div class="card-header">Site instances</div>
 								<div class="card-body">	
 									<div class="col-lg-4">
-										<div class="card" style="margin-top: -10px; margin-bottom: 5px">
+										<div class="card">
 											<div class="card-header">
 												<a class="card-link" data-toggle="collapse" href="#collapseFilter">View Filtering</a>
 											</div>
-											<div id="collapseFilter" class="collapse" data-parent="#monitorTab" style="margin-top: 10px; margin-left: 5px">
+											<div class="card-body" style="margin-bottom: -26px">												
+												<div id="collapseFilter" class="collapse" data-parent="#monitorTab" style="margin-top: 5px">
 													<label class="check">Active <span style="font-style: italic; font-size: 10px">(Completing, Idle, Operational, Pending, Running, Warning, etc.)</span><input id="viewActive" type="checkbox" checked>
 													  	<span class="checkmark"></span>
 													</label>
@@ -128,14 +129,16 @@
 													
 													<label><span style="font-style: italic; font-size: 12px">Since
 													<input type="date" autocomplete="off" id="sinceDate"></input></span></label>												    														
-													</br><span style="font-style: italic; font-size: 10px">(Note: Selection may take up to 3 seconds to appear)</span>
+												</div>
 											</div>
 								        </div>
 									</div>
 									
-									<div class="card">
-										<div id="filterMsg" style="margin-top: 5px; margin-left: 5px; display: none;"><span style="color: red">There is nothing to see here with your current filter selections.<span></div>
-										<div id="siteInstancesTarget"></div>
+									<div class="card-body">	
+										<div class="card">
+											<div id="filterMsg" style="margin-top: 5px; margin-left: 5px; display: none;"><span style="color: red">There is nothing to see here with your current filter selections.<span></div>
+											<div id="siteInstancesTarget"></div>
+										</div>
 									</div>
 								</div>
 							</div>

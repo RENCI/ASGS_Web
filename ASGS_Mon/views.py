@@ -110,7 +110,7 @@ def dataReq(request):
                 paramVal += request.GET.get('viewInactiveFlag')
                 
                 if request.GET.get('sinceDate') != '':
-                    paramVal += ',' + request.GET.get('sinceDate')
+                    paramVal += ',\'' + request.GET.get('sinceDate') + '\''
                 
             # if no errors continue
             if retVal == '':
