@@ -41,7 +41,7 @@ function renderMonitorTab(siteInstance)
 			// create/init the shells for all the site instances
 			d3.json("dataReq/?type=init" + "&viewActiveFlag=" + viewActiveFlag + "&viewInactiveFlag=" + viewInactiveFlag + "&sinceDate=" + sinceDate, function(error, initData)
 			{				
-				// erase all the site instances on error
+				// erase all the site instances on error or no data
 				if (error || initData.length == 0 || initData == 'None') 
 				{
 					d3.selectAll(".siteInstanceView").remove();
@@ -59,44 +59,21 @@ function renderMonitorTab(siteInstance)
 				// do we have a valid site instance already loaded
 				if(Array.isArray(curRendered))
 				{		
+					// init 2 arrays for instance ids
 					var a = [];
 					var b = [];
 					
+					// save the data instance ids
 					for(i=0; i<initData.length; i++)
 						a.push("_" + initData[i].instance_id);
 					
+					// save the current rendered ids
 					for(j=0; j<curRendered.length; j++)
 						b.push(curRendered[j].parentNode.id);					
 					
+					// if they are different remove all rendered 
 					if($.merge($(a).not(b).get(), $(b).not(a).get()).length != 0)
 						d3.selectAll(".siteInstanceView").remove();
-
-//					// loop through the data instances and remove rendered elements with no incoming data 
-//					for(i=0; i<initData.length; i++)
-//					{
-//						// reset the found flag
-//						bfound = false;
-//						
-//						// for each id in the incoming data
-//						for(j=0; j<curRendered.length; j++)
-//						{
-//							// was it previously rendered
-//							if("_" + initData[i].instance_id == curRendered[j].parentNode.id)
-//							{
-//								// set the flag
-//								bfound = true;
-//								
-//								// no need to continue
-//								break;
-//							}
-//						}
-//						
-//						// if data for this rendered item is not found remove it
-//						if(!bfound && curRendered[j] != undefined)
-//						{
-//							curRendered[j].parentNode.remove();
-//						}
-//					}
 				}
 				
 			  	// save this data in the object and render the svg region for all individual site instances
