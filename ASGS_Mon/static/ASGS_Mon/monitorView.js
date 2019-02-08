@@ -26,16 +26,37 @@
 			// for each site/instance in the view
 			g.each(function(d, i) 
 			{
-				// get the color of the state indicator for the cluster text
-				if(d.cluster_state_id == "3")
-					stateTextColor = "red"
-			    else if(d.cluster_state_id == "2" || d.cluster_state_id == "4")
-			    	stateTextColor = "goldenrod";
-			    else if(d.cluster_state_id == "6" || d.instance_status == "9")
-			    	stateTextColor = "gray";
-			    else
-			    	stateTextColor = "green";
+				// get the color of the state indicator for the cluster text	
+				switch(d.cluster_state_id)
+				{
+					case _CONST_INSTANCE_RUNN_MSG_TYPE:
+					case _CONST_INSTANCE_INIT_MSG_TYPE:
+						stateTextColor = "green";
+						break;
+						
+					case _CONST_INSTANCE_PEND_MSG_TYPE:
+					case _CONST_INSTANCE_IDLE_MSG_TYPE:
+					case _CONST_INSTANCE_WAIT_MSG_TYPE:
+					case _CONST_INSTANCE_WARN_MSG_TYPE:
+					case _CONST_INSTANCE_EXIT_MSG_TYPE:
+						stateTextColor = "goldenrod";
+						break;
+						
+					case _CONST_INSTANCE_CMPL_MSG_TYPE:
+					case _CONST_INSTANCE_NONE_MSG_TYPE:
+						stateTextColor = "gray";
+						break;
+						
+					case _CONST_INSTANCE_FAIL_MSG_TYPE:
+					case _CONST_INSTANCE_STALLED_MSG_TYPE:
+						stateTextColor = "red";
+						break;
 
+					default:
+						stateTextColor = "blue";
+						break;
+				}
+				
 				// update the operation message text
 				d3.select("#_" + d.instance_id + "_operation")
 					.text(d.event_operation)
@@ -148,15 +169,36 @@
 						.attr("width", w1)
 						.attr("height", height);
 	
-				// get the color of the state indicator for the event group progress bar
-				if(d.group_state_id == "3")
-					measureColor = "#F08080"
-				else if(d.group_state_id == "2" || d.group_state_id == "4")
-					measureColor = "goldenrod";
-				else if(d.group_state_id == "6")
-					measureColor = "gray"
-				else
-					measureColor = "darkseagreen";      
+				// get the color of the state indicator for the measure bar	
+				switch(d.group_state_id)
+				{
+					case _CONST_GROUP_RUNN_MSG_TYPE:
+					case _CONST_GROUP_INIT_MSG_TYPE:
+						measureColor = "darkseagreen";
+						break;
+						
+					case _CONST_GROUP_PEND_MSG_TYPE:
+					case _CONST_GROUP_IDLE_MSG_TYPE:
+					case _CONST_GROUP_WAIT_MSG_TYPE:
+					case _CONST_GROUP_WARN_MSG_TYPE:
+					case _CONST_GROUP_EXIT_MSG_TYPE:
+						measureColor = "goldenrod";
+						break;
+						
+					case _CONST_GROUP_CMPL_MSG_TYPE:
+					case _CONST_GROUP_NONE_MSG_TYPE:
+						measureColor = "gray";
+						break;
+						
+					case _CONST_GROUP_FAIL_MSG_TYPE:
+					case _CONST_GROUP_STALLED_MSG_TYPE:
+						measureColor = "#F08080";
+						break;
+
+					default:
+						measureColor = "blue";
+						break;
+				}
 	
 				// Update the measure rects
 				var measure = g.selectAll("rect.measure").data(measurez);

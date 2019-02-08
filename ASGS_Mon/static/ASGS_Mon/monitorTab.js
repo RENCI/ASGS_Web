@@ -3,6 +3,33 @@
  * 
  * @returns nothing. It renders the tab contents or it doesn't.
  */
+
+// set the instance message status type ids
+var _CONST_INSTANCE_INIT_MSG_TYPE = 0;
+var _CONST_INSTANCE_RUNN_MSG_TYPE = 1;
+var _CONST_INSTANCE_PEND_MSG_TYPE = 2;
+var _CONST_INSTANCE_FAIL_MSG_TYPE = 3;
+var _CONST_INSTANCE_WARN_MSG_TYPE = 4;
+var _CONST_INSTANCE_IDLE_MSG_TYPE = 5;
+var _CONST_INSTANCE_CMPL_MSG_TYPE = 6;
+var _CONST_INSTANCE_NONE_MSG_TYPE = 7;
+var _CONST_INSTANCE_WAIT_MSG_TYPE = 8;
+var _CONST_INSTANCE_EXIT_MSG_TYPE = 9;
+var _CONST_INSTANCE_STALLED_MSG_TYPE = 10;
+
+//set the event group state type ids
+var _CONST_GROUP_INIT_MSG_TYPE = 0;
+var _CONST_GROUP_RUNN_MSG_TYPE = 1;
+var _CONST_GROUP_PEND_MSG_TYPE = 2;
+var _CONST_GROUP_FAIL_MSG_TYPE = 3;
+var _CONST_GROUP_WARN_MSG_TYPE = 4;
+var _CONST_GROUP_IDLE_MSG_TYPE = 5;
+var _CONST_GROUP_CMPL_MSG_TYPE = 6;
+var _CONST_GROUP_NONE_MSG_TYPE = 7;
+var _CONST_GROUP_WAIT_MSG_TYPE = 8;
+var _CONST_GROUP_EXIT_MSG_TYPE = 9;
+var _CONST_GROUP_STALLED_MSG_TYPE = 10;
+
 function renderMonitorTab(siteInstance)
 {
 	// Microsoft browsers do not support EventSource
@@ -35,9 +62,6 @@ function renderMonitorTab(siteInstance)
 				});
 			}
 			
-			// set the exited run type id
-			var _CONST_EXIT_MSG_TYPE = 9;
-
 			// create/init the shells for all the site instances
 			d3.json("dataReq/?type=init" + "&viewActiveFlag=" + viewActiveFlag + "&viewInactiveFlag=" + viewInactiveFlag + "&sinceDate=" + sinceDate, function(error, initData)
 			{				
@@ -85,7 +109,7 @@ function renderMonitorTab(siteInstance)
 						.attr("class", "siteInstanceView")
 						.attr("width", siteInstance.width() + 30)
 						.attr("height", function(d) { // if this is an exited run collapse it by default
-							if(d.instance_status == _CONST_EXIT_MSG_TYPE) 
+							if(d.instance_status == _CONST_INSTANCE_EXIT_MSG_TYPE) 
 								return '21'; 
 							else 
 								return '75';
