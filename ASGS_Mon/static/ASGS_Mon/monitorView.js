@@ -39,6 +39,7 @@
 					case _CONST_INSTANCE_WAIT_MSG_TYPE:
 					case _CONST_INSTANCE_WARN_MSG_TYPE:
 					case _CONST_INSTANCE_EXIT_MSG_TYPE:
+					case _CONST_INSTANCE_STALLED_MSG_TYPE:
 						stateTextColor = "goldenrod";
 						break;
 						
@@ -48,7 +49,6 @@
 						break;
 						
 					case _CONST_INSTANCE_FAIL_MSG_TYPE:
-					case _CONST_INSTANCE_STALLED_MSG_TYPE:
 						stateTextColor = "red";
 						break;
 
@@ -182,6 +182,7 @@
 					case _CONST_GROUP_WAIT_MSG_TYPE:
 					case _CONST_GROUP_WARN_MSG_TYPE:
 					case _CONST_GROUP_EXIT_MSG_TYPE:
+					case _CONST_GROUP_STALLED_MSG_TYPE:
 						measureColor = "goldenrod";
 						break;
 						
@@ -191,7 +192,6 @@
 						break;
 						
 					case _CONST_GROUP_FAIL_MSG_TYPE:
-					case _CONST_GROUP_STALLED_MSG_TYPE:
 						measureColor = "#F08080";
 						break;
 
