@@ -53,7 +53,7 @@
 						break;
 
 					default:
-						stateTextColor = "blue";
+						stateTextColor = "lightblue";
 						break;
 				}
 				
@@ -196,7 +196,7 @@
 						break;
 
 					default:
-						measureColor = "blue";
+						measureColor = "lightblue";
 						break;
 				}
 	
