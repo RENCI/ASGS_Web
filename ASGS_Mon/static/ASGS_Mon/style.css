@@ -81,18 +81,20 @@ h2 span {
 
 .card-header 
 {
- 	padding: 3px 15px !important;	
+  	padding: 3px 15px !important;
 	background-color: azure;
 }
 
 .card-body 
 {
     border-color: #aaa;
+    margin: -15px -15px -15px -15px;
+	padding 0rem !important;
 }
 
 .card
 {
-	margin-bottom: 15px;	
+	margin-bottom: 5px;
 }
 
 .userViewtext
@@ -134,7 +136,6 @@ h2 span {
 {
 	margin-top: 5px;
 	margin-left: 5px;
-	margin-bottom: -20px;
 }
 
 #filterArea
@@ -176,12 +177,12 @@ img : hover
 	background-color: red;
 }
 
-/* The radio */
+/* The radio buttons */
 .radio {
     display: block;
     position: relative;
     padding-left: 30px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     cursor: pointer;
     font-size: 12px;
     -webkit-user-select: none;
@@ -200,8 +201,8 @@ img : hover
 /* Create a custom radio button */
 .checkround {
     position: absolute;
-    top: -2px;
-    left: 5px;
+    top: -5px;
+    left: 8px;
     height: 20px;
     width: 20px;
     background-color: #fff ;
@@ -245,10 +246,10 @@ img : hover
     display: block;
     position: relative;
     padding-left: 25px;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     padding-right: 15px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 12px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -265,7 +266,7 @@ img : hover
 /* Create a custom checkbox */
 .checkmark {
     position: absolute;
-    top: 0px;
+    top: -3px;
     left: 0;
     height: 18px;
     width: 18px;
