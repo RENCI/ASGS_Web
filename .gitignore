@@ -5,3 +5,4 @@
 /messages/msg_settings.ini
 messages/test/msg_settings.ini
 /ASGS_Mon/migrations/__pycache__
+cron/db_settings.ini
