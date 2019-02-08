@@ -1,2 +1,2 @@
 # every hour at 0 of hour
-0 * * * * python /srv/django/ASGS_Mon/cron/db-monitor.py
+0 * * * * /bin/python /srv/django/ASGS_Web/cron/db-monitor.py

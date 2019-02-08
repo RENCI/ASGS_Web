@@ -5,13 +5,13 @@ from configparser import ConfigParser
 from datetime import datetime, timedelta, tzinfo
 
 # set up logging
-logfile = "/srv/django/ASGS_Mon/cron/db-monitor.log"
+logfile = "/srv/django/ASGS_Web/cron/db-monitor.log"
 logging.basicConfig(filename=logfile, format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.INFO)
 logging.info("started db-monitor")
 
 # retrieve configuration settings
 parser = ConfigParser()
-parser.read('db_settings.ini')
+parser.read('/srv/django/ASGS_Web/cron/db_settings.ini')
 
 def db_connect():
     logging.debug("Connecting to DB: " + parser.get('postgres', 'database'))
