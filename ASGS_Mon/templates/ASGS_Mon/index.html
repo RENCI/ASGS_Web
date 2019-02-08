@@ -154,7 +154,7 @@
 								<div class="card-body">
 									<form role="form" method="POST" action="/login/">
 										<div>
-											<span style="font-size: 16px;"><a href="{% url 'change_password' %}">Change your Password</a></span>
+											<span style="font-size: 14px; margin-left: 15px;"><a href="{% url 'change_password' %}">Change your Password</a></span>
 										</div>								  	
 									</form>
 								</div>
@@ -220,13 +220,20 @@
 										</div>
 								  	</div>
 								</div>
-								<div style="margin-top: 5px; margin-bottom: 5px;">
-									<ul>
-										<li><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_17">RENCI run 17 "Storm Delta" - 12/05/2018</a></li>
-										<li><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_16">RENCI run 16 "Storm Charlie" - 12/04/2018</a></li>
-										<li><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_15">RENCI run 15 "Storm Beta" - 12/03/2018</a></li>
-										<li><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_14">RENCI run 14 "Storm Alpha" - 12/02/2018</a></li>
-									</ul>
+								<div style="margin-left: 10px; margin-top: 5px; margin-bottom: 5px;">
+									<dl class="row">
+										<dt class="col-sm-3 text-truncate">Storm Delta</dt>
+										<dd class="col-sm-9"><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_17">RENCI run 17 - 12/05/2018</a></dd>
+										
+										<dt class="col-sm-3 text-truncate">Storm Charlie</dt>
+										<dd class="col-sm-9"><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_16">RENCI run 16 - 12/04/2018</a></dd>
+										
+										<dt class="col-sm-3 text-truncate">Storm Beta</dt>
+										<dd class="col-sm-9"><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_15">RENCI run 15 - 12/03/2018</a></dd>
+										
+										<dt class="col-sm-3 text-truncate">Storm Alpha</dt>
+										<dd class="col-sm-9"><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_14">RENCI run 14 - 12/02/2018</a></dd>										
+									</dl>
 								</div>								
 							</div>					
 						</div>
@@ -240,8 +247,8 @@
 								<div class="card-header">Enter job submission parameters</div>
 								<div class="card-body">
 									<form role="form" method="post" action="">
-										<div class="input-group">
-										    <span class="input-group-addon">Cluster</span>
+										<div class="input-group-prepend">
+										    <span class="input-group-text">Cluster</span>
 											<select id="clusterName" class="form-control" onchange="loadJobSubmit(this.value)">
 												<option value="-1">Select a cluster</option>
 												<option value="George Mason">George Mason</option>
@@ -258,12 +265,12 @@
 												<div id="chartID" class="chart"></div>
 											</div>	
 											<br>
-										  	<div class="input-group">
-										    	<span class="input-group-addon">Run parameters</span>
+										  	<div class="input-group-prepend">
+										    	<span class="input-group-text">Run parameters</span>
 										    	<input id="msg" type="text" class="form-control" name="msg" placeholder="Enter the run parameters">
 										  	</div>
 										  	<br>
-										  	<div class="input-group">
+										  	<div class="input-group-prepend">
 												<button type="button" class="btn btn-info" value="Submit" onclick="updateMsg('jsMsg');">Submit</button>
 												<div style="margin-top: 5px"><span id="jsMsg" style="display: none; color: darkgreen;"></span></div>													
 											</div>
@@ -277,10 +284,14 @@
 						
 				<div id="configTab" class="tab-pane fade" role="tabpanel">
 					<div class="row">
-						<div class="col-lg-6">
+						<div class="col-lg-8">
 							<div class="card">
 								<div class="card-header">Run configurations, sorted by most recent</div>
-								<div id="configTabList" style="margin-top: 5px; margin-bottom: 5px;"></div>								
+								<div class="card-body">
+								  	<div class="input-group-prepend">								  	
+										<div id="configTabList"></div>
+									</div>					
+								</div>			
 							</div>					
 						</div>
 					</div>
@@ -294,8 +305,8 @@
 								<div class="card-header">Site Administration</div>
 								<div class="card-body">
 									<form role="form" method="post" action="">
-									  	<div class="input-group">
-										    <span class="input-group-addon">User</span>
+									  	<div class="input-group-prepend">
+										    <span class="input-group-text">User</span>
 											<select class="form-control" id="userName" onchange="loadUser(this.value)">
 												<option value="-1">Select a user</option>
 												<option value="JSmith">John Smith</option>
@@ -309,8 +320,8 @@
 												<span id="userVal" style="margin-top: 10px;"></span>	
 											</div>
 											<br>
-											<div class="input-group">			
-										    	<span class="input-group-addon">Role</span>
+											<div class="input-group-prepend">			
+										    	<span class="input-group-text">Role</span>
 												<select class="form-control" id="userRole">
 													<option value="-1">Select a new role</option>
 													<option value="Administrator">Administrator</option>

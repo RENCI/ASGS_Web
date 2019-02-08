@@ -3,6 +3,12 @@
  * 
  */
 
+/**
+ * Populates the Job submit tab area
+ * 
+ * @param val
+ * @returns
+ */
 function loadJobSubmit(val)
 {
 	$("#selectedCluster").hide(100);
@@ -31,6 +37,12 @@ function loadJobSubmit(val)
     }
 }	
 
+/**
+ * Populates the Site administration tab area
+ * 
+ * @param val
+ * @returns
+ */
 function loadUser(val)
 {
 	$("#selectedUserAdmin").hide(100);
@@ -53,6 +65,12 @@ function loadUser(val)
     }
 }
 
+/**
+ * handles data update alert
+ *  
+ * @param val
+ * @returns
+ */
 function updateMsg(val)
 {
 	var ctrl = $('#' + val);
@@ -62,30 +80,40 @@ function updateMsg(val)
 	ctrl.fadeIn(2000);
 	ctrl.fadeOut(1000);
 }
-		
+	
+/**
+ * Populates the Run configurations tab
+ * 
+ * @returns
+ */
 function initConfigTabList()
 {
 	// get the list and render the html
 	d3.json("dataReq/?type=config_list", function(error, configList) 
 	{
 		// init the output
-		var output = '<ul>';
+		var output = '';
 		
 		// go through all listings
 		configList.forEach(function(info, i)
 		{
 			// tack on each entry
-			output += '<li>' + info.instance_name + ' with ID ' + info.instance_id + ', started on: ' + info.start_ts + '. <a href="javascript:getConfigDetails(' + info.instance_id + ', \'asgs\')">View ASGS</a>&nbsp; or &nbsp;<a href="javascript:getConfigDetails(' + info.instance_id + ', \'adcirc\')">View ADCIRC</a></li><div style="display:none; border:1px solid black; margin-left: 10px; margin-top: 5px; margin-right: 5px;" id="configdetail_' + info.instance_id + '"></div>';
+			output += '<span class="input-group-text">' + info.instance_name + ' - Started on: ' + info.start_ts + '. <a href="javascript:getConfigDetails(' + info.instance_id + ', \'asgs\')">View ASGS</a>&nbsp; or &nbsp;<a href="javascript:getConfigDetails(' + info.instance_id + ', \'adcirc\')">View ADCIRC</a></span><div style="display:none; border:1px solid black; margin-top: 5px; margin-bottom: 5px" id="configdetail_' + info.instance_id + '"></div></br>';
+			output += '<span class="input-group-text">' + info.instance_name + ' - Started on: ' + info.start_ts + '. <a href="javascript:getConfigDetails(' + info.instance_id + 1 + ', \'asgs\')">View ASGS</a>&nbsp; or &nbsp;<a href="javascript:getConfigDetails(' + info.instance_id + 1 + ', \'adcirc\')">View ADCIRC</a></span><div style="display:none; border:1px solid black;" id="configdetail_' + info.instance_id + 1 + '"></div></br>';
 		});
-		
-		// finish off the list
-		output += '</ul>';
 		
 		// output the result
 		$("#configTabList").html(output);
 	});
 }
 
+/**
+ * Calls the database to get the run configuration data
+ * 
+ * @param id
+ * @param type
+ * @returns
+ */
 function getConfigDetails(id, type)
 {
 	// if anything is visible hide it
@@ -99,17 +127,26 @@ function getConfigDetails(id, type)
 		// get the render the configuration params
 		d3.json("dataReq/?type=config_detail&param=" + id, function(error, configDetail) 
 		{	
-			// storage for the target data
-			var theData = null;
+			// init the return
+			var retVal = '';
 			
-			// get the type of data to display
-			if(type == "asgs")
-				data = configDetail.asgs_config
+			if(error != null)
+				retVal = '<span style="color:red">Error retrieving information.</span>';
 			else
-				data = configDetail.adcirc_config
-									
+			{
+				// get the type of data to display
+				if(configDetail == undefined)
+					retVal = '<span style="color:red">Error retrieving information.</span>';
+				else if(type == "asgs")
+					retVal = configDetail.asgs_config;
+				else if(type == "adcirc")
+					retVal = configDetail.adcirc_config;
+				else
+					retVal = '<span style="color:red">Error retrieving information.</span>';
+			}
+			
 			// render the data
-			$('#configdetail_' + id).html(data);
+			$('#configdetail_' + id).html(retVal);
 			$('#configdetail_' + id).show(1500);
 		});
 	}

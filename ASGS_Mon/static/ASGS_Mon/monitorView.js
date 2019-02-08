@@ -1,7 +1,7 @@
 /*****
  * Renders all site/instance elements
  * 
- * @returns nothing. It renders the data or it doesnt.
+ * @returns nothing. It renders the data or it doesn't.
  */
 (function() 
 {

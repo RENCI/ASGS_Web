@@ -30,6 +30,12 @@ var _CONST_GROUP_WAIT_MSG_TYPE = 8;
 var _CONST_GROUP_EXIT_MSG_TYPE = 9;
 var _CONST_GROUP_STALLED_MSG_TYPE = 10;
 
+/**
+ * Renders the site instances and populates them with data from the database
+ * 
+ * @param siteInstance
+ * @returns
+ */
 function renderMonitorTab(siteInstance)
 {
 	// Microsoft browsers do not support EventSource
@@ -297,7 +303,7 @@ function renderMonitorTab(siteInstance)
 					.attr("id", function(d) { return "_" + d.instance_id + "_eventSummary"; });
 			});
 			
-			// create/init the shells for all the site instances
+			// load the shells for all the site instance events
 			d3.json("dataReq/?type=event" + "&viewActiveFlag=" + viewActiveFlag + "&viewInactiveFlag=" + viewInactiveFlag + "&sinceDate=" + sinceDate, function(error, eventData)
 			{				
 				// erase all the site instances on error
