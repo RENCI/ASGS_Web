@@ -69,7 +69,7 @@ def index(request):
         # head over to the login page
         return redirect('login')
 
-# abount propaganda
+# about propaganda
 def about(request):
     # render the about page
     return render(request, 'ASGS_Mon/about.html', {})
@@ -105,27 +105,24 @@ def dataReq(request):
             elif reqType == 'wellness':
                 retVal = 'retry:3000\ndata: {}\n\n'
             elif reqType == 'init' or reqType == 'event':
-                # get the query string items 
-                paramVal += request.GET.get('viewActiveFlag') + ','
-                paramVal += request.GET.get('viewInactiveFlag')
+                # get the query string items. we will always get these
+                paramVal += "'{0}', '{1}'".format(request.GET.get('viewActiveFlag'),request.GET.get('viewInactiveFlag'))
                 
+                # this param is optional
                 if request.GET.get('sinceDate') != '':
-                    paramVal += ',\'' + request.GET.get('sinceDate') + '\''
+                    paramVal += ", '{0}'".format(request.GET.get('sinceDate'))
                 
             # if no errors continue
             if retVal == '':
                 # create the SQL. raw SQL calls using the django db model need an ID
-                theSQL = 'SELECT 1 AS ''id'', public.get_' + reqType + '_json(' + paramVal + ') AS ''data'';'
+                theSQL = "SELECT 1 AS id, public.get_{0}_json({1}) AS data;".format(reqType, paramVal)
                     
                 # get the data, account for single quotes
-                retVal = str(models.Json.objects.raw(theSQL)[0].data).replace("'", "\"")
-            
+                retVal = str(models.Json.objects.raw(theSQL)[0].data).replace("'", "\"")            
+                
                 # reformat empty data sets
                 if retVal == "None":
                     retVal = '"None"'                            
-                # events need a wrapper
-                #elif reqType == 'event':
-                #    retVal = '{utilization : ' + retVal +'}'
         else:
             retVal = 'Invalid or illegal data request.'
                    
