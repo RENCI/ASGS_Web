@@ -1,7 +1,7 @@
 import logging
 import logging.handlers
 
-def setup(name, log_file="logs/rcv_msg_svc.log", log_level=logging.INFO, toConsole=False):
+def setup(name, log_file="logs/rcv_msg_svc.log", log_level=logging.WARN, toConsole=False):
     # logger settings
     log_num_backups = 7
     log_format = "%(asctime)s [%(levelname)s]: (%(funcName)s:%(lineno)s) >> %(message)s"

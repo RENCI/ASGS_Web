@@ -5,12 +5,13 @@ import psycopg2
 import json
 import datetime
 from configparser import ConfigParser
+import ASGSConstants
 
+import logging
 import log
 
-logger = log.setup('The_log')
-
-logger.info("Started receive_msg_service")
+# initialize the loggin
+logger = log.setup('The_log', log_level=logging.INFO)
 
 # retrieve configuration settings
 parser = ConfigParser()
@@ -29,12 +30,10 @@ channel = connection.channel()
 
 channel.queue_declare(queue='asgs_queue')
 
-# define some constants
-ASGS_Mon_pct_complete_lu = {'0':0,'1':5,'2':20,'3':40,'4':60,'5':90,'6':100,'7':0,'8':0,'9':0,'10':40,'11':90}
-ASGS_Mon_site_lu = {'RENCI':0,'TACC':1,'LSU':2,'UCF':3,'George Mason':4,'Penguin':5,'LONI':6}
-ASGS_Mon_event_type_lu = {'RSTR':0,'PRE1':1,'NOWC':2,'PRE2':3,'FORE':4,'POST':5,'REND':6,'STRT':7,'HIND':8,'EXIT':9,'FSTR':10,'FEND':11}
-ASGS_Mon_state_type_lu = {'INIT':0,'RUNN':1,'PEND':2,'FAIL':3,'WARN':4,'IDLE':5,'CMPL':6,'NONE':7,'WAIT':8,'EXIT':9,'STALLED':10}
-ASGS_Mon_instance_state_type_lu = {'INIT':0,'RUNN':1,'PEND':2,'FAIL':3,'WARN':4,'IDLE':5,'CMPL':6,'NONE':7,'WAIT':8,'EXIT':9,'STALLED':10}
+logger.info("Started receive_msg_service")
+
+# define the constants used in here
+ASGSConstants = ASGSConstants(logger)
 
 # just a check to see if there are any event groups defined for this site yet
 def get_existing_event_group_id(conn, inst_id):
@@ -91,6 +90,8 @@ def get_existing_instance_id(conn, site_id , msg_obj):
     logger.debug("existing_instance_id=" + str(existing_instance_id))
     return existing_instance_id
 
+
+# gets the instance id for a process
 
 def get_instance_id(conn, start_ts, site_id, process_id, instance_name):
     logger.debug("get_instance_id: start_ts=" + str(start_ts) + " site_id=" + str(site_id) + \
@@ -379,31 +380,13 @@ def db_connect():
     conn = psycopg2.connect(conn_str)
 
     return conn
-
-#
-# gets the id from a lookup
-#
-def getLuIdFromMsg(msgObj, paramName, luArr): 
-    # get the name
-    retName = msgObj.get(paramName, "")
-    
-    # get the ID
-    retID = luArr.get(retName, -1)
-    
-    # did we find something
-    if retID >= 0:
-        logger.info("Param: " + paramName + " is: " + str(retID))
-    else:
-        logger.error("FAILURE - Invalid or no param name " + paramName + " found")
-        
-    #return to the caller
-    return retID, retName
-    
+ 
+#   
 # main worker that operates on the incoming message from the queue
+#
 def callback(ch, method, properties, body):
     #print(" [x] Received %r" % body)
-    logger.info(" [x] Received %r" % body)
-
+    logger.info("Received %r" % body)
     
     try:
         msg_obj = json.loads(body)
@@ -415,23 +398,20 @@ def callback(ch, method, properties, body):
         logger.error("FAILURE - Cannot connect to DB: " + str(e))
         return
 
-        #save_raw_msg(conn, msg)
-
     # get the site id from the name in the message
-    site_id, site_name = getLuIdFromMsg(msg_obj, "physical_location", ASGS_Mon_site_lu)
+    site_id, site_name = ASGSConstants.getLuIdFromMsg(msg_obj, "physical_location", ASGSConstants.site_lu)
     
     if site_id < 0:
         return
     
     # get the 3vent type if from the event name in the message
-    event_type_id, event_name = getLuIdFromMsg(msg_obj, "event_type", ASGS_Mon_event_type_lu)
+    event_type_id, event_name = ASGSConstants.getLuIdFromMsg(msg_obj, "event_type", ASGSConstants.event_type_lu)
     
     if event_type_id < 0:
         return
 
-
     # get the 3vent type if from the event name in the message
-    state_id, state_name = getLuIdFromMsg(msg_obj, "state", ASGS_Mon_state_type_lu)
+    state_id, state_name = ASGSConstants.getLuIdFromMsg(msg_obj, "state", ASGSConstants.state_type_lu)
     
     if state_id < 0:
         return
@@ -448,6 +428,7 @@ def callback(ch, method, properties, body):
     # if this is a STRT event, create a new instance
     if ((inst_id < 0) or (event_name == "STRT" and state_name == "RUNN")):
         logger.debug("create_new_inst is True - creating new inst")
+        
         try:
             inst_id = insert_instance(conn, state_id, site_id, msg_obj)
         except:
@@ -456,6 +437,7 @@ def callback(ch, method, properties, body):
             return
     else: # just update instance
         logger.debug("create_new_inst is False - updating inst")
+        
         try:
             update_instance(conn, state_id, site_id, inst_id, msg_obj)
         except:
