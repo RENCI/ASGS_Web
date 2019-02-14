@@ -202,7 +202,7 @@ def insert_event(conn, site_id, event_group_id, event_type_id, state_type, msg_o
     # ignore intermediary cluster job completion percentage
     sql_fields += "pct_complete, "
     
-    pct_complete = ASGSConstants_inst.getLuId(str(1), "pct_complete")
+    pct_complete = ASGSConstants_inst.getLuId(str(event_type_id), "pct_complete")
     
     sql_values += str(pct_complete) + ", "
 
