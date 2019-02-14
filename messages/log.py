@@ -1,16 +1,15 @@
 import logging
 import logging.handlers
 
-def setup(name, log_file="rcv_msg_svc.log", log_level=logging.INFO, toConsole=False):
+def setup(name, log_file="logs/rcv_msg_svc.log", log_level=logging.INFO, toConsole=False):
     # logger settings
-    log_file = "rcv_msg_svc.log"
     log_num_backups = 7
     log_format = "%(asctime)s [%(levelname)s]: (%(funcName)s:%(lineno)s) >> %(message)s"
     log_date_format = "%m/%d/%Y %I:%M:%S %p"
-    log_filemode = "w" # w: overwrite; a: append
+    log_filemode = "a" # w: overwrite; a: append
     
     # setup logger
-    logging.basicConfig(filename=log_file, datefmt=log_date_format, format=log_format, filemode=log_filemode ,level=log_level)
+    logging.basicConfig(filename=log_file, datefmt=log_date_format, format=log_format, filemode=log_filemode, level=log_level)
     
     # Add the log message handler to the logger
     handler = logging.handlers.TimedRotatingFileHandler(log_file, when="d", interval=1, backupCount=log_num_backups)
