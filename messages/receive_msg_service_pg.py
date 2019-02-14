@@ -29,6 +29,13 @@ channel = connection.channel()
 
 channel.queue_declare(queue='asgs_queue')
 
+# define some constants
+ASGS_Mon_pct_complete_lu = {'0':0,'1':5,'2':20,'3':40,'4':60,'5':90,'6':100,'7':0,'8':0,'9':0,'10':40,'11':90}
+ASGS_Mon_site_lu = {'RENCI':0,'TACC':1,'LSU':2,'UCF':3,'George Mason':4,'Penguin':5,'LONI':6}
+ASGS_Mon_event_type_lu = {'RSTR':0,'PRE1':1,'NOWC':2,'PRE2':3,'FORE':4,'POST':5,'REND':6,'STRT':7,'HIND':8,'EXIT':9,'FSTR':10,'FEND':11}
+ASGS_Mon_state_type_lu = {'INIT':0,'RUNN':1,'PEND':2,'FAIL':3,'WARN':4,'IDLE':5,'CMPL':6,'NONE':7,'WAIT':8,'EXIT':9,'STALLED':10}
+ASGS_Mon_instance_state_type_lu = {'INIT':0,'RUNN':1,'PEND':2,'FAIL':3,'WARN':4,'IDLE':5,'CMPL':6,'NONE':7,'WAIT':8,'EXIT':9,'STALLED':10}
+
 # just a check to see if there are any event groups defined for this site yet
 def get_existing_event_group_id(conn, inst_id):
     logger.debug("get_existing_event_group_id: inst_id=" + str(inst_id))
@@ -70,6 +77,7 @@ def get_existing_instance_id(conn, site_id , msg_obj):
                                              " AND instance_name='" + instance_name + "'" + \
                                              " AND inst_state_type_id!=9" + \
                                              " ORDER BY id DESC"
+                                             
 # TODO +++++++++++++++FIX THIS++++++++++++++++++++Add query to get correct stat id for Defunct++++++++++++++++++++++++
 # TODO +++++++++++++++FIX THIS++++++++++++++++++++Add day to query too? (to account for rollover of process ids)++++++++++++++++++++++++
 
@@ -372,12 +380,31 @@ def db_connect():
 
     return conn
 
-
+#
+# gets the id from a lookup
+#
+def getLuIdFromMsg(msgObj, paramName, luArr): 
+    # get the name
+    retName = msgObj.get(paramName, "")
+    
+    # get the ID
+    retID = luArr.get(retName, -1)
+    
+    # did we find something
+    if retID >= 0:
+        logger.info("Param: " + paramName + " is: " + str(retID))
+    else:
+        logger.error("FAILURE - Invalid or no param name " + paramName + " found")
+        
+    #return to the caller
+    return retID, retName
+    
+# main worker that operates on the incoming message from the queue
 def callback(ch, method, properties, body):
     #print(" [x] Received %r" % body)
     logger.info(" [x] Received %r" % body)
 
-
+    
     try:
         msg_obj = json.loads(body)
 
@@ -390,66 +417,23 @@ def callback(ch, method, properties, body):
 
         #save_raw_msg(conn, msg)
 
-    try:
-        # get site id from site name
-        site_name = ""
-        if (msg_obj.get("physical_location") is not None and len(msg_obj["physical_location"]) > 0):
-            site_name = msg_obj["physical_location"]
-        else:
-            logger.error("NO SITE NAME PROVIDED - must drop message!")
-            return
-        query = 'SELECT id FROM "ASGS_Mon_site_lu" where name=' + "'" + site_name + "'"
-        logger.debug("query=" + query)
-        cur = conn.cursor()
-        cur.execute(query)
-        site_lu = cur.fetchone()
-        site_id = site_lu[0]
-        logger.info("SITE_NAME=" + site_name + " SITE_ID=" + str(site_id))
-    except:
-        e = sys.exc_info()[0]
-        logger.error("FAILURE - Cannot retrieve site id: " + str(e))
+    # get the site id from the name in the message
+    site_id, site_name = getLuIdFromMsg(msg_obj, "physical_location", ASGS_Mon_site_lu)
+    
+    if site_id < 0:
+        return
+    
+    # get the 3vent type if from the event name in the message
+    event_type_id, event_name = getLuIdFromMsg(msg_obj, "event_type", ASGS_Mon_event_type_lu)
+    
+    if event_type_id < 0:
         return
 
-    try:
-        # get event_type_id from event_name
-        event_name = ""
-        if (msg_obj.get("event_type") is not None and len(msg_obj["event_type"]) > 0):
-            event_name = msg_obj["event_type"]
-        else:
-            logger.error("NO EVENT TYPE PROVIDED - must drop message!")
-            return
-        query = 'SELECT id FROM "ASGS_Mon_event_type_lu" WHERE name=' + "'" + event_name + "'"
-        logger.debug("query=" + query)
-        cur = conn.cursor()
-        cur.execute(query)
-        event_lu = cur.fetchone()
-        event_type_id = event_lu[0]
-        logger.info("EVENT_NAME=" + event_name + " EVENT_ID=" + str(event_type_id))
-    except:
-        e = sys.exc_info()[0]
-        logger.error("FAILURE - Cannot retrieve event type id: " + str(e))
-        return
 
-    try:
-        # get run state id from state name
-        state_name = ""
-        if (msg_obj.get("state") is not None and len(msg_obj["state"]) > 0):
-            state_name = msg_obj["state"]
-        else:
-            logger.error("NO STATE TYPE PROVIDED - must drop message!")
-            return
-        
-        state_id = -1
-        query = 'SELECT id FROM "ASGS_Mon_state_type_lu" WHERE name=' + "'" + state_name + "'"
-        logger.debug("query=" + query)
-        cur = conn.cursor()
-        cur.execute(query)
-        state = cur.fetchone()
-        state_id = state[0]
-        logger.info("STATE_NAME=" + state_name + " STATE_ID=" + str(state_id))
-    except:
-        e = sys.exc_info()[0]
-        logger.error("FAILURE - Cannot retrieve run state id: " + str(e))
+    # get the 3vent type if from the event name in the message
+    state_id, state_name = getLuIdFromMsg(msg_obj, "state", ASGS_Mon_state_type_lu)
+    
+    if state_id < 0:
         return
 
     # check to see if there are any instances for this site_id yet
@@ -460,6 +444,7 @@ def callback(ch, method, properties, body):
         e = sys.exc_info()[0]
         logger.error("FAILURE - Cannot retrieve instance id: " + str(e))
         return
+    
     # if this is a STRT event, create a new instance
     if ((inst_id < 0) or (event_name == "STRT" and state_name == "RUNN")):
         logger.debug("create_new_inst is True - creating new inst")
@@ -528,7 +513,6 @@ def callback(ch, method, properties, body):
     # now commit and save
     try:
         conn.commit()
-        cur.close()
         conn.close()
     except:
         e = sys.exc_info()[0]
