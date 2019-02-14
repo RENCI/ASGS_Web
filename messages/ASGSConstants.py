@@ -1,7 +1,6 @@
 #######################
 # class to transform a ASGS LU constant from a name to a ID
 #
-#
 # SQL to generate the constant ArraySubclassSELECT 
 #    'ASGS_Mon_pct_complete_lu = {' || array_to_string(ARRAY (SELECT '''' || id || ''':' || pct_complete FROM public."ASGS_Mon_event_type_lu" order by id), ','::text) || '}' as c1,
 #    'ASGS_Mon_site_lu = {' || array_to_string(ARRAY (SELECT '''' || name || ''':' || id FROM public."ASGS_Mon_site_lu" order by id), ','::text) || '}' as c2 ,
@@ -19,7 +18,7 @@ class ASGSConstants:
     state_type_lu = {'INIT':0,'RUNN':1,'PEND':2,'FAIL':3,'WARN':4,'IDLE':5,'CMPL':6,'NONE':7,'WAIT':8,'EXIT':9,'STALLED':10}
     instance_state_type_lu = {'INIT':0,'RUNN':1,'PEND':2,'FAIL':3,'WARN':4,'IDLE':5,'CMPL':6,'NONE':7,'WAIT':8,'EXIT':9,'STALLED':10}
 
-    # define lookup by LU name array
+    # define string lookup of LU name array
     lus = {"pct_complete" : pct_complete_lu, "site":site_lu, "event_type":event_type_lu, "state_type":state_type_lu, "instance_state_type":instance_state_type_lu}
 
     def __init__(self, logger):
@@ -38,9 +37,9 @@ class ASGSConstants:
         
         # did we find something
         if retID >= 0:
-            self.logger.info("PASS - LU name: " + luName + ", Param name: " + paramName + " ID: " + str(retID))
+            self.logger.info("PASS - LU name: {0}, Param name: {1}, ID: {2}", luName, paramName, str(retID))
         else:
-            self.logger.error("FAILURE - Invalid or no param name: " + paramName + " not found in: " + luName)
+            self.logger.error("FAILURE - Invalid or no param name: {0} not found in: {1}", paramName, luName)
             
         #return to the caller
         return retID, retName
@@ -48,15 +47,15 @@ class ASGSConstants:
     #
     # gets the id from a lookup table
     #
-    def getLuId(self, paramName, luName):                 
+    def getLuId(self, elementName, luName):                 
         # get the ID
-        retID = self.lus[luName].get(paramName, -1)
+        retID = self.lus[luName].get(elementName, -1)
         
         # did we find something
         if retID >= 0:
-            self.logger.info("PASS - LU name: " + luName + ", Param name: " + paramName + " ID: " + str(retID))
+            self.logger.info("PASS - LU name: {0}, element name: {1}, ID: {2}", luName, elementName, str(retID))
         else:
-            self.logger.error("FAILURE - Invalid or no param name: " + paramName + " not found in: " + luName)
+            self.logger.error("FAILURE - Invalid or no element name: {0} not found in: {1}", elementName, luName)
             
         #return to the caller
         return retID
