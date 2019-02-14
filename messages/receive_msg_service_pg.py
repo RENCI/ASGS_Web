@@ -398,22 +398,27 @@ def callback(ch, method, properties, body):
         logger.error("FAILURE - Cannot connect to DB: " + str(e))
         return
 
-    # get the site id from the name in the message
-    site_id, site_name = ASGSConstants_inst.getLuIdFromMsg(msg_obj, "physical_location", ASGSConstants.site_lu)
+    try:
+        # get the site id from the name in the message
+        site_id, site_name = ASGSConstants_inst.getLuIdFromMsg(msg_obj, "physical_location", ASGSConstants.site_lu)
+        
+        if site_id < 0:
+            return
+        
+        # get the 3vent type if from the event name in the message
+        event_type_id, event_name = ASGSConstants_inst.getLuIdFromMsg(msg_obj, "event_type", ASGSConstants.event_type_lu)
+        
+        if event_type_id < 0:
+            return
     
-    if site_id < 0:
-        return
-    
-    # get the 3vent type if from the event name in the message
-    event_type_id, event_name = ASGSConstants_inst.getLuIdFromMsg(msg_obj, "event_type", ASGSConstants.event_type_lu)
-    
-    if event_type_id < 0:
-        return
-
-    # get the 3vent type if from the event name in the message
-    state_id, state_name = ASGSConstants_inst.getLuIdFromMsg(msg_obj, "state", ASGSConstants.state_type_lu)
-    
-    if state_id < 0:
+        # get the 3vent type if from the event name in the message
+        state_id, state_name = ASGSConstants_inst.getLuIdFromMsg(msg_obj, "state", ASGSConstants.state_type_lu)
+        
+        if state_id < 0:
+            return
+    except:
+        e = sys.exc_info()[0]
+        logger.error("FAILURE - Cannot get asgs constants: " + str(e))
         return
 
     # check to see if there are any instances for this site_id yet
