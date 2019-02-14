@@ -1,6 +1,9 @@
 import logging
 import logging.handlers
 
+############################
+# logger setup 
+############################
 def setup(name, log_file="logs/rcv_msg_svc.log", log_level=logging.WARN, toConsole=False):
     # logger settings
     log_num_backups = 7
@@ -24,11 +27,5 @@ def setup(name, log_file="logs/rcv_msg_svc.log", log_level=logging.WARN, toConso
         consoleHandler.setFormatter(logFormatter)
         logger.addHandler(consoleHandler)
 
+    # return to the caller
     return logger
-
-# source: https://docs.python.org/2/howto/logging.html
-# logger.debug("")      // Detailed information, typically of interest only when diagnosing problems.
-# logger.info("")       // Confirmation that things are working as expected.
-# logger.warning("")    // An indication that something unexpected happened, or indicative of some problem in the near future
-# logger.error("")      // Due to a more serious problem, the software has not been able to perform some function.
-# logger.critical("")   // A serious error, indicating that the program itself may be unable to continue running.

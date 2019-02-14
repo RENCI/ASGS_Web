@@ -17,7 +17,7 @@ logger = log.setup('The_log', log_level=logging.INFO)
 ASGSConstants_inst = ASGSConstants(logger)
 
 # get the site id from the name in the message
-site_id, site_name = ASGSConstants_inst.getLuIdFromMsg({'RENCI':0,'TACC':1,'LSU':2,'UCF':3,'George Mason':4,'Penguin':5,'LONI':6}, "RENCI", ASGSConstants.site_lu)
+site_id, site_name = ASGSConstants_inst.getLuIdFromMsg({'RENCI':0,'TACC':1,'LSU':2,'UCF':3,'George Mason':4,'Penguin':5,'LONI':6}, "RENCI", "site")
 
 # retrieve configuration settings
 parser = ConfigParser()
@@ -405,19 +405,19 @@ def callback(ch, method, properties, body):
 
     try:
         # get the site id from the name in the message
-        site_id, site_name = ASGSConstants_inst.getLuIdFromMsg(msg_obj, "physical_location", ASGSConstants.site_lu)
+        site_id, site_name = ASGSConstants_inst.getLuIdFromMsg(msg_obj, "physical_location", "site")
         
         if site_id < 0:
             return
         
         # get the 3vent type if from the event name in the message
-        event_type_id, event_name = ASGSConstants_inst.getLuIdFromMsg(msg_obj, "event_type", ASGSConstants.event_type_lu)
+        event_type_id, event_name = ASGSConstants_inst.getLuIdFromMsg(msg_obj, "event_type", "event_type")
         
         if event_type_id < 0:
             return
     
         # get the 3vent type if from the event name in the message
-        state_id, state_name = ASGSConstants_inst.getLuIdFromMsg(msg_obj, "state", ASGSConstants.state_type_lu)
+        state_id, state_name = ASGSConstants_inst.getLuIdFromMsg(msg_obj, "state", "state_type")
         
         if state_id < 0:
             return
