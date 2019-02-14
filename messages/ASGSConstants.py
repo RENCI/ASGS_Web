@@ -37,7 +37,7 @@ class ASGSConstants:
         
         # did we find something
         if retID >= 0:
-            self.logger.info("PASS - LU name: {0}, Param name: {1}, ID: {2}", luName, paramName, str(retID))
+            self.logger.debug("PASS - LU name: {0}, Param name: {1}, ID: {2}", luName, paramName, str(retID))
         else:
             self.logger.error("FAILURE - Invalid or no param name: {0} not found in: {1}", paramName, luName)
             
@@ -53,7 +53,7 @@ class ASGSConstants:
         
         # did we find something
         if retID >= 0:
-            self.logger.info("PASS - LU name: {0}, element name: {1}, ID: {2}", luName, elementName, str(retID))
+            self.logger.debug("PASS - LU name: {0}, element name: {1}, ID: {2}", luName, elementName, str(retID))
         else:
             self.logger.error("FAILURE - Invalid or no element name: {0} not found in: {1}", elementName, luName)
             
