@@ -5,13 +5,16 @@ import psycopg2
 import json
 import datetime
 from configparser import ConfigParser
-import ASGSConstants
+from ASGSConstants import ASGSConstants
 
 import logging
 import log
 
-# initialize the loggin
+# initialize the logging
 logger = log.setup('The_log', log_level=logging.INFO)
+
+# define the constants used in here
+ASGSConstants_inst = ASGSConstants(logger)
 
 # retrieve configuration settings
 parser = ConfigParser()
@@ -31,9 +34,6 @@ channel = connection.channel()
 channel.queue_declare(queue='asgs_queue')
 
 logger.info("Started receive_msg_service")
-
-# define the constants used in here
-ASGSConstants = ASGSConstants(logger)
 
 # just a check to see if there are any event groups defined for this site yet
 def get_existing_event_group_id(conn, inst_id):
@@ -399,19 +399,19 @@ def callback(ch, method, properties, body):
         return
 
     # get the site id from the name in the message
-    site_id, site_name = ASGSConstants.getLuIdFromMsg(msg_obj, "physical_location", ASGSConstants.site_lu)
+    site_id, site_name = ASGSConstants_inst.getLuIdFromMsg(msg_obj, "physical_location", ASGSConstants.site_lu)
     
     if site_id < 0:
         return
     
     # get the 3vent type if from the event name in the message
-    event_type_id, event_name = ASGSConstants.getLuIdFromMsg(msg_obj, "event_type", ASGSConstants.event_type_lu)
+    event_type_id, event_name = ASGSConstants_inst.getLuIdFromMsg(msg_obj, "event_type", ASGSConstants.event_type_lu)
     
     if event_type_id < 0:
         return
 
     # get the 3vent type if from the event name in the message
-    state_id, state_name = ASGSConstants.getLuIdFromMsg(msg_obj, "state", ASGSConstants.state_type_lu)
+    state_id, state_name = ASGSConstants_inst.getLuIdFromMsg(msg_obj, "state", ASGSConstants.state_type_lu)
     
     if state_id < 0:
         return
