@@ -29,9 +29,9 @@ class ASGSConstants:
         
         # did we find something
         if retID >= 0:
-            self.logger.info("PASS - LU name: " + luName + ". Param name " + paramName + " ID = " + str(retID))
+            self.logger.info("PASS - LU name: " + luName + ", Param name: " + paramName + " ID: " + str(retID))
         else:
-            self.logger.error("FAILURE - Invalid or no param name " + paramName + " found in " + luName)
+            self.logger.error("FAILURE - Invalid or no param name: " + paramName + " found in: " + luName)
             
         #return to the caller
         return retID, retName
