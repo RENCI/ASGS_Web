@@ -4,14 +4,13 @@ import pika
 import psycopg2
 import json
 import datetime
-from random import randint
-import logging
 from configparser import ConfigParser
 
-# set up logging
-logfile = "rcv_msg_svc.log"
-logging.basicConfig(filename=logfile, format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.INFO)
-logging.info("Started receive_msg_service")
+import log
+
+logger = log.setup('The_log')
+
+logger.info("Started receive_msg_service")
 
 # retrieve configuration settings
 parser = ConfigParser()
@@ -30,30 +29,29 @@ channel = connection.channel()
 
 channel.queue_declare(queue='asgs_queue')
 
-
 # just a check to see if there are any event groups defined for this site yet
 def get_existing_event_group_id(conn, inst_id):
-    logging.debug("get_existing_event_group_id: inst_id=" + str(inst_id))
+    logger.debug("get_existing_event_group_id: inst_id=" + str(inst_id))
 
     existing_group_id = -1
 
     # see if there are any event groups yet that have this instance_id
     # this could be caused by a new install that does not have any data in the DB yet
     query = 'SELECT id FROM "ASGS_Mon_event_group" WHERE instance_id=' + str(inst_id) + ' ORDER BY id DESC'
-    logging.debug("query=" + query)
+    logger.debug("query=" + query)
     cur = conn.cursor()
     cur.execute(query)
     group = cur.fetchone()
     if (group is not None):
         existing_group_id = group[0]
 
-    logging.debug("existing_group_id=" + str(existing_group_id))
+    logger.debug("existing_group_id=" + str(existing_group_id))
     return existing_group_id
 
 
 # just a check to see if there are any instances defined for this site yet
 def get_existing_instance_id(conn, site_id , msg_obj):
-    logging.debug("get_existing_instance_id: site_id=" + str(site_id))
+    logger.debug("get_existing_instance_id: site_id=" + str(site_id))
 
     existing_instance_id = -1
 
@@ -75,19 +73,19 @@ def get_existing_instance_id(conn, site_id , msg_obj):
 # TODO +++++++++++++++FIX THIS++++++++++++++++++++Add query to get correct stat id for Defunct++++++++++++++++++++++++
 # TODO +++++++++++++++FIX THIS++++++++++++++++++++Add day to query too? (to account for rollover of process ids)++++++++++++++++++++++++
 
-    logging.debug("query=" + query)
+    logger.debug("query=" + query)
     cur = conn.cursor()
     cur.execute(query)
     inst = cur.fetchone()
     if (inst is not None):
         existing_instance_id = inst[0]
 
-    logging.debug("existing_instance_id=" + str(existing_instance_id))
+    logger.debug("existing_instance_id=" + str(existing_instance_id))
     return existing_instance_id
 
 
 def get_instance_id(conn, start_ts, site_id, process_id, instance_name):
-    logging.debug("get_instance_id: start_ts=" + str(start_ts) + " site_id=" + str(site_id) + \
+    logger.debug("get_instance_id: start_ts=" + str(start_ts) + " site_id=" + str(site_id) + \
                                  " process_id=" + str(process_id) + " instance_name=" + instance_name)
     id = -1
 
@@ -95,22 +93,22 @@ def get_instance_id(conn, start_ts, site_id, process_id, instance_name):
                                              "' AND site_id=" + str(site_id) + \
                                              " AND process_id=" + str(process_id) + \
                                              " AND instance_name='" + str(instance_name) + "'"
-    logging.debug("About to find existing instance: " + query)
+    logger.debug("About to find existing instance: " + query)
     cur = conn.cursor()
     cur.execute(query)
     inst = cur.fetchone()
 
-    logging.debug("After query")
+    logger.debug("After query")
 
     if (inst is not None):
         id = inst[0]
 
-    logging.debug("returning id=" + str(id))
+    logger.debug("returning id=" + str(id))
     return id   
 
 
 def update_event_group(conn, state_id, event_group_id, msg_obj):
-    logging.debug("update_event_group: state_id=" + str(state_id) + " event_group_id=" + str(event_group_id))
+    logger.debug("update_event_group: state_id=" + str(state_id) + " event_group_id=" + str(event_group_id))
 
     storm_name = "N/A"
     if (msg_obj.get("storm") is not None and len(str(msg_obj["storm"])) > 0):
@@ -124,14 +122,14 @@ def update_event_group(conn, state_id, event_group_id, msg_obj):
                                             ", storm_name='" + storm_name + "'" + \
                                             ", advisory_id='" + str(advisory_id) + "'" + \
                                             " WHERE id=" + str(event_group_id)
-    logging.debug("sql_stmt=" + sql_stmt)
+    logger.debug("sql_stmt=" + sql_stmt)
     cur = conn.cursor()
     cur.execute(sql_stmt)
 
 
 # update instance with latest state_type_id
 def update_instance(conn, state_id, site_id, inst_id, msg_obj):
-    logging.debug("update_instance: state_id=" + str(state_id) + " site_id=" + str(site_id) + " inst_id=" + str(inst_id))
+    logger.debug("update_instance: state_id=" + str(state_id) + " site_id=" + str(site_id) + " inst_id=" + str(inst_id))
 
     now = datetime.datetime.now()
     end_ts = now.strftime("%Y-%m-%d %H:%M")
@@ -146,17 +144,17 @@ def update_instance(conn, state_id, site_id, inst_id, msg_obj):
                                                ", end_ts = '" + str(end_ts) + "'" \
                                                ", run_params = '" + str(run_params) + "'" \
                                                " WHERE site_id = " + str(site_id) + " AND id=" + str(inst_id)
-    logging.debug("About to update instance: " + sql_stmt)
+    logger.debug("About to update instance: " + sql_stmt)
     cur = conn.cursor()
     cur.execute(sql_stmt)
 
 
 # get the correct percent complete for an event type
 def get_pctcomplete(conn, event_type_id):
-    logging.debug("get_pctcomplete: event_type_id=" + str(event_type_id))
+    logger.debug("get_pctcomplete: event_type_id=" + str(event_type_id))
 
     query = 'SELECT pct_complete FROM "ASGS_Mon_event_type_lu" WHERE id=' + str(event_type_id)
-    logging.debug("query=" + query)
+    logger.debug("query=" + query)
     cur = conn.cursor()
     cur.execute(query)
     event_lu = cur.fetchone()
@@ -165,16 +163,16 @@ def get_pctcomplete(conn, event_type_id):
     return pct_complete
 
 def save_raw_msg(conn, msg):
-    logging.debug("save_raw_msg: msg=" + msg)
+    logger.debug("save_raw_msg: msg=" + msg)
 
     sql_stmt = 'INSERT INTO "ASGS_Mon_json" (data) VALUES(' + msg + "')"
-    logging.debug("query to insert raw message=" + sql_stmt)
+    logger.debug("query to insert raw message=" + sql_stmt)
     cur = conn.cursor()
     cur.execute(sql_stmt)
     
 
 def insert_event(conn, site_id, event_group_id, event_type_id, state_type, msg_obj):
-    logging.debug("insert_event: site_id=" + str(site_id) + " event_group_id=" + str(event_group_id) + \
+    logger.debug("insert_event: site_id=" + str(site_id) + " event_group_id=" + str(event_group_id) + \
                               " event_type_id=" + str(event_type_id) + " state_type=" + str(state_type))
 
     sql_fields = 'INSERT INTO "ASGS_Mon_event" ('
@@ -231,7 +229,7 @@ def insert_event(conn, site_id, event_group_id, event_type_id, state_type, msg_o
         # backslashes, quote, abd double quote for now
         msg_line = re.sub('\\\|\'|\"', '', msg_obj["message"])
 
-        logging.debug("msg_line=" + msg_line)
+        logger.debug("msg_line=" + msg_line)
 
         sql_fields += "raw_data)"
         sql_values += "'" + msg_line + "') "
@@ -239,15 +237,15 @@ def insert_event(conn, site_id, event_group_id, event_type_id, state_type, msg_o
     # add to message table
     sql_stmt = sql_fields + sql_values
 
-    logging.debug("About to insert event record:" + sql_stmt)
+    logger.debug("About to insert event record:" + sql_stmt)
     cur = conn.cursor()
     cur.execute(sql_stmt)
    
-    logging.debug(" Inserted event record: " + sql_stmt)
+    logger.debug(" Inserted event record: " + sql_stmt)
 
 
 def insert_event_group(conn, state_id, inst_id, msg_obj):
-    logging.debug("insert_event_group: state_id=" + str(state_id) + " inst_id=" + str(inst_id))
+    logger.debug("insert_event_group: state_id=" + str(state_id) + " inst_id=" + str(inst_id))
 
     sql_fields = 'INSERT INTO "ASGS_Mon_event_group" ('
     sql_values = " VALUES ("
@@ -289,34 +287,34 @@ def insert_event_group(conn, state_id, inst_id, msg_obj):
     sql_stmt = sql_fields + sql_values
     sql_stmt += " RETURNING id"
        
-    logging.debug("About to insert event group record: " + sql_stmt)
+    logger.debug("About to insert event group record: " + sql_stmt)
     cur = conn.cursor()
     cur.execute(sql_stmt)
 
-    logging.debug(" Inserted event group record: " + sql_stmt)
+    logger.debug(" Inserted event group record: " + sql_stmt)
 
     return cur.fetchone()[0]
 
 
 # id | process_id | start_ts | end_ts | run_params | inst_state_type_id | site_id  | instance_name
 def insert_instance(conn, state_id, site_id, msg_obj):
-    logging.debug("insert_instance: state_id=" + str(state_id) + " site_id=" + str(site_id))
+    logger.debug("insert_instance: state_id=" + str(state_id) + " site_id=" + str(site_id))
 
     start_ts = "2018-10-09 15:33:14"
     if (msg_obj.get("date-time") is not None and len(str(msg_obj["date-time"])) > 0):
         start_ts = str(msg_obj["date-time"])
-    logging.debug("got start_ts")
+    logger.debug("got start_ts")
 
     process_id = "0"
     if (msg_obj.get("uid") is not None and len(str(msg_obj["uid"])) > 0):
         process_id = str(msg_obj["uid"])
-    logging.debug("got process_id")
+    logger.debug("got process_id")
 
     instance_name = "N/A"
     if (msg_obj.get("instance_name") is not None and len(str(msg_obj["instance_name"])) > 0):
         instance_name = str(msg_obj["instance_name"])
 
-    logging.debug("got prelim values")
+    logger.debug("got prelim values")
     # check to make sure this instance doesn't already exists before adding a new one
     #instance_id = get_instance_id(conn, start_ts, site_id, process_id, instance_name)
     #if (instance_id < 0): 
@@ -355,16 +353,16 @@ def insert_instance(conn, state_id, site_id, msg_obj):
     sql_stmt = sql_fields + sql_values
     sql_stmt += " RETURNING id"
 
-    logging.debug("About to insert instance record: " + sql_stmt)
+    logger.debug("About to insert instance record: " + sql_stmt)
     cur = conn.cursor()
     cur.execute(sql_stmt)
 
-    logging.debug(" Inserted instance record: " + sql_stmt)
+    logger.debug(" Inserted instance record: " + sql_stmt)
     return cur.fetchone()[0]
 
 
 def db_connect():
-    logging.debug("Connecting to DB: " + parser.get('postgres', 'database'))
+    logger.debug("Connecting to DB: " + parser.get('postgres', 'database'))
     conn_str = "host=" + parser.get('postgres', 'host') + \
                " port=" + parser.get('postgres', 'port') + \
                " dbname=" + parser.get('postgres', 'database') + \
@@ -377,7 +375,7 @@ def db_connect():
 
 def callback(ch, method, properties, body):
     #print(" [x] Received %r" % body)
-    logging.info(" [x] Received %r" % body)
+    logger.info(" [x] Received %r" % body)
 
 
     try:
@@ -387,7 +385,7 @@ def callback(ch, method, properties, body):
         conn = db_connect()
     except:
         e = sys.exc_info()[0]
-        logging.error("FAILURE - Cannot connect to DB: " + str(e))
+        logger.error("FAILURE - Cannot connect to DB: " + str(e))
         return
 
         #save_raw_msg(conn, msg)
@@ -398,18 +396,18 @@ def callback(ch, method, properties, body):
         if (msg_obj.get("physical_location") is not None and len(msg_obj["physical_location"]) > 0):
             site_name = msg_obj["physical_location"]
         else:
-            logging.error("NO SITE NAME PROVIDED - must drop message!")
+            logger.error("NO SITE NAME PROVIDED - must drop message!")
             return
         query = 'SELECT id FROM "ASGS_Mon_site_lu" where name=' + "'" + site_name + "'"
-        logging.debug("query=" + query)
+        logger.debug("query=" + query)
         cur = conn.cursor()
         cur.execute(query)
         site_lu = cur.fetchone()
         site_id = site_lu[0]
-        logging.info("SITE_NAME=" + site_name + " SITE_ID=" + str(site_id))
+        logger.info("SITE_NAME=" + site_name + " SITE_ID=" + str(site_id))
     except:
         e = sys.exc_info()[0]
-        logging.error("FAILURE - Cannot retrieve site id: " + str(e))
+        logger.error("FAILURE - Cannot retrieve site id: " + str(e))
         return
 
     try:
@@ -418,18 +416,18 @@ def callback(ch, method, properties, body):
         if (msg_obj.get("event_type") is not None and len(msg_obj["event_type"]) > 0):
             event_name = msg_obj["event_type"]
         else:
-            logging.error("NO EVENT TYPE PROVIDED - must drop message!")
+            logger.error("NO EVENT TYPE PROVIDED - must drop message!")
             return
         query = 'SELECT id FROM "ASGS_Mon_event_type_lu" WHERE name=' + "'" + event_name + "'"
-        logging.debug("query=" + query)
+        logger.debug("query=" + query)
         cur = conn.cursor()
         cur.execute(query)
         event_lu = cur.fetchone()
         event_type_id = event_lu[0]
-        logging.info("EVENT_NAME=" + event_name + " EVENT_ID=" + str(event_type_id))
+        logger.info("EVENT_NAME=" + event_name + " EVENT_ID=" + str(event_type_id))
     except:
         e = sys.exc_info()[0]
-        logging.error("FAILURE - Cannot retrieve event type id: " + str(e))
+        logger.error("FAILURE - Cannot retrieve event type id: " + str(e))
         return
 
     try:
@@ -438,20 +436,20 @@ def callback(ch, method, properties, body):
         if (msg_obj.get("state") is not None and len(msg_obj["state"]) > 0):
             state_name = msg_obj["state"]
         else:
-            logging.error("NO STATE TYPE PROVIDED - must drop message!")
+            logger.error("NO STATE TYPE PROVIDED - must drop message!")
             return
         
         state_id = -1
         query = 'SELECT id FROM "ASGS_Mon_state_type_lu" WHERE name=' + "'" + state_name + "'"
-        logging.debug("query=" + query)
+        logger.debug("query=" + query)
         cur = conn.cursor()
         cur.execute(query)
         state = cur.fetchone()
         state_id = state[0]
-        logging.info("STATE_NAME=" + state_name + " STATE_ID=" + str(state_id))
+        logger.info("STATE_NAME=" + state_name + " STATE_ID=" + str(state_id))
     except:
         e = sys.exc_info()[0]
-        logging.error("FAILURE - Cannot retrieve run state id: " + str(e))
+        logger.error("FAILURE - Cannot retrieve run state id: " + str(e))
         return
 
     # check to see if there are any instances for this site_id yet
@@ -460,24 +458,24 @@ def callback(ch, method, properties, body):
         inst_id = get_existing_instance_id(conn, site_id, msg_obj)
     except:
         e = sys.exc_info()[0]
-        logging.error("FAILURE - Cannot retrieve instance id: " + str(e))
+        logger.error("FAILURE - Cannot retrieve instance id: " + str(e))
         return
     # if this is a STRT event, create a new instance
     if ((inst_id < 0) or (event_name == "STRT" and state_name == "RUNN")):
-        logging.debug("create_new_inst is True - creating new inst")
+        logger.debug("create_new_inst is True - creating new inst")
         try:
             inst_id = insert_instance(conn, state_id, site_id, msg_obj)
         except:
             e = sys.exc_info()[0]
-            logging.error("FAILURE - Cannot insert instance: " + str(e))
+            logger.error("FAILURE - Cannot insert instance: " + str(e))
             return
     else: # just update instance
-        logging.debug("create_new_inst is False - updating inst")
+        logger.debug("create_new_inst is False - updating inst")
         try:
             update_instance(conn, state_id, site_id, inst_id, msg_obj)
         except:
             e = sys.exc_info()[0]
-            logging.error("FAILURE - Cannot update instance: " + str(e))
+            logger.error("FAILURE - Cannot update instance: " + str(e))
             return
 
 
@@ -487,7 +485,7 @@ def callback(ch, method, properties, body):
         event_group_id = get_existing_event_group_id(conn, inst_id)
     except:
         e = sys.exc_info()[0]
-        logging.error("FAILURE - Cannot retrieve existing event group: " + str(e))
+        logger.error("FAILURE - Cannot retrieve existing event group: " + str(e))
         return
 
     # if this is the start of a group of Events, create a new event_group record
@@ -504,18 +502,18 @@ def callback(ch, method, properties, body):
             event_group_id = insert_event_group(conn, state_id, inst_id, msg_obj)
         except:
             e = sys.exc_info()[0]
-            logging.error("FAILURE - Cannot insert event group: " + str(e))
+            logger.error("FAILURE - Cannot insert event group: " + str(e))
             return
     else:
         # don't need a new event group
-        logging.info("event_group_id=" + str(event_group_id))
+        logger.info("event_group_id=" + str(event_group_id))
 
         # update event group with this latest state
         try:
             update_event_group(conn, state_id, event_group_id, msg_obj)
         except:
             e = sys.exc_info()[0]
-            logging.error("FAILURE - Cannot update event group: " + str(e))
+            logger.error("FAILURE - Cannot update event group: " + str(e))
             return
 
 
@@ -524,7 +522,7 @@ def callback(ch, method, properties, body):
         insert_event(conn, site_id, event_group_id, event_type_id, state_name, msg_obj)
     except:
         e = sys.exc_info()[0]
-        logging.error("FAILURE - Cannot update event group: " + str(e))
+        logger.error("FAILURE - Cannot update event group: " + str(e))
         return
      
     # now commit and save
@@ -534,12 +532,12 @@ def callback(ch, method, properties, body):
         conn.close()
     except:
         e = sys.exc_info()[0]
-        logging.warn("FAILURE - Cannot commit and save to DB" + str(e))
+        logger.warn("FAILURE - Cannot commit and save to DB" + str(e))
 
 channel.basic_consume(callback,
                       queue='asgs_queue',
                       no_ack=True)
 
 #print(' [*] Waiting for messages. To exit press CTRL+C')
-logging.info(' [*] Waiting for messages ...')
+logger.info(' [*] Waiting for messages ...')
 channel.start_consuming()
