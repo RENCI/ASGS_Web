@@ -11,7 +11,7 @@ import logging
 import log
 
 # initialize the logging
-logger = log.setup('The_log', log_level=logging.DEBUG)
+logger = log.setup('The_log', log_level=logging.INFO)
 
 # define the constants used in here
 ASGSConstants_inst = ASGSConstants(logger)
