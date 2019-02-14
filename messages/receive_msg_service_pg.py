@@ -16,9 +16,6 @@ logger = log.setup('The_log', log_level=logging.INFO)
 # define the constants used in here
 ASGSConstants_inst = ASGSConstants(logger)
 
-# get the site id from the name in the message
-site_id, site_name = ASGSConstants_inst.getLuIdFromMsg({'RENCI':0,'TACC':1,'LSU':2,'UCF':3,'George Mason':4,'Penguin':5,'LONI':6}, "RENCI", "site")
-
 # retrieve configuration settings
 parser = ConfigParser()
 parser.read('/srv/django/ASGS_Web/messages/msg_settings.ini')
@@ -162,20 +159,6 @@ def update_instance(conn, state_id, site_id, inst_id, msg_obj):
     cur = conn.cursor()
     cur.execute(sql_stmt)
 
-
-# get the correct percent complete for an event type
-def get_pctcomplete(conn, event_type_id):
-    logger.debug("get_pctcomplete: event_type_id=" + str(event_type_id))
-
-    query = 'SELECT pct_complete FROM "ASGS_Mon_event_type_lu" WHERE id=' + str(event_type_id)
-    logger.debug("query=" + query)
-    cur = conn.cursor()
-    cur.execute(query)
-    event_lu = cur.fetchone()
-    pct_complete  = event_lu[0]
-       
-    return pct_complete
-
 def save_raw_msg(conn, msg):
     logger.debug("save_raw_msg: msg=" + msg)
 
@@ -218,7 +201,9 @@ def insert_event(conn, site_id, event_group_id, event_type_id, state_type, msg_o
     # for now (until detail page is developed)
     # ignore intermediary cluster job completion percentage
     sql_fields += "pct_complete, "
-    pct_complete = get_pctcomplete(conn, event_type_id)
+    
+    pct_complete = ASGSConstants_inst.getLuId(str(1), "pct_complete")
+    
     sql_values += str(pct_complete) + ", "
 
     #if ((state_type =="CMPL") or (int(pct_complete) < 20)):
@@ -230,7 +215,6 @@ def insert_event(conn, site_id, event_group_id, event_type_id, state_type, msg_o
     #if (msg_obj.get("pctcomplete") is not None and len(msg_obj["pctcomplete"]) > 0):
         #pctcomplete = msg_obj["pctcomplete"]
         #sql_values += pctcomplete + ", "
-
 
     sql_fields += "process, "
     if (msg_obj.get("process") is not None and len(msg_obj["process"]) > 0):
@@ -403,27 +387,22 @@ def callback(ch, method, properties, body):
         logger.error("FAILURE - Cannot connect to DB: " + str(e))
         return
 
-    try:
-        # get the site id from the name in the message
-        site_id, site_name = ASGSConstants_inst.getLuIdFromMsg(msg_obj, "physical_location", "site")
-        
-        if site_id < 0:
-            return
-        
-        # get the 3vent type if from the event name in the message
-        event_type_id, event_name = ASGSConstants_inst.getLuIdFromMsg(msg_obj, "event_type", "event_type")
-        
-        if event_type_id < 0:
-            return
+    # get the site id from the name in the message
+    site_id, site_name = ASGSConstants_inst.getLuIdFromMsg(msg_obj, "physical_location", "site")
     
-        # get the 3vent type if from the event name in the message
-        state_id, state_name = ASGSConstants_inst.getLuIdFromMsg(msg_obj, "state", "state_type")
-        
-        if state_id < 0:
-            return
-    except:
-        e = sys.exc_info()[0]
-        logger.error("FAILURE - Cannot get asgs constants: " + str(e))
+    if site_id < 0:
+        return
+    
+    # get the 3vent type if from the event name in the message
+    event_type_id, event_name = ASGSConstants_inst.getLuIdFromMsg(msg_obj, "event_type", "event_type")
+    
+    if event_type_id < 0:
+        return
+
+    # get the 3vent type if from the event name in the message
+    state_id, state_name = ASGSConstants_inst.getLuIdFromMsg(msg_obj, "state", "state_type")
+    
+    if state_id < 0:
         return
 
     # check to see if there are any instances for this site_id yet

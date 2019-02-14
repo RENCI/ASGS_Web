@@ -1,5 +1,14 @@
 #######################
 # class to transform a ASGS LU constant from a name to a ID
+#
+#
+# SQL to generate the constant ArraySubclassSELECT 
+#    'ASGS_Mon_pct_complete_lu = {' || array_to_string(ARRAY (SELECT '''' || id || ''':' || pct_complete FROM public."ASGS_Mon_event_type_lu" order by id), ','::text) || '}' as c1,
+#    'ASGS_Mon_site_lu = {' || array_to_string(ARRAY (SELECT '''' || name || ''':' || id FROM public."ASGS_Mon_site_lu" order by id), ','::text) || '}' as c2 ,
+#    'ASGS_Mon_event_type_lu = {' || array_to_string(ARRAY (SELECT '''' || name || ''':' || id FROM public."ASGS_Mon_event_type_lu" order by id), ','::text) || '}' as c3,
+#    'ASGS_Mon_state_type_lu = {' || array_to_string(ARRAY (SELECT '''' || name || ''':' || id FROM public."ASGS_Mon_state_type_lu" order by id), ','::text) || '}' as c4,
+#    'ASGS_Mon_instance_state_type_lu = {' || array_to_string(ARRAY (SELECT '''' || name || ''':' || id FROM public."ASGS_Mon_instance_state_type_lu" order by id), ','::text) || '}' as c5
+
 #######################
 class ASGSConstants:
     
@@ -25,13 +34,29 @@ class ASGSConstants:
         retName = msgObj.get(paramName, "")
         
         # get the ID
-        retID = self.lus[luName].get(retName, -1)
+        retID = self.getLuId(retName, luName)
         
         # did we find something
         if retID >= 0:
             self.logger.info("PASS - LU name: " + luName + ", Param name: " + paramName + " ID: " + str(retID))
         else:
-            self.logger.error("FAILURE - Invalid or no param name: " + paramName + " found in: " + luName)
+            self.logger.error("FAILURE - Invalid or no param name: " + paramName + " not found in: " + luName)
             
         #return to the caller
         return retID, retName
+
+    #
+    # gets the id from a lookup table
+    #
+    def getLuId(self, paramName, luName):                 
+        # get the ID
+        retID = self.lus[luName].get(paramName, -1)
+        
+        # did we find something
+        if retID >= 0:
+            self.logger.info("PASS - LU name: " + luName + ", Param name: " + paramName + " ID: " + str(retID))
+        else:
+            self.logger.error("FAILURE - Invalid or no param name: " + paramName + " not found in: " + luName)
+            
+        #return to the caller
+        return retID
