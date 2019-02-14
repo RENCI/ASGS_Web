@@ -16,19 +16,24 @@ logger = log.setup('The_log', log_level=logging.INFO)
 # define the constants used in here
 ASGSConstants_inst = ASGSConstants(logger)
 
+# get the site id from the name in the message
+site_id, site_name = ASGSConstants_inst.getLuIdFromMsg({'RENCI':0,'TACC':1,'LSU':2,'UCF':3,'George Mason':4,'Penguin':5,'LONI':6}, "RENCI", ASGSConstants.site_lu)
+
 # retrieve configuration settings
 parser = ConfigParser()
 parser.read('/srv/django/ASGS_Web/messages/msg_settings.ini')
 
 # set up AMQP credentials and connect to asgs queue
-credentials = pika.PlainCredentials(parser.get('pika', 'username'),
-                                            parser.get('pika', 'password'))
+credentials = pika.PlainCredentials(parser.get('pika', 'username'), parser.get('pika', 'password'))
+
 parameters = pika.ConnectionParameters(parser.get('pika', 'host'),
                                        parser.get('pika', 'port'),
                                        '/',
                                        credentials,
                                        socket_timeout=2)
+
 connection = pika.BlockingConnection(parameters)
+
 channel = connection.channel()
 
 channel.queue_declare(queue='asgs_queue')

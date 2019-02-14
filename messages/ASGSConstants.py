@@ -16,7 +16,7 @@ class ASGSConstants:
     #
     # gets the id from a lookup
     #
-    def getLuIdFromMsg(self, msgObj, paramName, luArr): 
+    def getLuIdFromMsg(self, msgObj, paramName, luArr):         
         # get the name
         retName = msgObj.get(paramName, "")
         
@@ -25,7 +25,7 @@ class ASGSConstants:
         
         # did we find something
         if retID >= 0:
-            self.logger.debug("PASS - Param name " + paramName + " is " + str(retID))
+            self.logger.info("PASS - Param name " + paramName + " is " + str(retID))
         else:
             self.logger.error("FAILURE - Invalid or no param name " + paramName + " found")
             
