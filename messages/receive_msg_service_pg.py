@@ -10,13 +10,12 @@ from ASGSConstants import ASGSConstants
 import logging.config
 
 # load the config
-logging.config.fileConfig('/srv/django/ASGS_Web/messages/logging.conf')
+logging.config.fileConfig('/srv/django/ASGS_Web/messages/logging.conf') #
 
 # create logger
 logger = logging.getLogger('receive_msg_service_pg')
 
-# define the constants used in here
-ASGSConstants_inst = ASGSConstants(logger)
+logger.debug("Starting receive_msg_service")
 
 # retrieve configuration settings
 parser = ConfigParser()
@@ -37,7 +36,10 @@ channel = connection.channel()
 
 channel.queue_declare(queue='asgs_queue')
 
-logger.debug("Started receive_msg_service")
+logger.debug("Receive_msg_service started")
+
+# define and init the object used to handle ASGS constant conversions
+ASGSConstants_inst = ASGSConstants(logger)
 
 # just a check to see if there are any event groups defined for this site yet
 def get_existing_event_group_id(conn, inst_id):
