@@ -104,7 +104,6 @@ def get_existing_instance_id(conn, site_id , msg_obj):
 def get_instance_id(conn, start_ts, site_id, process_id, instance_name):
     logger.debug("start_ts: {0}, site_id: {1}, process_id: {2}, instance_name:{3}".format(start_ts, site_id, process_id, instance_name))
     
-    id = -1
 
     query = 'SELECT id FROM "ASGS_Mon_instance" WHERE CAST(start_ts as DATE)=\'{0}\' AND site_id={1} AND process_id={2} AND instance_name=\'{3}\''.format(start_ts[:10], site_id, process_id, instance_name)
                                              
@@ -114,9 +113,11 @@ def get_instance_id(conn, start_ts, site_id, process_id, instance_name):
     inst = cur.fetchone()
 
     if (inst is not None):
-        id = inst[0]
-
-    logger.debug("returning id: {0}".format(id))
+        _id = inst[0]
+    else:
+        _id = -1
+    
+    logger.debug("returning id: {0}".format(_id))
     
     return id   
 
@@ -285,7 +286,7 @@ def callback(ch, method, properties, body):
         return
 
     # get the site id from the name in the message
-    site_id, site_name = ASGSConstants_inst.getLuIdFromMsg(msg_obj, "physical_location", "site")
+    site_id = ASGSConstants_inst.getLuIdFromMsg(msg_obj, "physical_location", "site")
     
     # get the 3vent type if from the event name in the message
     event_type_id, event_name = ASGSConstants_inst.getLuIdFromMsg(msg_obj, "event_type", "event_type")
@@ -294,7 +295,7 @@ def callback(ch, method, properties, body):
     state_id, state_name = ASGSConstants_inst.getLuIdFromMsg(msg_obj, "state", "state_type")
     
     # did we get everything needed
-    if site_id < 0 or event_type_id < 0 or state_id < 0:
+    if site_id[0] < 0 or event_type_id < 0 or state_id < 0:
         logger.error("FAILURE - Cannot retrieve site, event type or state type ids.")
         return
 
