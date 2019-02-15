@@ -124,15 +124,11 @@ def get_instance_id(conn, start_ts, site_id, process_id, instance_name):
 
 
 def update_event_group(conn, state_id, event_group_id, msg_obj):
-    logger.debug("state_id {0}, event_group_id {1}".format(state_id, event_group_id))
+    # get the storm name
+    storm_name = msg_obj.get("storm", "N/A") if (msg_obj.get("storm", "N/A") != "") else "N/A"
 
-    storm_name = "N/A"
-    if (msg_obj.get("storm") is not None and len(str(msg_obj["storm"])) > 0):
-        storm_name = str(msg_obj["storm"])
-
-    advisory_id = "N/A"
-    if (msg_obj.get("advisory_number") is not None and len(str(msg_obj["advisory_number"])) > 0):
-        advisory_id = str(msg_obj["advisory_number"])
+    # get the advisory id
+    advisory_id = msg_obj.get("advisory_number", "N/A") if (msg_obj.get("advisory_number", "N/A") != "") else "N/A"
 
     sql_stmt = 'UPDATE "ASGS_Mon_event_group" SET state_type_id ={0}, storm_name=\'{1}\', advisory_id=\'{2}\' WHERE id={3}'.format(state_id, storm_name, advisory_id, event_group_id)
     
@@ -144,16 +140,14 @@ def update_event_group(conn, state_id, event_group_id, msg_obj):
 
 # update instance with latest state_type_id
 def update_instance(conn, state_id, site_id, inst_id, msg_obj):
-    logger.debug("state_id: {0}, site_id: {1}, inst_id: {2}".format(state_id, site_id, inst_id))
-
     now = datetime.datetime.now()
+        
     end_ts = now.strftime("%Y-%m-%d %H:%M")
     if (msg_obj.get("date-time") is not None and len(str(msg_obj["date-time"])) > 0):
         end_ts =  str(msg_obj["date-time"])
 
-    run_params = "N/A"
-    if (msg_obj.get("run_params") is not None and len(str(msg_obj["run_params"])) > 0):
-        run_params = str(msg_obj["run_params"])
+    # get the run params
+    run_params = msg_obj.get("run_params", "N/A") if (msg_obj.get("run_params", "N/A") != "") else "N/A"
 
     sql_stmt = 'UPDATE "ASGS_Mon_instance" SET inst_state_type_id = {0}, end_ts = \'{1}\', run_params = \'{2}\' WHERE site_id = {3} AND id={4}'.format(state_id, end_ts, run_params, site_id, inst_id)
                                                
@@ -174,13 +168,13 @@ def save_raw_msg(conn, msg):
     
 
 def insert_event(conn, site_id, event_group_id, event_type_id, state_type, msg_obj):
-    # get the optional event time stamp data
+    # get the event time stamp data
     event_ts = msg_obj.get("date-time", "N/A") if (msg_obj.get("date-time", "N/A") != "") else "N/A"
     
-    # get the optional event advisory data
+    # get the event advisory data
     advisory_id = msg_obj.get("advisory_number", "N/A") if (msg_obj.get("advisory_number", "N/A") != "") else "N/A"
 
-    # get the optional process data
+    # get the process data
     process = msg_obj.get("process", "N/A") if (msg_obj.get("process", "N/A") != "") else "N/A"
 
     # get the percent complete from a LU lookup
@@ -210,16 +204,16 @@ def insert_event(conn, site_id, event_group_id, event_type_id, state_type, msg_o
 
 
 def insert_event_group(conn, state_id, inst_id, msg_obj):
-    # get the optional event group time stamp data
+    # get the event group time stamp data
     event_group_ts = msg_obj.get("date-time", "N/A") if (msg_obj.get("date-time", "N/A") != "") else "N/A"
 
-    # get the optional storm name
+    # get the storm name
     storm_name = msg_obj.get("storm", "N/A") if (msg_obj.get("storm", "N/A") != "") else "N/A"
 
-    # get the optional storm number
+    # get the storm number
     storm_number = msg_obj.get("storm_number", "N/A") if (msg_obj.get("storm_number", "N/A") != "") else "N/A"
 
-    # get the optional event advisory data
+    # get the event advisory data
     advisory_id = msg_obj.get("advisory_number", "N/A") if (msg_obj.get("advisory_number", "N/A") != "") else "N/A"
      
     sql_stmt = 'INSERT INTO "ASGS_Mon_event_group" (state_type_id, instance_id, event_group_ts, storm_name, storm_number, advisory_id, final_product) VALUES ({0}, {1}, \'{2}\', \'{3}\', \'{4}\', \'{5}\', \'product\') RETURNING id'.format(state_id, inst_id, event_group_ts, storm_name, storm_number, advisory_id)
@@ -239,7 +233,7 @@ def insert_instance(conn, state_id, site_id, msg_obj):
     # get the start time stamp
     start_ts = end_ts = msg_obj.get("date-time", "2018-10-09 15:33:14") if (msg_obj.get("date-time", "2018-10-09 15:33:14") != "") else "2018-10-09 15:33:14"
 
-    # get the optional run params
+    # get the run params
     run_params = msg_obj.get("run_params", "N/A") if (msg_obj.get("run_params", "N/A") != "") else "N/A"
 
     # get the instance name
