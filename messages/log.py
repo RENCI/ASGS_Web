@@ -12,22 +12,21 @@ def setup(name, log_file="logs/rcv_msg_svc.log", log_level=logging.WARN, toConso
     log_filemode = "a" # w: overwrite; a: append
     
     # setup logger
-    logging.basicConfig(filename=log_file, datefmt=log_date_format, format=log_format, filemode=log_filemode, level=log_level)
-    
+    logging.basicConfig(datefmt=log_date_format, format=log_format, filemode=log_filemode)
+
     # Add the log message handler to the logger
     handler = logging.handlers.TimedRotatingFileHandler(log_file, when="d", interval=1, backupCount=log_num_backups)
 
     logger = logging.getLogger(name)
     logger.addHandler(handler)
-
+    logger.setLevel(log_level)
+    
     # print log messages to console
     if toConsole == True:
         consoleHandler = logging.StreamHandler()
         logFormatter = logging.Formatter(log_format)
         consoleHandler.setFormatter(logFormatter)
         logger.addHandler(consoleHandler)
-
-    logger.propagate = False
 
     # return to the caller
     return logger
