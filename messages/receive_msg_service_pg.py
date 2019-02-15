@@ -45,8 +45,6 @@ ASGSConstants_inst = ASGSConstants(logger)
 def get_existing_event_group_id(conn, inst_id):
     logger.debug("inst_id: {0}".format(inst_id))
 
-    existing_group_id = -1
-
     # see if there are any event groups yet that have this instance_id
     # this could be caused by a new install that does not have any data in the DB yet
     query = 'SELECT id FROM "ASGS_Mon_event_group" WHERE instance_id={0} ORDER BY id DESC'.format(inst_id)
@@ -60,7 +58,9 @@ def get_existing_event_group_id(conn, inst_id):
     
     if (group is not None):
         existing_group_id = group[0]
-
+    else:
+        existing_group_id = -1
+        
     logger.debug("existing_group_id: {0}".format(existing_group_id))
     
     return existing_group_id
@@ -70,15 +70,11 @@ def get_existing_event_group_id(conn, inst_id):
 def get_existing_instance_id(conn, site_id , msg_obj):
     logger.debug("site_id: {0}".format(site_id))
 
-    existing_instance_id = -1
+    # get the instance name
+    instance_name = msg_obj.get("instance_name", "N/A") if (msg_obj.get("instance_name", "N/A") != "") else "N/A"
 
-    instance_name = "N/A"
-    if (msg_obj.get("instance_name") is not None and len(str(msg_obj["instance_name"])) > 0):
-        instance_name = str(msg_obj["instance_name"])
-
-    process_id = 0
-    if (msg_obj.get("uid") is not None and len(str(msg_obj["uid"])) > 0):
-        process_id = int(msg_obj["uid"])
+    # get the process id
+    process_id = int(msg_obj.get("uid", "0")) if (msg_obj.get("uid", "0") != "") else 0
 
     # see if there are any instances yet that have this site_id and instance_name
     # this could be caused by a new install that does not have any data in the DB yet
@@ -95,6 +91,8 @@ def get_existing_instance_id(conn, site_id , msg_obj):
     
     if (inst is not None):
         existing_instance_id = inst[0]
+    else:
+        existing_instance_id = -1
 
     logger.debug("existing_instance_id {0}".format(existing_instance_id))
     
@@ -140,11 +138,10 @@ def update_event_group(conn, state_id, event_group_id, msg_obj):
 
 # update instance with latest state_type_id
 def update_instance(conn, state_id, site_id, inst_id, msg_obj):
+    # get a default time stamp, use it if necessary
     now = datetime.datetime.now()
-        
-    end_ts = now.strftime("%Y-%m-%d %H:%M")
-    if (msg_obj.get("date-time") is not None and len(str(msg_obj["date-time"])) > 0):
-        end_ts =  str(msg_obj["date-time"])
+    ts = now.strftime("%Y-%m-%d %H:%M")
+    end_ts = msg_obj.get("date-time", ts) if (msg_obj.get("date-time", ts) != "") else ts
 
     # get the run params
     run_params = msg_obj.get("run_params", "N/A") if (msg_obj.get("run_params", "N/A") != "") else "N/A"
@@ -168,8 +165,10 @@ def save_raw_msg(conn, msg):
     
 
 def insert_event(conn, site_id, event_group_id, event_type_id, state_type, msg_obj):
-    # get the event time stamp data
-    event_ts = msg_obj.get("date-time", "N/A") if (msg_obj.get("date-time", "N/A") != "") else "N/A"
+    # get a default time stamp, use it if necessary
+    now = datetime.datetime.now()
+    ts = now.strftime("%Y-%m-%d %H:%M")
+    event_ts = msg_obj.get("date-time", ts) if (msg_obj.get("date-time", ts) != "") else ts
     
     # get the event advisory data
     advisory_id = msg_obj.get("advisory_number", "N/A") if (msg_obj.get("advisory_number", "N/A") != "") else "N/A"
@@ -204,8 +203,10 @@ def insert_event(conn, site_id, event_group_id, event_type_id, state_type, msg_o
 
 
 def insert_event_group(conn, state_id, inst_id, msg_obj):
-    # get the event group time stamp data
-    event_group_ts = msg_obj.get("date-time", "N/A") if (msg_obj.get("date-time", "N/A") != "") else "N/A"
+    # get a default time stamp, use it if necessary
+    now = datetime.datetime.now()
+    ts = now.strftime("%Y-%m-%d %H:%M")
+    event_group_ts = msg_obj.get("date-time", ts) if (msg_obj.get("date-time", ts) != "") else ts
 
     # get the storm name
     storm_name = msg_obj.get("storm", "N/A") if (msg_obj.get("storm", "N/A") != "") else "N/A"
@@ -230,8 +231,10 @@ def insert_event_group(conn, state_id, inst_id, msg_obj):
 
 # id | process_id | start_ts | end_ts | run_params | inst_state_type_id | site_id  | instance_name
 def insert_instance(conn, state_id, site_id, msg_obj):
-    # get the start time stamp
-    start_ts = end_ts = msg_obj.get("date-time", "2018-10-09 15:33:14") if (msg_obj.get("date-time", "2018-10-09 15:33:14") != "") else "2018-10-09 15:33:14"
+    # get a default time stamp, use it if necessary
+    now = datetime.datetime.now()
+    ts = now.strftime("%Y-%m-%d %H:%M")
+    start_ts = end_ts = msg_obj.get("date-time", ts) if (msg_obj.get("date-time", ts) != "") else ts
 
     # get the run params
     run_params = msg_obj.get("run_params", "N/A") if (msg_obj.get("run_params", "N/A") != "") else "N/A"
@@ -240,7 +243,7 @@ def insert_instance(conn, state_id, site_id, msg_obj):
     instance_name = msg_obj.get("instance_name", "N/A") if (msg_obj.get("instance_name", "N/A") != "") else "N/A"
     
     # get the process id
-    process_id = int(msg_obj.get("process_id", "0")) if (msg_obj.get("process_id", "0") != "") else 0
+    process_id = int(msg_obj.get("uid", "0")) if (msg_obj.get("uid", "0") != "") else 0
 
     # check to make sure this instance doesn't already exists before adding a new one
     #instance_id = get_instance_id(conn, start_ts, site_id, process_id, instance_name)
