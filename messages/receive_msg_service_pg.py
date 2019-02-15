@@ -165,7 +165,7 @@ def save_raw_msg(conn, msg):
     cur.execute(sql_stmt)
     
 
-def insert_event(conn, site_id, event_group_id, event_type_id, state_type, msg_obj):
+def insert_event(conn, site_id, event_group_id, event_type_id, msg_obj):
     # get a default time stamp, use it if necessary
     now = datetime.datetime.now()
     ts = now.strftime("%Y-%m-%d %H:%M")
@@ -369,7 +369,7 @@ def callback(ch, method, properties, body):
 
     # now insert message into the event table
     try:
-        insert_event(conn, site_id[0], event_group_id, event_type_id, state_name, msg_obj)
+        insert_event(conn, site_id[0], event_group_id, event_type_id, msg_obj)
     except:
         e = sys.exc_info()[0]
         logger.error("FAILURE - Cannot update event group. error {0}".format(str(e)))
