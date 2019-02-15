@@ -27,5 +27,7 @@ def setup(name, log_file="logs/rcv_msg_svc.log", log_level=logging.WARN, toConso
         consoleHandler.setFormatter(logFormatter)
         logger.addHandler(consoleHandler)
 
+    logger.propagate = False
+
     # return to the caller
     return logger
