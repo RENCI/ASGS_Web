@@ -7,11 +7,13 @@ import datetime
 from configparser import ConfigParser
 from ASGSConstants import ASGSConstants
 
-import logging
-import log
+import logging.config
 
-# initialize the logging
-logger = log.setup('The_log', log_level=logging.DEBUG)
+# load the config
+logging.config.fileConfig('logging.conf')
+
+# create logger
+logger = logging.getLogger('receive_msg_service_pg')
 
 # define the constants used in here
 ASGSConstants_inst = ASGSConstants(logger)
@@ -35,7 +37,7 @@ channel = connection.channel()
 
 channel.queue_declare(queue='asgs_queue')
 
-logger.info("Started receive_msg_service")
+logger.debug("Started receive_msg_service")
 
 # just a check to see if there are any event groups defined for this site yet
 def get_existing_event_group_id(conn, inst_id):
@@ -239,7 +241,7 @@ def insert_event(conn, site_id, event_group_id, event_type_id, state_type, msg_o
     cur = conn.cursor()
     cur.execute(sql_stmt)
    
-    logger.debug(" Inserted event record: " + sql_stmt)
+    logger.debug("Inserted event record: " + sql_stmt)
 
 
 def insert_event_group(conn, state_id, inst_id, msg_obj):
