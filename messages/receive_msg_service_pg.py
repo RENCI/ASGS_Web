@@ -302,7 +302,7 @@ def callback(ch, method, properties, body):
     # check to see if there are any instances for this site_id yet
     # this might happen if we start up this process in the middle of a model run
     try:
-        inst_id = get_existing_instance_id(conn, site_id, msg_obj)
+        inst_id = get_existing_instance_id(conn, site_id[0], msg_obj)
     except:
         e = sys.exc_info()[0]
         logger.error("FAILURE - Cannot retrieve instance id. error {0}".format(str(e)))
@@ -313,7 +313,7 @@ def callback(ch, method, properties, body):
         logger.debug("create_new_inst is True - creating new inst")
         
         try:
-            inst_id = insert_instance(conn, state_id, site_id, msg_obj)
+            inst_id = insert_instance(conn, state_id, site_id[0], msg_obj)
         except:
             e = sys.exc_info()[0]
             logger.error("FAILURE - Cannot insert instance. error {0}".format(str(e)))
@@ -322,7 +322,7 @@ def callback(ch, method, properties, body):
         logger.debug("create_new_inst is False - updating inst")
         
         try:
-            update_instance(conn, state_id, site_id, inst_id, msg_obj)
+            update_instance(conn, state_id, site_id[0], inst_id, msg_obj)
         except:
             e = sys.exc_info()[0]
             logger.error("FAILURE - Cannot update instance: " + str(e))
@@ -369,7 +369,7 @@ def callback(ch, method, properties, body):
 
     # now insert message into the event table
     try:
-        insert_event(conn, site_id, event_group_id, event_type_id, state_name, msg_obj)
+        insert_event(conn, site_id[0], event_group_id, event_type_id, state_name, msg_obj)
     except:
         e = sys.exc_info()[0]
         logger.error("FAILURE - Cannot update event group. error {0}".format(str(e)))
