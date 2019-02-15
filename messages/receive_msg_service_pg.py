@@ -136,7 +136,7 @@ def update_event_group(conn, state_id, event_group_id, msg_obj):
 
     sql_stmt = 'UPDATE "ASGS_Mon_event_group" SET state_type_id ={0}, storm_name=\'{1}\', advisory_id=\'{2}\' WHERE id={3}'.format(state_id, storm_name, advisory_id, event_group_id)
     
-    logger.debug("sql_stmt:{0}".format(sql_stmt))
+    logger.debug("sql_stmt: {0}".format(sql_stmt))
                  
     cur = conn.cursor()
     cur.execute(sql_stmt)
@@ -174,186 +174,85 @@ def save_raw_msg(conn, msg):
     
 
 def insert_event(conn, site_id, event_group_id, event_type_id, state_type, msg_obj):
-    logger.debug("site_id: {0}, event_group_id: {1}, event_type_id: {2}, state_type: {3}".format(site_id, event_group_id, event_type_id, state_type))
-
-    sql_fields = 'INSERT INTO "ASGS_Mon_event" ('
-    sql_values = " VALUES ("
-
-    # now construct SQL INSERT statement for the event table
-    sql_fields += "site_id, "
-    sql_values += str(site_id) + ", "
-
-    sql_fields += "event_group_id, "
-    sql_values += str(event_group_id) + ", "
-
-    sql_fields += "event_type_id, "
-    sql_values += str(event_type_id) + ", "
-
-    sql_fields += "event_ts, "
-    if (msg_obj.get("date-time") is not None and len(msg_obj["date-time"]) > 0):
-        sql_values += "'" + msg_obj["date-time"] + "', "
-    else:
-        sql_values += "'N/A', "
-
-    sql_fields += "advisory_id, "
-    if (msg_obj.get("advisory_number") is not None and len(str(msg_obj["advisory_number"])) > 0):
-        sql_values += "'" + str(msg_obj["advisory_number"]) + "', "
-    else:
-        sql_values += "'N/A', "
-
-
-    # for now (until detail page is developed)
-    # ignore intermediary cluster job completion percentage
-    sql_fields += "pct_complete, "
+    # get the optional event time stamp data
+    event_ts = msg_obj.get("date-time", "N/A") if (msg_obj.get("date-time", "N/A") != "") else "N/A"
     
+    # get the optional event advisory data
+    advisory_id = msg_obj.get("advisory_number", "N/A") if (msg_obj.get("advisory_number", "N/A") != "") else "N/A"
+
+    # get the optional process data
+    process = msg_obj.get("process", "N/A") if (msg_obj.get("process", "N/A") != "") else "N/A"
+
+    # get the percent complete from a LU lookup
     pct_complete = ASGSConstants_inst.getLuId(str(event_type_id), "pct_complete")
-    
-    sql_values += str(pct_complete) + ", "
 
-    #if ((state_type =="CMPL") or (int(pct_complete) < 20)):
-        #sql_values += str(pct_complete) + ", "
-    #else: #this should still be the previous pct amount - 20 less - until completion of the event
-        #sql_values += str(int(pct_complete)-20) + ", "
-                
-    #pctcomplete = "0"
-    #if (msg_obj.get("pctcomplete") is not None and len(msg_obj["pctcomplete"]) > 0):
-        #pctcomplete = msg_obj["pctcomplete"]
-        #sql_values += pctcomplete + ", "
-
-    sql_fields += "process, "
-    if (msg_obj.get("process") is not None and len(msg_obj["process"]) > 0):
-        sql_values += "'" + msg_obj["process"] + "', "
-    else:
-        sql_values += "'N/A', "
-
+    # if there was a message included parse and add it
     if (msg_obj.get("message") is not None and len(msg_obj["message"]) > 0):
         # get rid of any special chars that might mess up postgres
         # backslashes, quote, abd double quote for now
         msg_line = re.sub('\\\|\'|\"', '', msg_obj["message"])
 
-        logger.debug("msg_line=" + msg_line)
+        rawDataCol = ", raw_data"
+        msg_line = ", '{0}'".format(msg_line)
+    else:
+        rawDataCol = ''
+        msg_line = ''
+    
+    # create the fields
+    sql_stmt = 'INSERT INTO "ASGS_Mon_event" (site_id, event_group_id, event_type_id, event_ts, advisory_id, pct_complete, process{0}) VALUES ({1}, {2}, {3}, \'{4}\', \'{5}\', {6} \'{7}\'{8})'.format(rawDataCol, site_id, event_group_id, event_type_id, event_ts, advisory_id, pct_complete, process, msg_line)
 
-        sql_fields += "raw_data)"
-        sql_values += "'" + msg_line + "') "
-
-    # add to message table
-    sql_stmt = sql_fields + sql_values
-
-    logger.debug("About to insert event record:" + sql_stmt)
+    logger.debug("About to insert event record: {0}".format(sql_stmt))
+    
     cur = conn.cursor()
     cur.execute(sql_stmt)
    
-    logger.debug("Inserted event record: " + sql_stmt)
+    logger.debug("Inserted event record: {0}".format(sql_stmt))
 
 
 def insert_event_group(conn, state_id, inst_id, msg_obj):
-    logger.debug("insert_event_group: state_id=" + str(state_id) + " inst_id=" + str(inst_id))
+    # get the optional event group time stamp data
+    event_group_ts = msg_obj.get("date-time", "N/A") if (msg_obj.get("date-time", "N/A") != "") else "N/A"
 
-    sql_fields = 'INSERT INTO "ASGS_Mon_event_group" ('
-    sql_values = " VALUES ("
+    # get the optional storm name
+    storm_name = msg_obj.get("storm", "N/A") if (msg_obj.get("storm", "N/A") != "") else "N/A"
 
-    sql_fields += "state_type_id, "
-    sql_values += str(state_id) + ", "
+    # get the optional storm number
+    storm_number = msg_obj.get("storm_number", "N/A") if (msg_obj.get("storm_number", "N/A") != "") else "N/A"
 
-    sql_fields += "instance_id, "
-    sql_values += str(inst_id) + ", "
-
-    sql_fields += "event_group_ts, "
-    if (msg_obj.get("date-time") is not None and len(msg_obj["date-time"]) > 0):
-        sql_values += "'" + msg_obj["date-time"] + "', "
-    else:
-        sql_values += "'N/A', "
- 
-    sql_fields += "storm_name, "
-    if (msg_obj.get("storm") is not None and len(msg_obj["storm"]) > 0):
-        sql_values += "'" + msg_obj["storm"] + "', "
-    else:
-        sql_values += "'N/A', "
-
-    sql_fields += "storm_number, "
-    if (msg_obj.get("storm_number") is not None and len(str(msg_obj["storm_number"])) > 0):
-        sql_values += "'" + str(msg_obj["storm_number"]) + "', "
-    else:
-        sql_values += "'N/A', "
-
-    sql_fields += "advisory_id, "
-    if (msg_obj.get("advisory_number") is not None and len(str(msg_obj["advisory_number"])) > 0):
-        sql_values += "'" + str(msg_obj["advisory_number"]) + "', "
-    else:
-        sql_values += "'N/A', "
-
-    # for now just stick "final_product" on end
-    sql_fields += "final_product)"
-    sql_values += "'product')"
-
-    sql_stmt = sql_fields + sql_values
-    sql_stmt += " RETURNING id"
-       
-    logger.debug("About to insert event group record: " + sql_stmt)
+    # get the optional event advisory data
+    advisory_id = msg_obj.get("advisory_number", "N/A") if (msg_obj.get("advisory_number", "N/A") != "") else "N/A"
+     
+    sql_stmt = 'INSERT INTO "ASGS_Mon_event_group" (state_type_id, instance_id, event_group_ts, storm_name, storm_number, advisory_id, final_product) VALUES ({0}, {1}, \'{2}\', \'{3}\', \'{4}\', \'{5}\', \'product\') RETURNING id'.format(state_id, inst_id, event_group_ts, storm_name, storm_number, advisory_id)
+    
+    logger.debug("About to insert event group record: {0}".format(sql_stmt))
+    
     cur = conn.cursor()
     cur.execute(sql_stmt)
 
-    logger.debug(" Inserted event group record: " + sql_stmt)
+    logger.debug(" Inserted event group record: {0}".format(sql_stmt))
 
     return cur.fetchone()[0]
 
 
 # id | process_id | start_ts | end_ts | run_params | inst_state_type_id | site_id  | instance_name
 def insert_instance(conn, state_id, site_id, msg_obj):
-    logger.debug("insert_instance: state_id=" + str(state_id) + " site_id=" + str(site_id))
+    # get the start time stamp
+    start_ts = end_ts = msg_obj.get("date-time", "2018-10-09 15:33:14") if (msg_obj.get("date-time", "2018-10-09 15:33:14") != "") else "2018-10-09 15:33:14"
 
-    start_ts = "2018-10-09 15:33:14"
-    if (msg_obj.get("date-time") is not None and len(str(msg_obj["date-time"])) > 0):
-        start_ts = str(msg_obj["date-time"])
-    logger.debug("got start_ts")
+    # get the optional run params
+    run_params = msg_obj.get("run_params", "N/A") if (msg_obj.get("run_params", "N/A") != "") else "N/A"
 
-    process_id = "0"
-    if (msg_obj.get("uid") is not None and len(str(msg_obj["uid"])) > 0):
-        process_id = str(msg_obj["uid"])
-    logger.debug("got process_id")
+    # get the instance name
+    instance_name = msg_obj.get("instance_name", "N/A") if (msg_obj.get("instance_name", "N/A") != "") else "N/A"
+    
+    # get the process id
+    process_id = int(msg_obj.get("process_id", "0")) if (msg_obj.get("process_id", "0") != "") else 0
 
-    instance_name = "N/A"
-    if (msg_obj.get("instance_name") is not None and len(str(msg_obj["instance_name"])) > 0):
-        instance_name = str(msg_obj["instance_name"])
-
-    logger.debug("got prelim values")
     # check to make sure this instance doesn't already exists before adding a new one
     #instance_id = get_instance_id(conn, start_ts, site_id, process_id, instance_name)
     #if (instance_id < 0): 
 
-    sql_fields = 'INSERT INTO "ASGS_Mon_instance" ('
-    sql_values = " VALUES ("
-
-    # now construct SQL INSERT statement for the event table
-    sql_fields += "site_id, "
-    sql_values += str(site_id) + ", "
-
-    sql_fields += "process_id, "
-    sql_values += process_id + ", "
-
-    sql_fields += "start_ts, "
-    sql_values += "'" + start_ts + "', "
-
-    sql_fields += "end_ts, "
-    if (msg_obj.get("date-time") is not None and len(str(msg_obj["date-time"])) > 0):
-        sql_values += "'" + str(msg_obj["date-time"]) + "', "
-    else:
-        sql_values += "'2018-10-09 15:33:14', "
-
-    sql_fields += "run_params, "
-    if (msg_obj.get("run_params") is not None and len(str(msg_obj["run_params"])) > 0):
-        sql_values += "'" + str(msg_obj["run_params"]) + "', "
-    else:
-        sql_values += "'N/A', "
-
-    sql_fields += "instance_name, "
-    sql_values += "'" + instance_name + "', "
-
-    sql_fields += "inst_state_type_id)"
-    sql_values += str(state_id) + ")"
-
-    sql_stmt = sql_fields + sql_values
-    sql_stmt += " RETURNING id"
+    sql_stmt = 'INSERT INTO "ASGS_Mon_instance" (site_id, process_id, start_ts, end_ts, run_params, instance_name, inst_state_type_id) VALUES ({0}, {1}, \'{2}\', \'{3}\', \'{4}\', \'{5}\', {6}) RETURNING id'.format(site_id, process_id, start_ts, end_ts, run_params, instance_name, state_id)
 
     logger.debug("About to insert instance record: " + sql_stmt)
     cur = conn.cursor()
@@ -361,7 +260,6 @@ def insert_instance(conn, state_id, site_id, msg_obj):
 
     logger.debug(" Inserted instance record: " + sql_stmt)
     return cur.fetchone()[0]
-
 
 def db_connect():
     logger.debug("Connecting to DB: {0}".format(parser.get('postgres', 'database')))
@@ -460,7 +358,7 @@ def callback(ch, method, properties, body):
             return
     else:
         # don't need a new event group
-        logger.info("event_group_id=" + str(event_group_id))
+        logger.info("event_group_id: {0}".format(event_group_id))
 
         # update event group with this latest state
         try:
@@ -487,10 +385,9 @@ def callback(ch, method, properties, body):
         e = sys.exc_info()[0]
         logger.warn("FAILURE - Cannot commit and save to DB. error {0}".format(str(e)))
 
-channel.basic_consume(callback,
-                      queue='asgs_queue',
-                      no_ack=True)
+channel.basic_consume(callback, queue='asgs_queue', no_ack=True)
 
 #print(' [*] Waiting for messages. To exit press CTRL+C')
 logger.info(' [*] Waiting for messages ...')
+
 channel.start_consuming()
