@@ -10,7 +10,7 @@ from ASGSConstants import ASGSConstants
 import logging.config
 
 # load the config
-logging.config.fileConfig('logging.conf')
+logging.config.fileConfig('/srv/django/ASGS_Web/messages/logging.conf')
 
 # create logger
 logger = logging.getLogger('receive_msg_service_pg')
