@@ -193,7 +193,7 @@ def insert_event(conn, site_id, event_group_id, event_type_id, state_type, msg_o
         msg_line = ''
     
     # create the fields
-    sql_stmt = 'INSERT INTO "ASGS_Mon_event" (site_id, event_group_id, event_type_id, event_ts, advisory_id, pct_complete, process{0}) VALUES ({1}, {2}, {3}, \'{4}\', \'{5}\', {6} \'{7}\'{8})'.format(rawDataCol, site_id, event_group_id, event_type_id, event_ts, advisory_id, pct_complete, process, msg_line)
+    sql_stmt = 'INSERT INTO "ASGS_Mon_event" (site_id, event_group_id, event_type_id, event_ts, advisory_id, pct_complete, process{0}) VALUES ({1}, {2}, {3}, \'{4}\', \'{5}\', {6}, \'{7}\'{8})'.format(rawDataCol, site_id, event_group_id, event_type_id, event_ts, advisory_id, pct_complete, process, msg_line)
 
     logger.debug("About to insert event record: {0}".format(sql_stmt))
     
