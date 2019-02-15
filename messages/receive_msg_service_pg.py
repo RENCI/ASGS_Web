@@ -130,7 +130,7 @@ def update_event_group(conn, state_id, event_group_id, msg_obj):
     if (msg_obj.get("advisory_number") is not None and len(str(msg_obj["advisory_number"])) > 0):
         advisory_id = str(msg_obj["advisory_number"])
 
-    sql_stmt = 'UPDATE "ASGS_Mon_event_group" SET state_type_id ={0}, storm_name=\'{1}\', advisory_id=\'{2}\'" WHERE id={3}'.format(state_id, storm_name, advisory_id, event_group_id)
+    sql_stmt = 'UPDATE "ASGS_Mon_event_group" SET state_type_id ={0}, storm_name=\'{1}\', advisory_id=\'{2}\' WHERE id={3}'.format(state_id, storm_name, advisory_id, event_group_id)
     
     logger.debug("sql_stmt:{0}".format(sql_stmt))
                  
