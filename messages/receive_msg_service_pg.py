@@ -151,26 +151,26 @@ def update_instance(conn, state_id, site_id, inst_id, msg_obj):
     if (msg_obj.get("run_params") is not None and len(str(msg_obj["run_params"])) > 0):
         run_params = str(msg_obj["run_params"])
 
-    sql_stmt = 'UPDATE "ASGS_Mon_instance" SET inst_state_type_id = ' + str(state_id) + \
-                                               ", end_ts = '" + str(end_ts) + "'" \
-                                               ", run_params = '" + str(run_params) + "'" \
-                                               " WHERE site_id = " + str(site_id) + " AND id=" + str(inst_id)
-    logger.debug("About to update instance: " + sql_stmt)
+    sql_stmt = 'UPDATE "ASGS_Mon_instance" SET inst_state_type_id = {0}, end_ts = \'{1}\', run_params = \'{2}\' WHERE site_id = {3} AND id={4}'.format(state_id, end_ts, run_params, site_id, inst_id)
+                                               
+    logger.debug("sql: {0}".format(sql_stmt))
+    
     cur = conn.cursor()
     cur.execute(sql_stmt)
 
 def save_raw_msg(conn, msg):
-    logger.debug("save_raw_msg: msg=" + msg)
+    logger.debug("msg: {0}".format(msg))
 
-    sql_stmt = 'INSERT INTO "ASGS_Mon_json" (data) VALUES(' + msg + "')"
-    logger.debug("query to insert raw message=" + sql_stmt)
+    sql_stmt = 'INSERT INTO "ASGS_Mon_json" (data) VALUES (\'{0}\''.format(msg)
+    
+    logger.debug("sql: {0}".format(sql_stmt))
+    
     cur = conn.cursor()
     cur.execute(sql_stmt)
     
 
 def insert_event(conn, site_id, event_group_id, event_type_id, state_type, msg_obj):
-    logger.debug("insert_event: site_id=" + str(site_id) + " event_group_id=" + str(event_group_id) + \
-                              " event_type_id=" + str(event_type_id) + " state_type=" + str(state_type))
+    logger.debug("site_id: {0}, event_group_id: {1}, event_type_id: {2}, state_type: {3}".format(site_id, event_group_id, event_type_id, state_type))
 
     sql_fields = 'INSERT INTO "ASGS_Mon_event" ('
     sql_values = " VALUES ("
@@ -360,12 +360,10 @@ def insert_instance(conn, state_id, site_id, msg_obj):
 
 
 def db_connect():
-    logger.debug("Connecting to DB: " + parser.get('postgres', 'database'))
-    conn_str = "host=" + parser.get('postgres', 'host') + \
-               " port=" + parser.get('postgres', 'port') + \
-               " dbname=" + parser.get('postgres', 'database') + \
-               " user=" + parser.get('postgres', 'username') + \
-               " password=" + parser.get('postgres', 'password')
+    logger.debug("Connecting to DB: {0}".format(parser.get('postgres', 'database')))
+    
+    conn_str = "host={0} port={1} dbname={2} user={3} password={4}".format(parser.get('postgres', 'host'), parser.get('postgres', 'port'), parser.get('postgres', 'database'), parser.get('postgres', 'password'))
+               
     conn = psycopg2.connect(conn_str)
 
     return conn
@@ -384,7 +382,7 @@ def callback(ch, method, properties, body):
         conn = db_connect()
     except:
         e = sys.exc_info()[0]
-        logger.error("FAILURE - Cannot connect to DB: " + str(e))
+        logger.error("FAILURE - Cannot connect to DB. error: {0}".format(str(e)))
         return
 
     # get the site id from the name in the message
