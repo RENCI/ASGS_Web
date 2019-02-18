@@ -80,6 +80,8 @@ class ASGS_DB:
         cur.execute(query)
         inst = cur.fetchone()
         
+        self.logger.info("Received %r" % inst)
+
         if (inst is not None):
             existing_instance_id = inst[0]
         else:
