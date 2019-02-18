@@ -17,37 +17,18 @@ logger = logging.getLogger('receive_msg_service_pg')
 
 logger.debug("Starting receive_msg_service")
 
-# retrieve configuration settings
-parser = ConfigParser()
-parser.read('/srv/django/ASGS_Web/messages/msg_settings.ini')
-
-# set up AMQP credentials and connect to asgs queue
-credentials = pika.PlainCredentials(parser.get('pika', 'username'), parser.get('pika', 'password'))
-
-parameters = pika.ConnectionParameters(parser.get('pika', 'host'),
-                                       parser.get('pika', 'port'),
-                                       '/',
-                                       credentials,
-                                       socket_timeout=2)
-
-connection = pika.BlockingConnection(parameters)
-
-channel = connection.channel()
-
-channel.queue_declare(queue='asgs_queue')
-
-logger.debug("Receive_msg_service started")
-
 # define and init the object used to handle ASGS constant conversions
 ASGSConstants_inst = ASGSConstants(logger)
 
+##########################################
 # just a check to see if there are any event groups defined for this site yet
-def get_existing_event_group_id(conn, inst_id):
-    logger.debug("inst_id: {0}".format(inst_id))
+##########################################
+def get_existing_event_group_id(conn, instance_id, advisory_id):
+    logger.debug("instance_id: {0}, advisory_id {1}".format(instance_id, advisory_id))
 
     # see if there are any event groups yet that have this instance_id
     # this could be caused by a new install that does not have any data in the DB yet
-    query = 'SELECT id FROM "ASGS_Mon_event_group" WHERE instance_id={0} ORDER BY id DESC'.format(inst_id)
+    query = 'SELECT id FROM "ASGS_Mon_event_group" WHERE instance_id={0} AND advisory_id=\'{1}\' ORDER BY id DESC'.format(instance_id, advisory_id)
     
     logger.debug("query: {0}".format(query))
     
@@ -66,7 +47,9 @@ def get_existing_event_group_id(conn, inst_id):
     return existing_group_id
 
 
+##########################################
 # just a check to see if there are any instances defined for this site yet
+##########################################
 def get_existing_instance_id(conn, site_id , msg_obj):
     logger.debug("site_id: {0}".format(site_id))
 
@@ -99,8 +82,9 @@ def get_existing_instance_id(conn, site_id , msg_obj):
     return existing_instance_id
 
 
+##########################################
 # gets the instance id for a process
-
+##########################################
 def get_instance_id(conn, start_ts, site_id, process_id, instance_name):
     logger.debug("start_ts: {0}, site_id: {1}, process_id: {2}, instance_name:{3}".format(start_ts, site_id, process_id, instance_name))
     
@@ -122,6 +106,8 @@ def get_instance_id(conn, start_ts, site_id, process_id, instance_name):
     return id   
 
 
+##########################################
+##########################################
 def update_event_group(conn, state_id, event_group_id, msg_obj):
     # get the storm name
     storm_name = msg_obj.get("storm", "N/A") if (msg_obj.get("storm", "N/A") != "") else "N/A"
@@ -137,8 +123,10 @@ def update_event_group(conn, state_id, event_group_id, msg_obj):
     cur.execute(sql_stmt)
 
 
+##########################################
 # update instance with latest state_type_id
-def update_instance(conn, state_id, site_id, inst_id, msg_obj):
+##########################################
+def update_instance(conn, state_id, site_id, instance_id, msg_obj):
     # get a default time stamp, use it if necessary
     now = datetime.datetime.now()
     ts = now.strftime("%Y-%m-%d %H:%M")
@@ -147,13 +135,15 @@ def update_instance(conn, state_id, site_id, inst_id, msg_obj):
     # get the run params
     run_params = msg_obj.get("run_params", "N/A") if (msg_obj.get("run_params", "N/A") != "") else "N/A"
 
-    sql_stmt = 'UPDATE "ASGS_Mon_instance" SET inst_state_type_id = {0}, end_ts = \'{1}\', run_params = \'{2}\' WHERE site_id = {3} AND id={4}'.format(state_id, end_ts, run_params, site_id, inst_id)
+    sql_stmt = 'UPDATE "ASGS_Mon_instance" SET inst_state_type_id = {0}, end_ts = \'{1}\', run_params = \'{2}\' WHERE site_id = {3} AND id={4}'.format(state_id, end_ts, run_params, site_id, instance_id)
                                                
     logger.debug("sql: {0}".format(sql_stmt))
     
     cur = conn.cursor()
     cur.execute(sql_stmt)
 
+##########################################
+##########################################
 def save_raw_msg(conn, msg):
     logger.debug("msg: {0}".format(msg))
 
@@ -164,7 +154,8 @@ def save_raw_msg(conn, msg):
     cur = conn.cursor()
     cur.execute(sql_stmt)
     
-
+##########################################
+##########################################
 def insert_event(conn, site_id, event_group_id, event_type_id, msg_obj):
     # get a default time stamp, use it if necessary
     now = datetime.datetime.now()
@@ -202,8 +193,9 @@ def insert_event(conn, site_id, event_group_id, event_type_id, msg_obj):
    
     logger.debug("Inserted event record: {0}".format(sql_stmt))
 
-
-def insert_event_group(conn, state_id, inst_id, msg_obj):
+##########################################
+##########################################
+def insert_event_group(conn, state_id, instance_id, msg_obj):
     # get a default time stamp, use it if necessary
     now = datetime.datetime.now()
     ts = now.strftime("%Y-%m-%d %H:%M")
@@ -218,7 +210,7 @@ def insert_event_group(conn, state_id, inst_id, msg_obj):
     # get the event advisory data
     advisory_id = msg_obj.get("advisory_number", "N/A") if (msg_obj.get("advisory_number", "N/A") != "") else "N/A"
      
-    sql_stmt = 'INSERT INTO "ASGS_Mon_event_group" (state_type_id, instance_id, event_group_ts, storm_name, storm_number, advisory_id, final_product) VALUES ({0}, {1}, \'{2}\', \'{3}\', \'{4}\', \'{5}\', \'product\') RETURNING id'.format(state_id, inst_id, event_group_ts, storm_name, storm_number, advisory_id)
+    sql_stmt = 'INSERT INTO "ASGS_Mon_event_group" (state_type_id, instance_id, event_group_ts, storm_name, storm_number, advisory_id, final_product) VALUES ({0}, {1}, \'{2}\', \'{3}\', \'{4}\', \'{5}\', \'product\') RETURNING id'.format(state_id, instance_id, event_group_ts, storm_name, storm_number, advisory_id)
     
     logger.debug("About to insert event group record: {0}".format(sql_stmt))
     
@@ -230,7 +222,9 @@ def insert_event_group(conn, state_id, inst_id, msg_obj):
     return cur.fetchone()[0]
 
 
+##########################################
 # id | process_id | start_ts | end_ts | run_params | inst_state_type_id | site_id  | instance_name
+##########################################
 def insert_instance(conn, state_id, site_id, msg_obj):
     # get a default time stamp, use it if necessary
     now = datetime.datetime.now()
@@ -259,6 +253,8 @@ def insert_instance(conn, state_id, site_id, msg_obj):
     logger.debug(" Inserted instance record: " + sql_stmt)
     return cur.fetchone()[0]
 
+##########################################
+##########################################
 def db_connect():
     logger.debug("Connecting to DB: {0}".format(parser.get('postgres', 'database')))
     
@@ -268,9 +264,9 @@ def db_connect():
 
     return conn
  
-#   
+##########################################
 # main worker that operates on the incoming message from the queue
-#
+##########################################
 def callback(ch, method, properties, body):
     #print(" [x] Received %r" % body)
     logger.info("Received %r" % body)
@@ -294,26 +290,29 @@ def callback(ch, method, properties, body):
     # get the 3vent type if from the event name in the message
     state_id, state_name = ASGSConstants_inst.getLuIdFromMsg(msg_obj, "state", "state_type")
     
+        # get the event advisory data
+    advisory_id = msg_obj.get("advisory_number", "N/A") if (msg_obj.get("advisory_number", "N/A") != "") else "N/A"
+
     # did we get everything needed
-    if site_id[0] < 0 or event_type_id < 0 or state_id < 0:
-        logger.error("FAILURE - Cannot retrieve site, event type or state type ids.")
+    if site_id[0] < 0 or event_type_id < 0 or state_id < 0 or advisory_id =='N/A':
+        logger.error("FAILURE - Cannot retrieve advisory number, site, event type or state type ids.")
         return
 
     # check to see if there are any instances for this site_id yet
     # this might happen if we start up this process in the middle of a model run
     try:
-        inst_id = get_existing_instance_id(conn, site_id[0], msg_obj)
+        instance_id = get_existing_instance_id(conn, site_id[0], msg_obj)
     except:
         e = sys.exc_info()[0]
         logger.error("FAILURE - Cannot retrieve instance id. error {0}".format(str(e)))
         return
     
     # if this is a STRT event, create a new instance
-    if ((inst_id < 0) or (event_name == "STRT" and state_name == "RUNN")):
+    if ((instance_id < 0) or (event_name == "STRT" and state_name == "RUNN")):
         logger.debug("create_new_inst is True - creating new inst")
         
         try:
-            inst_id = insert_instance(conn, state_id, site_id[0], msg_obj)
+            instance_id = insert_instance(conn, state_id, site_id[0], msg_obj)
         except:
             e = sys.exc_info()[0]
             logger.error("FAILURE - Cannot insert instance. error {0}".format(str(e)))
@@ -322,7 +321,7 @@ def callback(ch, method, properties, body):
         logger.debug("create_new_inst is False - updating inst")
         
         try:
-            update_instance(conn, state_id, site_id[0], inst_id, msg_obj)
+            update_instance(conn, state_id, site_id[0], instance_id, msg_obj)
         except:
             e = sys.exc_info()[0]
             logger.error("FAILURE - Cannot update instance: " + str(e))
@@ -332,7 +331,7 @@ def callback(ch, method, properties, body):
     # check to see if there are any event groups for this site_id and inst yet
     # this might happen if we start up this process in the middle of a model run
     try:
-        event_group_id = get_existing_event_group_id(conn, inst_id)
+        event_group_id = get_existing_event_group_id(conn, instance_id)
     except:
         e = sys.exc_info()[0]
         logger.error("FAILURE - Cannot retrieve existing event group. error {0}".format(str(e)))
@@ -349,7 +348,7 @@ def callback(ch, method, properties, body):
 
     if ((event_group_id < 0) or (event_name == "RSTR")):
         try:
-            event_group_id = insert_event_group(conn, state_id, inst_id, msg_obj)
+            event_group_id = insert_event_group(conn, state_id, instance_id, msg_obj)
         except:
             e = sys.exc_info()[0]
             logger.error("FAILURE - Cannot insert event group. error {0}".format(str(e)))
@@ -382,6 +381,27 @@ def callback(ch, method, properties, body):
     except:
         e = sys.exc_info()[0]
         logger.warn("FAILURE - Cannot commit and save to DB. error {0}".format(str(e)))
+
+# retrieve configuration settings
+parser = ConfigParser()
+parser.read('/srv/django/ASGS_Web/messages/msg_settings.ini')
+
+# set up AMQP credentials and connect to asgs queue
+credentials = pika.PlainCredentials(parser.get('pika', 'username'), parser.get('pika', 'password'))
+
+parameters = pika.ConnectionParameters(parser.get('pika', 'host'),
+                                       parser.get('pika', 'port'),
+                                       '/',
+                                       credentials,
+                                       socket_timeout=2)
+
+connection = pika.BlockingConnection(parameters)
+
+channel = connection.channel()
+
+channel.queue_declare(queue='asgs_queue')
+
+logger.debug("Receive_msg_service started")
 
 channel.basic_consume(callback, queue='asgs_queue', no_ack=True)
 
