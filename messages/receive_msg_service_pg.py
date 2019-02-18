@@ -331,7 +331,7 @@ def callback(ch, method, properties, body):
     # check to see if there are any event groups for this site_id and inst yet
     # this might happen if we start up this process in the middle of a model run
     try:
-        event_group_id = get_existing_event_group_id(conn, instance_id)
+        event_group_id = get_existing_event_group_id(conn, instance_id, advisory_id)
     except:
         e = sys.exc_info()[0]
         logger.error("FAILURE - Cannot retrieve existing event group. error {0}".format(str(e)))
