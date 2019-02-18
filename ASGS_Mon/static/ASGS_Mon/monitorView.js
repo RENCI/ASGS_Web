@@ -58,25 +58,25 @@
 				}
 				
 				// update the operation message text
-				d3.select("#_" + d.instance_id + "_operation")
+				d3.select("#_" + d.instance_id + '_' + d.advisory_number + "_operation")
 					.text(d.event_operation)
 		      		.attr("fill", "black");
 							      
 			    // update the site state indicator text
-			    d3.select("#_" + d.instance_id + "_state")
+			    d3.select("#_" + d.instance_id + '_' + d.advisory_number + "_state")
 			    	.text(d.cluster_state)
 			    		.transition().duration(0)			    			
 			    	.transition().delay(0).duration(duration)
 			      		.attr("fill", stateTextColor);		    			    
 			    
 			    // get the event msg rectangle
-			    var msgRect = d3.select("#_" + d.instance_id + "_rect");
+			    var msgRect = d3.select("#_" + d.instance_id + '_' + d.advisory_number + "_rect");
 			    
 			    // if the rectangle is there process the event message text
 			    if(msgRect[0][0] != null)
 			    {		
 			    	// get a reference to the event message text area
-			    	var textarea = d3.select("#_" + d.instance_id + "_eventSummary");
+			    	var textarea = d3.select("#_" + d.instance_id + '_' + d.advisory_number + "_eventSummary");
 				    
 			    	// remove all instances of the current event text messages
 			    	textarea.selectAll("text").remove();
