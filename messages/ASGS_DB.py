@@ -78,10 +78,16 @@ class ASGS_DB:
             self.logger.debug("query: {0}".format(query))
             
             cur = self.conn.cursor()
+            
+            self.logger.info("got cursor")
+
             cur.execute(query)
+            
+            self.logger.info("executedr")
+            
             inst = cur.fetchone()
             
-            self.logger.info("Received {0}" % inst)
+            self.logger.info("Received {0}" % inst[0])
         except:
             e = sys.exc_info()[0]
             self.logger.error("FAILURE - DB issue: " + str(e))
