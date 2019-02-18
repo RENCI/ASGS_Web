@@ -355,7 +355,7 @@ def callback(ch, method, properties, body):
             return
     else:
         # don't need a new event group
-        logger.info("event_group_id: {0}".format(event_group_id))
+        logger.debug("Reusing event_group_id: {0}".format(event_group_id))
 
         # update event group with this latest state
         try:
