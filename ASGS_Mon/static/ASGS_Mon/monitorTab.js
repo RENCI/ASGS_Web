@@ -30,6 +30,8 @@ var _CONST_GROUP_WAIT_MSG_TYPE = 8;
 var _CONST_GROUP_EXIT_MSG_TYPE = 9;
 var _CONST_GROUP_STALLED_MSG_TYPE = 10;
 
+var latestData;
+
 /**
  * Renders the site instances and populates them with data from the database
  * 
@@ -83,6 +85,8 @@ function renderMonitorTab(siteInstance)
 				else
 					$("#filterMsg").hide(0);
 					
+				latestData = initData;
+				
 				// get the current rendered items
 				var curRendered = d3.selectAll(".siteInstanceView").selectAll("svg");
 
@@ -228,8 +232,17 @@ function renderMonitorTab(siteInstance)
 				    	// remove all instances of the current text messages
 				    	textarea.selectAll("text").remove();
 
-				    	// get the event messages from the site instance. this is the latest.
-					    var eventMsgs = si[0][0].__data__.event_raw_msgs; //d.event_raw_msgs;
+				    	var eventMsgs = null;
+				    	
+				    	// spin through the instances to find the one we are handling here
+				    	latestData.forEach(function(info)
+				    	{
+				    		if(info.instance_id == d.instance_id && info.advisory_number == d.advisory_number)
+				    		{
+						    	// get the event messages
+				    			eventMsgs = info.event_raw_msgs; //d.event_raw_msgs;
+				    		}
+				    	});				    	
 
 						// if it is large, make it small
 						if(parseInt(msgRect.node().getBoundingClientRect().height) >= 75)
@@ -252,10 +265,10 @@ function renderMonitorTab(siteInstance)
 							    	{
 							    		var ellipsis = '';
 							    		
-							    		if(eventMsgs[0].event_summary.length > 120)
+							    		if(eventMsgs[0].event_summary.length > 130)
 							    			ellipsis = '...';
 
-							    		return eventMsgs[0].event_summary.substring(0, 120) + ellipsis; 
+							    		return eventMsgs[0].event_summary.substring(0, 130) + ellipsis; 
 							    	})
 								;
 						}
@@ -284,10 +297,10 @@ function renderMonitorTab(siteInstance)
 									    	{
 									    		var ellipsis = '';
 									    		
-									    		if(info.event_summary.length > 120)
+									    		if(info.event_summary.length > 130)
 									    			ellipsis = '...';
 
-									    		return info.event_summary.substring(0, 120) + ellipsis; 
+									    		return info.event_summary.substring(0, 130) + ellipsis; 
 									    	})
 								    	;
 						    	});
