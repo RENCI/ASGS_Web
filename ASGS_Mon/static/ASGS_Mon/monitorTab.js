@@ -249,12 +249,12 @@ function renderMonitorTab(siteInstance)
 						{
 							// make the entire control small size
 							si.transition()
-								.duration(300)
+								.duration(100)
 								.attr("height", "75")
 
 							// make the event message area small
 							msgRect.transition()
-								.duration(300)
+								.duration(100)
 								.attr("height", "15")		
 																			
 							// insert the event area message text
