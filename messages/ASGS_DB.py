@@ -81,7 +81,7 @@ class ASGS_DB:
             cur.execute(query)
             inst = cur.fetchone()
             
-            self.logger.info("Received %r" % inst)
+            self.logger.info("Received {0}" % inst)
         except:
             e = sys.exc_info()[0]
             self.logger.error("FAILURE - DB issue: " + str(e))
