@@ -2,7 +2,7 @@ import pika
 import logging.config
 from configparser import ConfigParser
 
-from ASGS_Queue_callback import ASGS_Queue_callback
+#from ASGS_Queue_callback import ASGS_Queue_callback
 
 ###################################
 # main entry point
@@ -19,21 +19,17 @@ if __name__ == "__main__":
     parser.read('/srv/django/ASGS_Web/messages/msg_settings.ini')#
 
     # set up AMQP credentials and connect to asgs queue
-    credentials = pika.PlainCredentials(parser.get('pika', 'username'), parser.get('pika', 'password'))
+    #credentials = pika.PlainCredentials(parser.get('pika', 'username'), parser.get('pika', 'password'))
     
-    parameters = pika.ConnectionParameters(parser.get('pika', 'host'),
-                                           parser.get('pika', 'port'),
-                                           '/',
-                                           credentials,
-                                           socket_timeout=2)
+    #parameters = pika.ConnectionParameters(parser.get('pika', 'host'), parser.get('pika', 'port'), '/', credentials, socket_timeout=2)
     
     logger.debug("Configuring ASGS queue receive_msg_service")
 
-    connection = pika.BlockingConnection(parameters)
+    #connection = pika.BlockingConnection(parameters)
     
-    channel = connection.channel()    
+    #channel = connection.channel()    
     
-    channel.queue_declare(queue='asgs_queue')
+    #channel.queue_declare(queue='asgs_queue')
     
     logger.debug("ASGS queue declared")
     
