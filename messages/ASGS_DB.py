@@ -48,7 +48,7 @@ class ASGS_DB:
     ###########################################        
     def exec_sql(self, sql_stmt, bFetch = False):
         try:        
-            self.logger.debug("sql_stmt: {0}".format(sql_stmt))
+            self.logger.debug("sql_stmt: {0}, bFetch {1}".format(sql_stmt, bFetch))
             
             # execute the ssq
             self.cursor.execute(sql_stmt)
