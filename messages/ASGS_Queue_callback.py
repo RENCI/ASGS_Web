@@ -21,7 +21,7 @@ class ASGS_Queue_callback:
         self.ASGS_DB_inst = ASGS_DB(self.logger, self.ASGSConstants_inst, self.parser)
 
         self.logger.debug("Initializing ASGS_Queue_callback complete")
-
+        
     ##########################################
     # main worker that operates on the incoming message from the queue
     ##########################################
@@ -99,10 +99,7 @@ class ASGS_Queue_callback:
     
         if ((event_group_id < 0) or (event_name == "RSTR")):
             try:                
-                # get the percent complete from a LU lookup
-                pct_complete = self.ASGSConstants_inst.getLuId(str(event_type_id), "pct_complete")
-    
-                event_group_id = self.ASGS_DB_inst.insert_event_group(state_id, instance_id, pct_complete, msg_obj)
+                event_group_id = self.ASGS_DB_inst.insert_event_group(state_id, instance_id, msg_obj)
             except:
                 e = sys.exc_info()[0]
                 self.logger.error("FAILURE - Cannot insert event group. error {0}".format(str(e)))
