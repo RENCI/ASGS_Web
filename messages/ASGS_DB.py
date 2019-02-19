@@ -45,7 +45,7 @@ class ASGS_DB:
     ###########################################        
     def exec_sql(self, sql_stmt, bFetch = False):
         try:        
-            self.logger.debug("sql_stmt: {0}, connection: {1}".format(sql_stmt, self.conn))
+            self.logger.debug("sql_stmt: {0}".format(sql_stmt))
             
             # execute the ssq
             self.cursor.execute(sql_stmt)
@@ -55,9 +55,11 @@ class ASGS_DB:
             # get the returned value
             if bFetch == True:
                 retVal = self.cursor.fetchone()
-            
-            self.logger.debug("sql_stmt fetched.")
-
+                retVal = retVal[0]
+                self.logger.debug("sql_stmt fetched {0}".format(retVal))
+            else:
+                retVal = -1
+                
             self.conn.commit()
             
             self.logger.debug("sql_stmt commited.")
