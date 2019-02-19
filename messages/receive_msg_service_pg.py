@@ -2,7 +2,7 @@ import pika
 import logging.config
 from configparser import ConfigParser
 
-#from ASGS_Queue_callback import ASGS_Queue_callback
+from ASGS_Queue_callback import ASGS_Queue_callback
 
 ###################################
 # main entry point
@@ -34,11 +34,11 @@ if __name__ == "__main__":
     logger.debug("ASGS queue declared")
     
     # get an instance to the callback handler
-    #Queue_callback_inst = ASGS_Queue_callback(logger, parser)
+    Queue_callback_inst = ASGS_Queue_callback(logger, parser)
     
     #channel.basic_consume(Queue_callback_inst.callback, queue='asgs_queue', no_ack=True)
     
     #print(' [*] Waiting for messages. To exit press CTRL+C')
-    #logger.info('ASGS queue configured and waiting for messages...')
+    logger.info('ASGS queue configured and waiting for messages...')
     
     #channel.start_consuming()
