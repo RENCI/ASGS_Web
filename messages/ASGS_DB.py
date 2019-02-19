@@ -9,11 +9,11 @@ class ASGS_DB:
         
         self.ASGSConstants_inst = ASGSConstants_inst
         
-        self.parser = parser
+        #self.parser = parser
         
-        self.conn = self.db_connect()
+        #self.conn = self.db_connect()
         
-        self.cursor = self.conn.cursor
+        #self.cursor = self.conn.cursor
         
         logger.debug("ASGS_DB initialized")
 
@@ -21,7 +21,7 @@ class ASGS_DB:
         # now commit and save
         try:
             self.logger.debug("Closing the connection")
-            self.conn.close()
+            #self.conn.close()
 
             self.logger.debug("DB shutdown complete")
         except:

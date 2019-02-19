@@ -15,10 +15,10 @@ class ASGS_Queue_callback:
         self.parser = parser
         
         # define and init the object used to handle ASGS constant conversions
-        self.ASGSConstants_inst = ASGSConstants(self.logger)
+        #self.ASGSConstants_inst = ASGSConstants(self.logger)
         
         # define and init the object that will handle ASGS DB operations
-        self.ASGS_DB_inst = ASGS_DB(self.logger, self.ASGSConstants_inst, self.parser)
+        #self.ASGS_DB_inst = ASGS_DB(self.logger, self.ASGSConstants_inst, self.parser)
 
         self.logger.debug("Initializing ASGS_Queue_callback complete")
 
