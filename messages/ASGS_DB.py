@@ -46,20 +46,24 @@ class ASGS_DB:
     
     def exec_sql(self, sql_stmt):
         try:        
-            self.logger.debug("sql_stmt: {0}".format(sql_stmt))
+            self.logger.debug("sql_stmt: {0}, connection: {1}".format(sql_stmt, self.conn))
             
             # execute the ssq
             self.cursor.execute(sql_stmt)
             
+            self.logger.debug("sql_stmt executed.")
+
             # get the returned value
             retVal = self.cursor.fetchone()
 
             if (retVal is not None):
                 retVal = retVal[0]
             
-            self.logger.debug("sql_stmt executed.")
+            self.logger.debug("sql_stmt fetched.")
 
             self.cursor.commit()
+            
+            self.logger.debug("sql_stmt commited.")
             
             return retVal
         except:
