@@ -5,13 +5,13 @@ import datetime
 
 class ASGS_DB:
     def __init__(self, logger, ASGSConstants_inst, parser):
-        self.logger = logger
+        self.logger = logger#.getLogger('ASGS_DB')
         
         self.logger.debug("Connecting to DB: {0}".format(self.parser.get('postgres', 'database')))
         
         conn_str = "host={0} port={1} dbname={2} user={3} password={4}".format(self.parser.get('postgres', 'host'), self.parser.get('postgres', 'port'), self.parser.get('postgres', 'database'), self.parser.get('postgres', 'username'), self.parser.get('postgres', 'password'))
 
-        self.conn = psycopg2.connect(conn_str)
+        #self.conn = psycopg2.connect(conn_str)
         
         logger.debug("Got a connection to the DB")
 
