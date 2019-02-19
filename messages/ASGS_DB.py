@@ -226,10 +226,39 @@ class ASGS_DB:
          
         sql_stmt = 'INSERT INTO "ASGS_Mon_event_group" (state_type_id, instance_id, event_group_ts, storm_name, storm_number, advisory_id, final_product) VALUES ({0}, {1}, \'{2}\', \'{3}\', \'{4}\', \'{5}\', \'product\') RETURNING id'.format(state_id, instance_id, event_group_ts, storm_name, storm_number, advisory_id)
 
-        group = self.exec(sql_stmt)
+        group = self.exec_sql(sql_stmt)
 
         self.logger.debug("group {0}".format(group))
 
         return group
     
+    ##########################################
+    # id | process_id | start_ts | end_ts | run_params | inst_state_type_id | site_id  | instance_name
+    ##########################################
+    def insert_instance(self, state_id, site_id, msg_obj):
+        # get a default time stamp, use it if necessary
+        now = datetime.datetime.now()
+        ts = now.strftime("%Y-%m-%d %H:%M")
+        start_ts = end_ts = msg_obj.get("date-time", ts) if (msg_obj.get("date-time", ts) != "") else ts
+    
+        # get the run params
+        run_params = msg_obj.get("run_params", "N/A") if (msg_obj.get("run_params", "N/A") != "") else "N/A"
+    
+        # get the instance name
+        instance_name = msg_obj.get("instance_name", "N/A") if (msg_obj.get("instance_name", "N/A") != "") else "N/A"
+        
+        # get the process id
+        process_id = int(msg_obj.get("uid", "0")) if (msg_obj.get("uid", "0") != "") else 0
+    
+        # check to make sure this instance doesn't already exists before adding a new one
+        #instance_id = get_instance_id(start_ts, site_id, process_id, instance_name)
+        #if (instance_id < 0): 
+    
+        sql_stmt = 'INSERT INTO "ASGS_Mon_instance" (site_id, process_id, start_ts, end_ts, run_params, instance_name, inst_state_type_id) VALUES ({0}, {1}, \'{2}\', \'{3}\', \'{4}\', \'{5}\', {6}) RETURNING id'.format(site_id, process_id, start_ts, end_ts, run_params, instance_name, state_id)
+    
+        inst = self.exec_sql(sql_stmt)
+
+        self.logger.debug("inst {0}".format(inst))
+
+        return inst
         
