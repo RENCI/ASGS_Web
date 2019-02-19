@@ -124,6 +124,3 @@ class ASGS_Queue_callback:
             e = sys.exc_info()[0]
             self.logger.error("FAILURE - Cannot update event group. error {0}".format(str(e)))
             return
-    
-        # if we got this far commit all outstanding DB queries    
-        ASGS_DB_inst.db_commit()

@@ -23,6 +23,10 @@ class ASGS_DB:
     def __del__(self):
         # now commit and save
         try:
+            self.logger.info("Committing and closing the connection")
+            
+            # if we got this far commit all outstanding DB queries    
+            self.db_commit()
             self.conn.close()
         except:
             e = sys.exc_info()[0]
