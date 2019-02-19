@@ -58,11 +58,15 @@ class ASGS_DB:
             # get the returned value
             if bFetch == True:
                 self.logger.debug("sql_stmt fetching")
-                retVal = self.cursor.fetchone()[0]
-                
-                if retVal is None:
+                retVal = self.cursor.fetchone()
+                self.logger.debug("sql_stmt fetched {0}".format(retVal))
+
+                if retVal is None or retVal[0] is None:
                     self.logger.debug("sql_stmt nothing fetched")
                     retVal = -1
+                else:
+                    retVal = retVal[0]
+                    
             else:
                 retVal = -1
                 
