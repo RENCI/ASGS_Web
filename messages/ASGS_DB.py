@@ -59,39 +59,39 @@ class ASGS_DB:
     # just a check to see if there are any instances defined for this site yet
     ##########################################
     def get_existing_instance_id(self, site_id , msg_obj):
-        try:        
-            self.logger.debug("site_id: {0}".format(site_id))
-        
-            # get the instance name
-            instance_name = msg_obj.get("instance_name", "N/A") if (msg_obj.get("instance_name", "N/A") != "") else "N/A"
-        
-            # get the process id
-            process_id = int(msg_obj.get("uid", "0")) if (msg_obj.get("uid", "0") != "") else 0
-        
-            # see if there are any instances yet that have this site_id and instance_name
-            # this could be caused by a new install that does not have any data in the DB yet
-            query = 'SELECT id FROM "ASGS_Mon_instance" WHERE site_id={0} AND process_id={1} AND instance_name=\'{2}\' AND inst_state_type_id!=9 ORDER BY id DESC'.format(site_id, process_id, instance_name)
+        self.logger.debug("site_id: {0}".format(site_id))
+    
+        # get the instance name
+        instance_name = msg_obj.get("instance_name", "N/A") if (msg_obj.get("instance_name", "N/A") != "") else "N/A"
+    
+        # get the process id
+        process_id = int(msg_obj.get("uid", "0")) if (msg_obj.get("uid", "0") != "") else 0
+    
+        # see if there are any instances yet that have this site_id and instance_name
+        # this could be caused by a new install that does not have any data in the DB yet
+        query = 'SELECT id FROM "ASGS_Mon_instance" WHERE site_id={0} AND process_id={1} AND instance_name=\'{2}\' AND inst_state_type_id!=9 ORDER BY id DESC'.format(site_id, process_id, instance_name)
                                                      
         # TODO +++++++++++++++FIX THIS++++++++++++++++++++Add query to get correct stat id for Defunct++++++++++++++++++++++++
         # TODO +++++++++++++++FIX THIS++++++++++++++++++++Add day to query too? (to account for rollover of process ids)++++++++++++++++++++++++
         
-            self.logger.debug("query: {0}".format(query))
+        self.logger.debug("query: {0}".format(query))
             
-            cur = self.conn.cursor()
-            
-            self.logger.info("got cursor")
-
-            cur.execute(query)
-            
-            self.logger.info("executedr")
-            
-            inst = cur.fetchone()
-            
-            self.logger.info("Received {0}" % inst[0])
+        try:        
+            cur = self.conn.cursor()            
         except:
             e = sys.exc_info()[0]
             self.logger.error("FAILURE - DB issue: " + str(e))
             return
+
+        self.logger.info("got cursor")
+
+        cur.execute(query)
+            
+        self.logger.info("executed")
+            
+        inst = cur.fetchone()
+            
+        self.logger.info("Received {0}" % inst[0])
 
         if (inst is not None):
             existing_instance_id = inst[0]

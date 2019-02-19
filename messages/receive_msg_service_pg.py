@@ -1,8 +1,9 @@
 import pika
 import logging.config
+from configparser import ConfigParser
 
 from ASGS_Queue_callback import ASGS_Queue_callback
-from configparser import ConfigParser
+
 
 ###################################
 # main entry point
