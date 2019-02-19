@@ -47,13 +47,13 @@ class ASGS_DB:
         try:        
             self.logger.debug("sql_stmt: {0}".format(sql_stmt))
             
-            #self.cursor.execute(sql_stmt)
+            self.cursor.execute(sql_stmt)
             
-            #retVal = self.cursor.fetchone()
+            retVal = self.cursor.fetchone()
             
             self.logger.debug("sql_stmt executed")
 
-            #self.cursor.commit()
+            self.cursor.commit()
             
             return 1#retVal[0]
         except:
