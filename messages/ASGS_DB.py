@@ -30,8 +30,8 @@ class ASGS_DB:
         try:
             self.logger.debug("Closing the connection")
             
-            if self.conn.open:
-                self.conn.close()
+#            if self.conn.open:
+#                self.conn.close()
 
             self.logger.debug("DB shutdown complete")
         except:
