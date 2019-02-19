@@ -30,9 +30,8 @@ class ASGS_DB:
         
         # close up the DB
         try:          
-            if self.cursor is not None and self.conn is not None:
-                if self.conn.open:
-                    self.conn.close()
+            self.cursor.close()
+            self.conn.close()
 
             self.logger.debug("DB shutdown complete")
         except:
@@ -54,9 +53,9 @@ class ASGS_DB:
 
             # get the returned value
             if bFetch == True:
+                self.logger.debug("sql_stmt fetching")
                 retVal = self.cursor.fetchone()
                 retVal = retVal[0]
-                self.logger.debug("sql_stmt fetched {0}".format(retVal))
             else:
                 retVal = -1
                 
