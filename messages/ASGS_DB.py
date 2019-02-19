@@ -15,12 +15,12 @@ class ASGS_DB:
             conn_str = "host={0} port={1} dbname={2} user={3} password={4}".format(parser.get('postgres', 'host'), parser.get('postgres', 'port'), parser.get('postgres', 'database'), parser.get('postgres', 'username'), parser.get('postgres', 'password'))
     
             self.conn = psycopg2.connect(conn_str)
-            
+                        
             self.logger.debug("Got a connection to the DB")
     
-            self.cursor = self.conn.cursor
+            self.cursor = self.conn.cursor()
                     
-            self.logger.debug("ASGS_DB initialized")
+            self.logger.debug("ASGS_DB initialized. connection: {0}".format(self.cursor))
         except:
             e = sys.exc_info()[0]
             self.logger.warn("FAILURE initializing. error {0}".format(str(e)))
@@ -42,9 +42,8 @@ class ASGS_DB:
     
     ###########################################
     # executes a sql statement, returns the first row
-    ###########################################
-    
-    def exec_sql(self, sql_stmt):
+    ###########################################        
+    def exec_sql(self, sql_stmt, bCommit = False):
         try:        
             self.logger.debug("sql_stmt: {0}, connection: {1}".format(sql_stmt, self.conn))
             
@@ -61,7 +60,8 @@ class ASGS_DB:
             
             self.logger.debug("sql_stmt fetched.")
 
-            self.cursor.commit()
+            if bCommit:
+                self.cursor.commit()
             
             self.logger.debug("sql_stmt commited.")
             
@@ -155,7 +155,7 @@ class ASGS_DB:
     
         sql_stmt = 'UPDATE "ASGS_Mon_event_group" SET state_type_id ={0}, storm_name=\'{1}\', advisory_id=\'{2}\' WHERE id={3}'.format(state_id, storm_name, advisory_id, event_group_id)
         
-        self.exec_sql(sql_stmt)
+        self.exec_sql(sql_stmt, True)
     
     
     ##########################################
@@ -172,7 +172,7 @@ class ASGS_DB:
     
         sql_stmt = 'UPDATE "ASGS_Mon_instance" SET inst_state_type_id = {0}, end_ts = \'{1}\', run_params = \'{2}\' WHERE site_id = {3} AND id={4}'.format(state_id, end_ts, run_params, site_id, instance_id)
                                                    
-        self.exec_sql(sql_stmt)
+        self.exec_sql(sql_stmt, True)
    
     ##########################################
     # saves the raw message
@@ -182,7 +182,7 @@ class ASGS_DB:
     
         sql_stmt = 'INSERT INTO "ASGS_Mon_json" (data) VALUES (\'{0}\''.format(msg)
         
-        self.exec_sql(sql_stmt)
+        self.exec_sql(sql_stmt, True)
         
     ##########################################
     # insert an event
@@ -214,7 +214,7 @@ class ASGS_DB:
         # create the fields
         sql_stmt = 'INSERT INTO "ASGS_Mon_event" (site_id, event_group_id, event_type_id, event_ts, advisory_id, pct_complete, process{0}) VALUES ({1}, {2}, {3}, \'{4}\', \'{5}\', {6}, \'{7}\'{8})'.format(rawDataCol, site_id, event_group_id, event_type_id, event_ts, advisory_id, pct_complete, process, msg_line)
     
-        self.exec_sql(sql_stmt)
+        self.exec_sql(sql_stmt, True)
         
     ##########################################
     # inserts an event group
@@ -236,7 +236,7 @@ class ASGS_DB:
          
         sql_stmt = 'INSERT INTO "ASGS_Mon_event_group" (state_type_id, instance_id, event_group_ts, storm_name, storm_number, advisory_id, final_product) VALUES ({0}, {1}, \'{2}\', \'{3}\', \'{4}\', \'{5}\', \'product\') RETURNING id'.format(state_id, instance_id, event_group_ts, storm_name, storm_number, advisory_id)
 
-        group = self.exec_sql(sql_stmt)
+        group = self.exec_sql(sql_stmt, True)
 
         self.logger.debug("group {0}".format(group))
 
@@ -266,7 +266,7 @@ class ASGS_DB:
     
         sql_stmt = 'INSERT INTO "ASGS_Mon_instance" (site_id, process_id, start_ts, end_ts, run_params, instance_name, inst_state_type_id) VALUES ({0}, {1}, \'{2}\', \'{3}\', \'{4}\', \'{5}\', {6}) RETURNING id'.format(site_id, process_id, start_ts, end_ts, run_params, instance_name, state_id)
     
-        inst = self.exec_sql(sql_stmt)
+        inst = self.exec_sql(sql_stmt, True)
 
         self.logger.debug("inst {0}".format(inst))
 
