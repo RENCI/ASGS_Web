@@ -206,3 +206,30 @@ class ASGS_DB:
     
         self.exec_sql(sql_stmt)
         
+    ##########################################
+    # inserts an event group
+    ##########################################
+    def insert_event_group(self, state_id, instance_id, msg_obj):
+        # get a default time stamp, use it if necessary
+        now = datetime.datetime.now()
+        ts = now.strftime("%Y-%m-%d %H:%M")
+        event_group_ts = msg_obj.get("date-time", ts) if (msg_obj.get("date-time", ts) != "") else ts
+    
+        # get the storm name
+        storm_name = msg_obj.get("storm", "N/A") if (msg_obj.get("storm", "N/A") != "") else "N/A"
+    
+        # get the storm number
+        storm_number = msg_obj.get("storm_number", "N/A") if (msg_obj.get("storm_number", "N/A") != "") else "N/A"
+    
+        # get the event advisory data
+        advisory_id = msg_obj.get("advisory_number", "N/A") if (msg_obj.get("advisory_number", "N/A") != "") else "N/A"
+         
+        sql_stmt = 'INSERT INTO "ASGS_Mon_event_group" (state_type_id, instance_id, event_group_ts, storm_name, storm_number, advisory_id, final_product) VALUES ({0}, {1}, \'{2}\', \'{3}\', \'{4}\', \'{5}\', \'product\') RETURNING id'.format(state_id, instance_id, event_group_ts, storm_name, storm_number, advisory_id)
+
+        group = self.exec(sql_stmt)
+
+        self.logger.debug("group {0}".format(group))
+
+        return group
+    
+        
