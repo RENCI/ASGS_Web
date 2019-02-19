@@ -1,8 +1,8 @@
 import sys
 import json
 
-from ASGSConstants import ASGSConstants
-from ASGS_DB import ASGS_DB
+#from ASGSConstants import ASGSConstants
+#from ASGS_DB import ASGS_DB
 
 class ASGS_Queue_callback:
     def __init__(self, logger, parser):
