@@ -15,7 +15,7 @@ class ASGS_DB:
         
         logger.debug("Got a connection to the DB")
 
-        self.cursor = self.conn.cursor
+        #self.cursor = self.conn.cursor
                 
         logger.debug("ASGS_DB initialized")
 
