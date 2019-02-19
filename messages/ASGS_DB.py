@@ -174,3 +174,34 @@ class ASGS_DB:
         
         self.exec_sql(sql_stmt)
         
+    ##########################################
+    # insert an event
+    ##########################################
+    def insert_event(self, site_id, event_group_id, event_type_id, pct_complete, msg_obj):
+        # get a default time stamp, use it if necessary
+        now = datetime.datetime.now()
+        ts = now.strftime("%Y-%m-%d %H:%M")
+        event_ts = msg_obj.get("date-time", ts) if (msg_obj.get("date-time", ts) != "") else ts
+        
+        # get the event advisory data
+        advisory_id = msg_obj.get("advisory_number", "N/A") if (msg_obj.get("advisory_number", "N/A") != "") else "N/A"
+    
+        # get the process data
+        process = msg_obj.get("process", "N/A") if (msg_obj.get("process", "N/A") != "") else "N/A"
+    
+        # if there was a message included parse and add it
+        if (msg_obj.get("message") is not None and len(msg_obj["message"]) > 0):
+            # get rid of any special chars that might mess up postgres
+            # backslashes, quote, abd double quote for now
+            msg_line = re.sub('\\\|\'|\"', '', msg_obj["message"])
+    
+            rawDataCol = ", raw_data"
+            msg_line = ", '{0}'".format(msg_line)
+        else:
+            rawDataCol = ''
+            msg_line = ''
+        
+        # create the fields
+        sql_stmt = 'INSERT INTO "ASGS_Mon_event" (site_id, event_group_id, event_type_id, event_ts, advisory_id, pct_complete, process{0}) VALUES ({1}, {2}, {3}, \'{4}\', \'{5}\', {6}, \'{7}\'{8})'.format(rawDataCol, site_id, event_group_id, event_type_id, event_ts, advisory_id, pct_complete, process, msg_line)
+    
+        self.exec_sql(sql_stmt)
