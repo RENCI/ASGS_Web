@@ -20,7 +20,7 @@ class ASGS_DB:
     
             self.cursor = self.conn.cursor()
                     
-            self.logger.debug("ASGS_DB initialized. connection: {0}".format(self.cursor))
+            self.logger.debug("ASGS_DB initialized")
         except:
             e = sys.exc_info()[0]
             self.logger.warn("FAILURE initializing. error {0}".format(str(e)))
@@ -61,7 +61,7 @@ class ASGS_DB:
             self.logger.debug("sql_stmt fetched.")
 
             if bCommit:
-                self.cursor.commit()
+                self.conn.commit()
             
             self.logger.debug("sql_stmt commited.")
             
