@@ -1,6 +1,5 @@
 import sys
 import json
-from warnings import catch_warnings
 
 from ASGSConstants import ASGSConstants
 from ASGS_DB import ASGS_DB
@@ -10,6 +9,8 @@ class ASGS_Queue_callback:
         # save the reference to the logger
         self.logger = logger
         
+        self.logger.debug("Initializing ASGS_Queue_callback")
+        
         # save the reference to the configuration params
         self.parser = parser
         
@@ -18,6 +19,8 @@ class ASGS_Queue_callback:
         
         # define and init the object that will handle ASGS DB operations
         self.ASGS_DB_inst = ASGS_DB(self.logger, self.ASGSConstants_inst, self.parser)
+
+        self.logger.debug("Initializing ASGS_Queue_callback complete")
 
     ##########################################
     # main worker that operates on the incoming message from the queue

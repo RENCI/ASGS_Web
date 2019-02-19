@@ -17,7 +17,7 @@ if __name__ == "__main__":
                 
     # retrieve configuration settings
     parser = ConfigParser()
-    parser.read('/srv/django/ASGS_Web/messages/msg_settings.ini')
+    parser.read('/srv/django/ASGS_Web/messages/msg_settings.ini')#
 
     # set up AMQP credentials and connect to asgs queue
     credentials = pika.PlainCredentials(parser.get('pika', 'username'), parser.get('pika', 'password'))

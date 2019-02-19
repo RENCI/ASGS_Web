@@ -2,16 +2,16 @@ import sys
 import re
 import psycopg2
 import datetime
-from receive_config_message_service import db_connect
 
 class ASGS_DB:
     def __init__(self, logger, ASGSConstants_inst, parser):
         self.logger = logger
+        
         self.ASGSConstants_inst = ASGSConstants_inst
         
         self.parser = parser
         
-        self.conn = db_connect()
+        self.conn = self.db_connect()
         
         self.cursor = self.conn.cursor
         
@@ -20,13 +20,10 @@ class ASGS_DB:
     def __del__(self):
         # now commit and save
         try:
-            self.logger.debug("Committing and closing the connection")
-            
-            # if we got this far commit all outstanding DB queries    
-            self.db_commit()
+            self.logger.debug("Closing the connection")
             self.conn.close()
 
-            self.logger.debug("Commited and connection closed")
+            self.logger.debug("DB shutdown complete")
         except:
             e = sys.exc_info()[0]
             self.logger.warn("FAILURE - Error closing DB connection. error {0}".format(str(e)))
@@ -244,6 +241,8 @@ class ASGS_DB:
             
             self.logger.debug("sql_stmt executed")
 
+            self.cursor.commit()
+            
             return retVal[0]
         except:
             e = sys.exc_info()[0]
