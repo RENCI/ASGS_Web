@@ -15,6 +15,9 @@ class ASGS_Queue_callback:
         
         # define and init the object used to handle ASGS constant conversions
         self.ASGSConstants_inst = ASGSConstants(self.logger)
+        
+        # define and init the object that will handle ASGS DB operations
+        self.ASGS_DB_inst = ASGS_DB(self.logger, self.ASGSConstants_inst, self.parser)
 
     ##########################################
     # main worker that operates on the incoming message from the queue
@@ -43,13 +46,10 @@ class ASGS_Queue_callback:
             self.logger.error("FAILURE - Cannot retrieve advisory number, site, event type or state type ids.")
             return
     
-        # define and init the object that will handle ASGS DB operations
-        ASGS_DB_inst = ASGS_DB(self.logger, self.ASGSConstants_inst, self.parser)
-
         # check to see if there are any instances for this site_id yet
         # this might happen if we start up this process in the middle of a model run
         try:
-            instance_id = ASGS_DB_inst.get_existing_instance_id(site_id[0], msg_obj)
+            instance_id = self.ASGS_DB_inst.get_existing_instance_id(site_id[0], msg_obj)
         except:
             e = sys.exc_info()[0]
             self.logger.error("FAILURE - Cannot retrieve instance id. error {0}".format(str(e)))
@@ -60,7 +60,7 @@ class ASGS_Queue_callback:
             self.logger.debug("create_new_inst is True - creating new inst")
             
             try:
-                instance_id = ASGS_DB_inst.insert_instance(state_id, site_id[0], msg_obj)
+                instance_id = self.ASGS_DB_inst.insert_instance(state_id, site_id[0], msg_obj)
             except:
                 e = sys.exc_info()[0]
                 self.logger.error("FAILURE - Cannot insert instance. error {0}".format(str(e)))
@@ -69,7 +69,7 @@ class ASGS_Queue_callback:
             self.logger.debug("create_new_inst is False - updating inst")
             
             try:
-                ASGS_DB_inst.update_instance(state_id, site_id[0], instance_id, msg_obj)
+                self.ASGS_DB_inst.update_instance(state_id, site_id[0], instance_id, msg_obj)
             except:
                 e = sys.exc_info()[0]
                 self.logger.error("FAILURE - Cannot update instance: " + str(e))
@@ -79,7 +79,7 @@ class ASGS_Queue_callback:
         # check to see if there are any event groups for this site_id and inst yet
         # this might happen if we start up this process in the middle of a model run
         try:
-            event_group_id = ASGS_DB_inst.get_existing_event_group_id(instance_id, advisory_id)
+            event_group_id = self.ASGS_DB_inst.get_existing_event_group_id(instance_id, advisory_id)
         except:
             e = sys.exc_info()[0]
             self.logger.error("FAILURE - Cannot retrieve existing event group. error {0}".format(str(e)))
@@ -99,7 +99,7 @@ class ASGS_Queue_callback:
                 # get the percent complete from a LU lookup
                 pct_complete = self.ASGSConstants_inst.getLuId(str(event_type_id), "pct_complete")
     
-                event_group_id = ASGS_DB_inst.insert_event_group(state_id, instance_id, pct_complete, msg_obj)
+                event_group_id = self.ASGS_DB_inst.insert_event_group(state_id, instance_id, pct_complete, msg_obj)
             except:
                 e = sys.exc_info()[0]
                 self.logger.error("FAILURE - Cannot insert event group. error {0}".format(str(e)))
@@ -110,7 +110,7 @@ class ASGS_Queue_callback:
     
             # update event group with this latest state
             try:
-                ASGS_DB_inst.update_event_group(state_id, event_group_id, msg_obj)
+                self.ASGS_DB_inst.update_event_group(state_id, event_group_id, msg_obj)
             except:
                 e = sys.exc_info()[0]
                 self.logger.error("FAILURE - Cannot update event group. error {0}".format(str(e)))
@@ -119,8 +119,11 @@ class ASGS_Queue_callback:
     
         # now insert message into the event table
         try:
-            ASGS_DB_inst.insert_event(site_id[0], event_group_id, event_type_id, msg_obj)
+            self.ASGS_DB_inst.insert_event(site_id[0], event_group_id, event_type_id, msg_obj)
         except:
             e = sys.exc_info()[0]
             self.logger.error("FAILURE - Cannot update event group. error {0}".format(str(e)))
             return
+    
+        # if we got this far commit all outstanding DB queries    
+        self.ASGS_DB_inst.db_commit()

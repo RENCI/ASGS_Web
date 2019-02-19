@@ -8,29 +8,20 @@ class ASGS_DB:
         self.logger = logger
         self.ASGSConstants_inst = ASGSConstants_inst
         self.parser = parser
-
-        # open a persistent DB connection
-        try:    
-            #open ASGS_Web django db
-            self.conn = self.db_connect()
-        except:
-            e = sys.exc_info()[0]
-            logger.error("FAILURE - Cannot connect to DB. error: {0}".format(str(e)))
-            raise Exception('Error getting connection to the database')
         
         logger.debug("ASGS_DB initialized")
 
-    def __del__(self):
+#    def __del__(self):
         # now commit and save
-        try:
-            self.logger.info("Committing and closing the connection")
+#        try:
+#            self.logger.info("Committing and closing the connection")
             
             # if we got this far commit all outstanding DB queries    
-            self.db_commit()
-            self.conn.close()
-        except:
-            e = sys.exc_info()[0]
-            self.logger.warn("FAILURE - Error closing DB connection. error {0}".format(str(e)))
+            #self.db_commit()
+            #self.conn.close()
+#        except:
+#            e = sys.exc_info()[0]
+#            self.logger.warn("FAILURE - Error closing DB connection. error {0}".format(str(e)))
 
     ##########################################
     # just a check to see if there are any event groups defined for this site yet
@@ -81,6 +72,8 @@ class ASGS_DB:
         self.logger.debug("query: {0}".format(query))
             
         try:        
+            self.db_connect()
+
             cur = self.conn.cursor()            
         except:
             e = sys.exc_info()[0]
@@ -103,6 +96,8 @@ class ASGS_DB:
             existing_instance_id = -1
         
         self.logger.debug("existing_instance_id {0}".format(existing_instance_id))
+        
+        self.conn.close()
         
         return existing_instance_id
     
@@ -284,6 +279,7 @@ class ASGS_DB:
         conn_str = "host={0} port={1} dbname={2} user={3} password={4}".format(self.parser.get('postgres', 'host'), self.parser.get('postgres', 'port'), self.parser.get('postgres', 'database'), self.parser.get('postgres', 'username'), self.parser.get('postgres', 'password'))
                    
         self.conn = psycopg2.connect(conn_str)
+        
         
     ##########################################
     # commits all outstanding DB queries
