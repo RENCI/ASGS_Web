@@ -43,7 +43,7 @@ class ASGS_DB:
     ###########################################
     # executes a sql statement, returns the first row
     ###########################################        
-    def exec_sql(self, sql_stmt, bCommit = False):
+    def exec_sql(self, sql_stmt, bFetch = False):
         try:        
             self.logger.debug("sql_stmt: {0}, connection: {1}".format(sql_stmt, self.conn))
             
@@ -53,15 +53,12 @@ class ASGS_DB:
             self.logger.debug("sql_stmt executed.")
 
             # get the returned value
-            retVal = self.cursor.fetchone()
-
-            if (retVal is not None):
-                retVal = retVal[0]
+            if bFetch == True:
+                retVal = self.cursor.fetchone()
             
             self.logger.debug("sql_stmt fetched.")
 
-            if bCommit:
-                self.conn.commit()
+            self.conn.commit()
             
             self.logger.debug("sql_stmt commited.")
             
@@ -81,7 +78,7 @@ class ASGS_DB:
         # this could be caused by a new install that does not have any data in the DB yet
         sql_stmt = 'SELECT id FROM "ASGS_Mon_event_group" WHERE instance_id={0} AND advisory_id=\'{1}\' ORDER BY id DESC'.format(instance_id, advisory_id)
         
-        group = self.exec_sql(sql_stmt)
+        group = self.exec_sql(sql_stmt, True)
         
         if (group is not None):
             existing_group_id = group
@@ -111,7 +108,7 @@ class ASGS_DB:
         # TODO +++++++++++++++FIX THIS++++++++++++++++++++Add query to get correct stat id for Defunct++++++++++++++++++++++++
         # TODO +++++++++++++++FIX THIS++++++++++++++++++++Add day to query too? (to account for rollover of process ids)++++++++++++++++++++++++
         
-        inst = self.exec_sql(sql_stmt)
+        inst = self.exec_sql(sql_stmt, True)
 
         if (inst is not None):
             existing_instance_id = inst
@@ -131,7 +128,7 @@ class ASGS_DB:
            
         sql_stmt = 'SELECT id FROM "ASGS_Mon_instance" WHERE CAST(start_ts as DATE)=\'{0}\' AND site_id={1} AND process_id={2} AND instance_name=\'{3}\''.format(start_ts[:10], site_id, process_id, instance_name)
                                                  
-        inst = self.exec_sql(sql_stmt)
+        inst = self.exec_sql(sql_stmt, True)
    
         if (inst is not None):
             _id = inst
@@ -155,7 +152,7 @@ class ASGS_DB:
     
         sql_stmt = 'UPDATE "ASGS_Mon_event_group" SET state_type_id ={0}, storm_name=\'{1}\', advisory_id=\'{2}\' WHERE id={3}'.format(state_id, storm_name, advisory_id, event_group_id)
         
-        self.exec_sql(sql_stmt, True)
+        self.exec_sql(sql_stmt)
     
     
     ##########################################
@@ -172,7 +169,7 @@ class ASGS_DB:
     
         sql_stmt = 'UPDATE "ASGS_Mon_instance" SET inst_state_type_id = {0}, end_ts = \'{1}\', run_params = \'{2}\' WHERE site_id = {3} AND id={4}'.format(state_id, end_ts, run_params, site_id, instance_id)
                                                    
-        self.exec_sql(sql_stmt, True)
+        self.exec_sql(sql_stmt)
    
     ##########################################
     # saves the raw message
@@ -182,7 +179,7 @@ class ASGS_DB:
     
         sql_stmt = 'INSERT INTO "ASGS_Mon_json" (data) VALUES (\'{0}\''.format(msg)
         
-        self.exec_sql(sql_stmt, True)
+        self.exec_sql(sql_stmt)
         
     ##########################################
     # insert an event
@@ -214,7 +211,7 @@ class ASGS_DB:
         # create the fields
         sql_stmt = 'INSERT INTO "ASGS_Mon_event" (site_id, event_group_id, event_type_id, event_ts, advisory_id, pct_complete, process{0}) VALUES ({1}, {2}, {3}, \'{4}\', \'{5}\', {6}, \'{7}\'{8})'.format(rawDataCol, site_id, event_group_id, event_type_id, event_ts, advisory_id, pct_complete, process, msg_line)
     
-        self.exec_sql(sql_stmt, True)
+        self.exec_sql(sql_stmt)
         
     ##########################################
     # inserts an event group
