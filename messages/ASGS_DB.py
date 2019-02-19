@@ -15,9 +15,13 @@ class ASGS_DB:
             conn_str = "host={0} port={1} dbname={2} user={3} password={4}".format(parser.get('postgres', 'host'), parser.get('postgres', 'port'), parser.get('postgres', 'database'), parser.get('postgres', 'username'), parser.get('postgres', 'password'))
     
             self.conn = psycopg2.connect(conn_str)
-                        
+                                    
             self.logger.debug("Got a connection to the DB")
-    
+            
+            self.conn.set_session(autocommit=True)
+
+            self.logger.debug("Set autocommit")
+
             self.cursor = self.conn.cursor()
                     
             self.logger.debug("ASGS_DB initialized")
@@ -54,19 +58,16 @@ class ASGS_DB:
             # get the returned value
             if bFetch == True:
                 self.logger.debug("sql_stmt fetching")
-                retVal = self.cursor.fetchone()
+                retVal = self.cursor.fetchone()[0]
                 
-                if retVal is not None:
-                    retVal = retVal[0]
-                else:
+                if retVal is None:
                     self.logger.debug("sql_stmt nothing fetched")
                     retVal = -1
             else:
                 retVal = -1
                 
-            self.conn.commit()
-            
-            self.logger.debug("sql_stmt commited.")
+            #self.conn.commit()            
+            #self.logger.debug("sql_stmt commited.")
             
             return retVal
         except:
