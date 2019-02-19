@@ -7,19 +7,19 @@ class ASGS_DB:
     def __init__(self, logger, ASGSConstants_inst, parser):
         self.logger = logger#.getLogger('ASGS_DB')
         
-        self.logger.debug("Connecting to DB: {0}".format(parser.get('postgres', 'database')))
+        #self.logger.debug("Connecting to DB: {0}".format(parser.get('postgres', 'database')))
         
-        conn_str = "host={0} port={1} dbname={2} user={3} password={4}".format(parser.get('postgres', 'host'), parser.get('postgres', 'port'), parser.get('postgres', 'database'), parser.get('postgres', 'username'), parser.get('postgres', 'password'))
+        #conn_str = "host={0} port={1} dbname={2} user={3} password={4}".format(parser.get('postgres', 'host'), parser.get('postgres', 'port'), parser.get('postgres', 'database'), parser.get('postgres', 'username'), parser.get('postgres', 'password'))
 
         #self.conn = psycopg2.connect(conn_str)
         
-        logger.debug("Got a connection to the DB")
+        self.logger.debug("Got a connection to the DB")
 
         #self.cursor = self.conn.cursor
                 
-        logger.debug("ASGS_DB initialized")
+        self.logger.debug("ASGS_DB initialized")
 
-        self.ASGSConstants_inst = ASGSConstants_inst
+        #self.ASGSConstants_inst = ASGSConstants_inst
 
     def __del__(self):
         # now commit and save
