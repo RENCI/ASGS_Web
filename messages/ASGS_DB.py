@@ -5,7 +5,7 @@ import datetime
 
 class ASGS_DB:
     def __init__(self, logger, ASGSConstants_inst, parser):
-        self.logger = logger#.getLogger('ASGS_DB')
+        self.logger = logger
         
         try:
             self.ASGSConstants_inst = ASGSConstants_inst
@@ -26,12 +26,13 @@ class ASGS_DB:
             self.logger.warn("FAILURE initializing. error {0}".format(str(e)))
 
     def __del__(self):
-        # now commit and save
-        try:
-            self.logger.debug("Closing the connection")
-            
-#            if self.conn.open:
-#                self.conn.close()
+        self.logger.debug("Closing the DB")
+        
+        # close up the DB
+        try:          
+            if self.cursor is not None and self.conn is not None:
+                if self.conn.open:
+                    self.conn.close()
 
             self.logger.debug("DB shutdown complete")
         except:
@@ -47,15 +48,20 @@ class ASGS_DB:
         try:        
             self.logger.debug("sql_stmt: {0}".format(sql_stmt))
             
+            # execute the ssq
             self.cursor.execute(sql_stmt)
             
+            # get the returned value
             retVal = self.cursor.fetchone()
+
+            if (retVal is not None):
+                retVal = retVal[0]
             
-            self.logger.debug("sql_stmt executed")
+            self.logger.debug("sql_stmt executed.")
 
             self.cursor.commit()
             
-            return retVal[0]
+            return retVal
         except:
             e = sys.exc_info()[0]
             self.logger.error("FAILURE - DB issue: " + str(e))
