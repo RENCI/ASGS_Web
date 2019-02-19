@@ -21,6 +21,10 @@ class ASGS_Queue_callback:
         self.ASGS_DB_inst = ASGS_DB(self.logger, self.ASGSConstants_inst, self.parser)
 
         self.logger.debug("Initializing ASGS_Queue_callback complete")
+
+        #msg_obj = {"advisory_number": "2019021812", "uid": "6337", "process": "asgs_main.sh>monitorJobs()>padcirc.namforecast", "pctcomplete": "0", "message": "Still waiting for padcirc.namforecast job to start...", "physical_location": "LONI", "event_type": "FORE", "name": "asgs", "clustername": "Queenbee", "storm_number": 99, "instance_name": "namhsofs", "state": "PEND", "run_params": "hsofs:EnsSize=2:NWS=-312", "storm": "hindcast", "date-time": "2019-02-19 16:46:37"}
+                
+        #self.ASGS_DB_inst.update_event_group(2, 1482, msg_obj)
         
     ##########################################
     # main worker that operates on the incoming message from the queue
@@ -98,7 +102,7 @@ class ASGS_Queue_callback:
         #   after creating first one, when very first RSTR comes for this instance+++++++++++++++++++
     
         if ((event_group_id < 0) or (event_name == "RSTR")):
-            try:                
+            try:                    
                 event_group_id = self.ASGS_DB_inst.insert_event_group(state_id, instance_id, msg_obj)
             except:
                 e = sys.exc_info()[0]

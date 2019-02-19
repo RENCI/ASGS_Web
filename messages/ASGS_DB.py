@@ -50,7 +50,7 @@ class ASGS_DB:
         try:        
             self.logger.debug("sql_stmt: {0}, bFetch {1}".format(sql_stmt, bFetch))
             
-            # execute the ssq
+            # execute the sql
             self.cursor.execute(sql_stmt)
             
             self.logger.debug("sql_stmt executed.")
@@ -76,7 +76,7 @@ class ASGS_DB:
             return retVal
         except:
             e = sys.exc_info()[0]
-            self.logger.error("FAILURE - DB issue: " + str(e))
+            self.logger.error("FAILURE - DB issue: {0}".format(e))
             return
 
     ##########################################
@@ -195,7 +195,7 @@ class ASGS_DB:
     ##########################################
     # insert an event
     ##########################################
-    def insert_event(self, site_id, event_group_id, event_type_id, pct_complete, msg_obj):
+    def insert_event(self, site_id, event_group_id, event_type_id, msg_obj):
         # get a default time stamp, use it if necessary
         now = datetime.datetime.now()
         ts = now.strftime("%Y-%m-%d %H:%M")
@@ -207,6 +207,9 @@ class ASGS_DB:
         # get the process data
         process = msg_obj.get("process", "N/A") if (msg_obj.get("process", "N/A") != "") else "N/A"
     
+        # get the percent complete from a LU lookup
+        pct_complete = self.ASGSConstants_inst.getLuId(str(event_type_id), "pct_complete")
+
         # if there was a message included parse and add it
         if (msg_obj.get("message") is not None and len(msg_obj["message"]) > 0):
             # get rid of any special chars that might mess up postgres
