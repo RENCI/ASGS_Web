@@ -110,7 +110,10 @@ def dataReq(request):
                 
                 # this param is optional
                 if request.GET.get('sinceDate') != '':
-                    paramVal += ", '{0}'".format(request.GET.get('sinceDate'))
+                    paramVal += ", _since := '{0}'".format(request.GET.get('sinceDate'))
+                
+                if request.GET.get('sites') != '':
+                    paramVal += ", _sites := '{{{0}}}'".format(request.GET.get('sites'))
                 
             # if no errors continue
             if retVal == '':

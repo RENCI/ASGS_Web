@@ -77,7 +77,7 @@ function renderMonitorTab(siteInstance)
 	        });	        
 
 			// create/init the shells for all the site instances
-			d3.json("dataReq/?type=init" + "&viewActiveFlag=" + viewActiveFlag + "&viewInactiveFlag=" + viewInactiveFlag + "&sinceDate=" + sinceDate, function(error, initData)
+			d3.json("dataReq/?type=init" + "&viewActiveFlag=" + viewActiveFlag + "&viewInactiveFlag=" + viewInactiveFlag + "&sinceDate=" + sinceDate + "&sites=" + sites.toString(), function(error, initData)
 			{				
 				// erase all the site instances on error or no data
 				if (error || initData.length == 0 || initData == 'None') 
@@ -333,7 +333,7 @@ function renderMonitorTab(siteInstance)
 			});
 			
 			// load the shells for all the site instance events
-			d3.json("dataReq/?type=event" + "&viewActiveFlag=" + viewActiveFlag + "&viewInactiveFlag=" + viewInactiveFlag + "&sinceDate=" + sinceDate, function(error, eventData)
+			d3.json("dataReq/?type=event" + "&viewActiveFlag=" + viewActiveFlag + "&viewInactiveFlag=" + viewInactiveFlag + "&sinceDate=" + sinceDate + "&sites=" + sites.toString(), function(error, eventData)
 			{				
 				// erase all the site instances on error
 				if (error || eventData.length == 0) 
