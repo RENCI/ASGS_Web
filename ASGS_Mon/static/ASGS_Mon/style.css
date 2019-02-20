@@ -120,6 +120,16 @@ h2 span {
     margin-top: 5px;
 }
 
+.dropdown-menu li
+{
+   font-size:12px
+}
+
+.btn
+{
+	font-size: 12px	
+}
+
 #pagehdr {  
 	width: 98%;
   	border: 2px solid black;
