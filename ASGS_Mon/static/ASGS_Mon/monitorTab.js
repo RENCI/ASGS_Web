@@ -101,7 +101,7 @@ function renderMonitorTab(siteInstance)
 				var hour = d.getUTCHours();
 							
 				// update the current NCEP cycle number
-				$("#NCEP_cycle").text('Current NCEP cycle: ' + d.getUTCFullYear() + ('0' + (d.getUTCMonth() + 1)).slice(-2) + ('0' + d.getUTCDate()).slice(-2) + ((hour >= 18) ? '18' : ((hour >= 12) ? '12' : ((hour >= 6) ? '06' : '00'))));
+				$("#NCEP_cycle").text('Current NCEP cycle: ' + d.getUTCFullYear() + '/' + ('0' + (d.getUTCMonth() + 1)).slice(-2) + '/' + ('0' + d.getUTCDate()).slice(-2) + ((hour >= 18) ? ' 18z' : ((hour >= 12) ? ' 12z' : ((hour >= 6) ? ' 06z' : ' 00z'))));
 				
 				// get the current rendered items
 				var curRendered = d3.selectAll(".siteInstanceView").selectAll("svg");
