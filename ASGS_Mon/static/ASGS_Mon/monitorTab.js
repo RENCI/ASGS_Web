@@ -85,7 +85,17 @@ function renderMonitorTab(siteInstance)
 				else
 					$("#filterMsg").hide(0);
 					
+				// save this data for the event message rendering later
 				latestData = initData;
+				
+				// get the current date
+				d = new Date()
+				
+				// get the current hour
+				var hour = d.getUTCHours();
+							
+				// update the current NCEP cycle number
+				$("#NCEP_cycle").text('Current NCEP cycle: ' + d.getUTCFullYear() + ('0' + (d.getUTCMonth() + 1)).slice(-2) + ('0' + d.getUTCDate()).slice(-2) + ((hour >= 18) ? '18' : ((hour >= 12) ? '12' : ((hour >= 6) ? '06' : '00'))));
 				
 				// get the current rendered items
 				var curRendered = d3.selectAll(".siteInstanceView").selectAll("svg");

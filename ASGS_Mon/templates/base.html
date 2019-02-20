@@ -39,17 +39,18 @@
 				<tr>
 					<td align="left"><a href="{% url 'about' %}"><img class="imgASGSLogo" src="/static/ASGS_Mon/images/ASGSlogo.jpg" style="width: 70px; height: 55px;"/></a></td>
 					<td style="text-align: center;">ASGS Operational Awareness Dashboard
-						{% if user.is_authenticated %}
-							<div style="margin-right: 20px; margin-top: 5px; text-align: center;"><span style="font-size: 16px; font-style: italic">Good day, {{ user.first_name }} {{ user.last_name }}.</span>&nbsp;&nbsp;&nbsp;<span style="font-size: 16px;"><a href="{% url 'logout' %}">Log out</a></span>
-							
-							{% if user.is_superuser %}
-								&nbsp;&nbsp;&nbsp;<span style="font-size: 16px;"><a href="{% url 'admin:index' %}">Go to admin site</a></span>							
-							{% endif %}
-							
-							</div>
-						{% elif not request.path == "/login/" and not request.path == "/" %}
-							<div style="margin-right: 20px; margin-top: 5px; text-align: center;"><span style="font-size: 16px;"><a href="{% url 'login' %}">Login</a></span></div>
+						<span style="font-size: 18px;"><div id="NCEP_cycle" style="margin-right: 20px; margin-top: 5px; text-align: center;"></div></span>					
+					{% if user.is_authenticated %}
+						<div style="margin-right: 20px; margin-top: 5px; text-align: center;"><span style="font-size: 16px; font-style: italic">Good day, {{ user.first_name }} {{ user.last_name }}.</span>&nbsp;&nbsp;&nbsp;<span style="font-size: 16px;"><a href="{% url 'logout' %}">Log out</a></span>
+						
+						{% if user.is_superuser %}
+							&nbsp;&nbsp;&nbsp;<span style="font-size: 16px;"><a href="{% url 'admin:index' %}">Go to admin site</a></span>							
 						{% endif %}
+						
+						</div>
+					{% elif not request.path == "/login/" and not request.path == "/" %}
+						<div style="margin-right: 20px; margin-top: 5px; text-align: center;"><span style="font-size: 16px;"><a href="{% url 'login' %}">Login</a></span></div>
+					{% endif %}
 					</td>
 					<td align="right"><a href="https://renci.org/"><img class="imgRENCILogo" src="/static/ASGS_Mon/images/RENCIlogo.jpg" style="width: 90px; height: 55px;"/></a></td>
 				</tr>		
