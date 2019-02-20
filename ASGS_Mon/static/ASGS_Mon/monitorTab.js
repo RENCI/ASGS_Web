@@ -70,6 +70,12 @@ function renderMonitorTab(siteInstance)
 				});
 			}
 			
+			// get the selected sites
+	        var sites = [];
+	        $.each($("#siteFilter option:selected"), function(){            
+	        	sites.push($(this).val());
+	        });	        
+
 			// create/init the shells for all the site instances
 			d3.json("dataReq/?type=init" + "&viewActiveFlag=" + viewActiveFlag + "&viewInactiveFlag=" + viewInactiveFlag + "&sinceDate=" + sinceDate, function(error, initData)
 			{				
@@ -87,7 +93,7 @@ function renderMonitorTab(siteInstance)
 					
 				// save this data for the event message rendering later
 				latestData = initData;
-				
+						        		
 				// get the current date
 				d = new Date()
 				
