@@ -1,4 +1,4 @@
-import logging.config
+import logging
 
 #######################
 # class to transform a ASGS LU constant from a name to a ID
@@ -27,7 +27,7 @@ class ASGSConstants:
         # load the logger
         self.logger = logger or logging.getLogger(__name__)
    
-        self.logger.debug("ASGSConstants initialized")
+        self.logger.info("ASGSConstants initialized")
 
     #
     # gets the id from a lookup table

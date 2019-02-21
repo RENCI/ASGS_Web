@@ -2,7 +2,7 @@ import sys
 import re
 import psycopg2
 import datetime
-import logging.config
+import logging
 
 class ASGS_DB:
     def __init__(self, ASGSConstants_inst, parser, logger=None):
@@ -12,37 +12,37 @@ class ASGS_DB:
         try:
             self.ASGSConstants_inst = ASGSConstants_inst
             
-            self.logger.debug("Connecting to DB: {0}".format(parser.get('postgres', 'database')))
+            self.logger.info("initializing ASGS_DB. Connecting to: {0}".format(parser.get('postgres', 'database')))
             
             conn_str = "host={0} port={1} dbname={2} user={3} password={4}".format(parser.get('postgres', 'host'), parser.get('postgres', 'port'), parser.get('postgres', 'database'), parser.get('postgres', 'username'), parser.get('postgres', 'password'))
     
             self.conn = psycopg2.connect(conn_str)
                                     
-            self.logger.debug("Got a connection to the DB")
+            self.logger.debug("Got a connection to the DB.")
             
             self.conn.set_session(autocommit=True)
 
-            self.logger.debug("Set autocommit")
+            self.logger.debug("Set autocommit.")
 
             self.cursor = self.conn.cursor()
                     
-            self.logger.debug("ASGS_DB initialized")
+            self.logger.info("ASGS_DB initialized")
         except:
             e = sys.exc_info()[0]
-            self.logger.warn("FAILURE initializing. error {0}".format(str(e)))
+            self.logger.error("FAILURE - initializing ASGS_DB. error {0}".format(str(e)))
 
     def __del__(self):
-        self.logger.debug("Closing the DB")
+        self.logger.info("ASGS_DB closing the DB connection")
         
         # close up the DB
         try:          
             self.cursor.close()
             self.conn.close()
 
-            self.logger.debug("DB shutdown complete")
+            self.logger.info("ASGS_DB shutdown complete")
         except:
             e = sys.exc_info()[0]
-            self.logger.warn("FAILURE - Error closing DB connection. error {0}".format(str(e)))
+            self.logger.error("FAILURE - Error closing DB connection. error {0}".format(str(e)))
 
     
     ###########################################

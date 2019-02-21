@@ -1,6 +1,6 @@
 import sys
 import json
-import logging.config
+import logging
 
 from ASGSConstants import ASGSConstants
 from ASGS_DB import ASGS_DB
@@ -10,7 +10,7 @@ class ASGS_Queue_callback:
         # load the config
         self.logger = logger or logging.getLogger(__name__)
 
-        self.logger.debug("Initializing ASGS_Queue_callback")
+        self.logger.info("Initializing ASGS_Queue_callback")
         
         # save the reference to the configuration params
         self.parser = parser
@@ -21,7 +21,7 @@ class ASGS_Queue_callback:
         # define and init the object that will handle ASGS DB operations
         self.ASGS_DB_inst = ASGS_DB(self.ASGSConstants_inst, self.parser)
 
-        self.logger.debug("Initializing ASGS_Queue_callback complete")
+        self.logger.info("ASGS_Queue_callback initialization complete")
         
     ##########################################
     # main worker that operates on the incoming message from the queue

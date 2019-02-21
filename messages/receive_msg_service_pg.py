@@ -15,7 +15,9 @@ if __name__ == "__main__":
     # create a logger
     logger = logging.getLogger(__name__)
 
-    try:                    
+    try:         
+        logger.info("Initializing receive_msg_queue handler.")
+           
         # retrieve configuration settings
         parser = ConfigParser()
         parser.read('/srv/django/ASGS_Web/messages/msg_settings.ini')#
@@ -31,14 +33,14 @@ if __name__ == "__main__":
         
         channel.queue_declare(queue='asgs_queue')
         
-        logger.info("ASGS Msg queue declared.")
+        logger.info("receive_msg_queue channel and queue declared.")
         
         # get an instance to the callback handler
         Queue_callback_inst = ASGS_Queue_callback(parser)
         
         channel.basic_consume(Queue_callback_inst.callback, queue='asgs_queue', no_ack=True)
         
-        logger.info('ASGS Msg queue configured and waiting for messages...')
+        logger.info('receive_msg_queue configured and waiting for messages...')
         
         channel.start_consuming()
     except:
