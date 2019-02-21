@@ -15,12 +15,11 @@ if __name__ == "__main__":
     # create a logger
     logger = logging.getLogger(__name__)
 
-#    try:                    
-        # retrieve configuration settings
-    parser = ConfigParser()
-    parser.read('msg_settings.ini')#/srv/django/ASGS_Web/messages/
-
     logger.info("Configuring ASGS Msg queue.")
+
+    parser = ConfigParser()
+
+    parser.read('msg_settings.ini')#/srv/django/ASGS_Web/messages/
 
     # set up AMQP credentials and connect to asgs queue
     credentials = pika.PlainCredentials(parser.get('pika', 'username'), parser.get('pika', 'password'))
@@ -43,9 +42,6 @@ if __name__ == "__main__":
     logger.info('ASGS Msg queue configured and waiting for messages...')
     
     channel.start_consuming()
-#    except:
-#        e = sys.exc_info()[0]
-#        logger.error("FAILURE - Problems initiating receive_msg_queue. error {0}".format(str(e)))
 
     
     
