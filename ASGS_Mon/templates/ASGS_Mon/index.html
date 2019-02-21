@@ -100,42 +100,48 @@
 							<div class="card">
 								<div class="card-header">Site instances</div>
 								<div class="card-body">	
-									<div class="col-lg-3">
+									<div class="col-lg-4">
 										<div class="card">
 											<div class="card-header">
 												<a class="card-link" data-toggle="collapse" href="#collapseFilter">View Filtering</a>
 											</div>
 											<div class="card-body" style="margin-bottom: -26px">												
 												<div id="collapseFilter" class="collapse" data-parent="#monitorTab" style="margin-top: 5px">
-													<label class="check">Active<input id="viewActive" type="checkbox" checked>
+													<label class="check">Show all active
+														<input id="viewActive" type="checkbox" checked>
 													  	<span class="checkmark"></span>
 													</label>
 													
-													<label class="check">Inactive<input  id="viewInactive" type="checkbox">
-													  	<span class="checkmark"></span>
-															<label> 
-																<select id="inactiveFilter" class="selectpicker" multiple data-live-search="true">
-																	<option value="3">Error</option>
-																	<option value="9">Exited</option>
-																	<option value="10">Stalled</option>
-																</select>
-															</label>													  	
-													</label>	
+													<label> 
+														<span style="font-style: italic; font-size: 12px">Show inactive
+															<select id="inactiveFilter" class="selectpicker" multiple data-live-search="true">
+																<option value="3">Error</option>
+																<option value="9">Exited</option>
+																<option value="10">Stalled</option>
+															</select>
+														</span>
+													</label>																										  	
 													
-													<label><span style="font-style: italic; font-size: 12px">Since 
-													<input type="date" autocomplete="off" id="sinceDate"></input></span></label>	
-
-													<label><span style="font-style: italic; font-size: 12px">Sites 
-													<select id="siteFilter" class="selectpicker" multiple data-live-search="true">
-														<option value="4">George Mason</option>
-														<option value="6">LONI</option>
-														<option value="2">LSU</option>
-														<option value="5">Penguin</option>
-														<option value="0">RENCI</option>
-														<option value="7">Seahorse</option>														
-														<option value="1">TACC</option>
-														<option value="3">UCF</option>
-													</select></span></label>
+													<label>
+														<span style="font-style: italic; font-size: 12px">Show only sites 
+															<select id="siteFilter" class="selectpicker" multiple data-live-search="true">
+																<option value="4">George Mason</option>
+																<option value="6">LONI</option>
+																<option value="2">LSU</option>
+																<option value="5">Penguin</option>
+																<option value="0">RENCI</option>
+																<option value="7">Seahorse</option>														
+																<option value="1">TACC</option>
+																<option value="3">UCF</option>
+															</select>
+														</span>
+													</label>
+													
+													<label>
+														<span style="font-style: italic; font-size: 12px">Show filtered since 
+															<input type="date" autocomplete="off" id="sinceDate"></input>
+														</span>
+													</label>	
 												</div>
 											</div>
 								        </div>

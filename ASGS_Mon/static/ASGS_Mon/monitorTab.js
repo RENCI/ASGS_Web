@@ -59,12 +59,9 @@ function renderMonitorTab(siteInstance)
 	        var inactives = [];
 	        
 			// get all the selected values into an array
-			if($('#viewInactive').is(":checked"))
-			{
-		        $.each($("#inactiveFilter option:selected"), function(){            
-		        	inactives.push($(this).val());
-		        });	
-			}
+	        $.each($("#inactiveFilter option:selected"), function(){            
+	        	inactives.push($(this).val());
+	        });	
 			
 			// array for the selected sites
 	        var sites = [];
