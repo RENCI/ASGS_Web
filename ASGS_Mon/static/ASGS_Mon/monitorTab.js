@@ -331,7 +331,7 @@ function renderMonitorTab(siteInstance)
 			});
 			
 			// load the shells for all the site instance events
-			d3.json("dataReq/?type=event" + "&viewActiveFlag=" + viewActiveFlag + "&viewInactiveFlag=" + viewInactiveFlag + "&sinceDate=" + sinceDate + "&sites=" + sites.toString(), function(error, eventData)
+			d3.json("dataReq/?type=event" + "&viewActiveFlag=" + viewActiveFlag + "&inactives=" + inactives.toString() + "&sinceDate=" + sinceDate + "&sites=" + sites.toString(), function(error, eventData)
 			{				
 				// erase all the site instances on error
 				if (error || eventData.length == 0) 
