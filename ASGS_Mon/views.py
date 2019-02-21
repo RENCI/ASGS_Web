@@ -106,8 +106,11 @@ def dataReq(request):
                 retVal = 'retry:3000\ndata: {}\n\n'
             elif reqType == 'init' or reqType == 'event':
                 # get the query string items. we will always get these
-                paramVal += "'{0}', '{1}'".format(request.GET.get('viewActiveFlag'),request.GET.get('viewInactiveFlag'))
+                paramVal += "'{0}'".format(request.GET.get('viewActiveFlag'))
                 
+                if request.GET.get('inactives') != '':
+                    paramVal += ", _inactives := '{{{0}}}'".format(request.GET.get('inactives'))
+
                 # this param is optional
                 if request.GET.get('sinceDate') != '':
                     paramVal += ", _since := '{0}'".format(request.GET.get('sinceDate'))

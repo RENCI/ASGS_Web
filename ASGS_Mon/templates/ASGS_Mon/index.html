@@ -113,16 +113,14 @@
 													
 													<label class="check">Inactive<input  id="viewInactive" type="checkbox">
 													  	<span class="checkmark"></span>
-													</label>												
-														<label class="radio">Error<input id="rbError" type="radio" name="is_filterGroup" data-val="3" checked>
-														  <span class="checkround"></span>
-														</label>
-														<label class="radio">Exited<input id="rbExited" type="radio" data-val="9" name="is_filterGroup">
-														  <span class="checkround"></span>
-														</label>
-														<label class="radio">Stalled<input id="rbStalled" type="radio" data-val="10" name="is_filterGroup">
-														  <span class="checkround"></span>
-														</label>
+															<label> 
+																<select id="inactiveFilter" class="selectpicker" multiple data-live-search="true">
+																	<option value="3">Error</option>
+																	<option value="9">Exited</option>
+																	<option value="10">Stalled</option>
+																</select>
+															</label>													  	
+													</label>	
 													
 													<label><span style="font-style: italic; font-size: 12px">Since 
 													<input type="date" autocomplete="off" id="sinceDate"></input></span></label>	

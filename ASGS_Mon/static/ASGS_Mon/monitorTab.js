@@ -55,29 +55,27 @@ function renderMonitorTab(siteInstance)
 			// get the since date
 			var sinceDate = $('#sinceDate').val(); //($('#sinceDate').val() == '') ? 'NULL' : $('#sinceDate').val();
 			
-			// get the value of the view all since filter
-			var viewInactiveFlag = -1;
-			
-			// get the checked radio button
+			// array for the selected inactives 
+	        var inactives = [];
+	        
+			// get all the selected values into an array
 			if($('#viewInactive').is(":checked"))
 			{
-				$("input[data-val]").each(function () 
-				{
-					if($(this).is(":checked"))
-					{
-						viewInactiveFlag = $(this).data('val');
-					}
-				});
+		        $.each($("#inactiveFilter option:selected"), function(){            
+		        	inactives.push($(this).val());
+		        });	
 			}
 			
-			// get the selected sites
+			// array for the selected sites
 	        var sites = [];
+	        
+	        // get all the selected values into an array
 	        $.each($("#siteFilter option:selected"), function(){            
 	        	sites.push($(this).val());
 	        });	        
 
 			// create/init the shells for all the site instances
-			d3.json("dataReq/?type=init" + "&viewActiveFlag=" + viewActiveFlag + "&viewInactiveFlag=" + viewInactiveFlag + "&sinceDate=" + sinceDate + "&sites=" + sites.toString(), function(error, initData)
+			d3.json("dataReq/?type=init" + "&viewActiveFlag=" + viewActiveFlag + "&inactives=" + inactives.toString() + "&sinceDate=" + sinceDate + "&sites=" + sites.toString(), function(error, initData)
 			{				
 				// erase all the site instances on error or no data
 				if (error || initData.length == 0 || initData == 'None') 
