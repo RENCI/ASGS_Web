@@ -76,19 +76,19 @@ function renderMonitorTab(siteInstance)
 	        	        
 	        // view active?
 	        if(viewActiveFlag == false)
-	        	viewFilterTitle.push("Active disabled ");
+	        	viewFilterTitle.push(" Active disabled");
 	        
 	        // view inactives?
 	        if(inactives.length > 0)
-	        	viewFilterTitle.push("Inactive enabled ");
+	        	viewFilterTitle.push(" Inactive enabled");
 	        
 	        // view specific sites?
 	        if(sites.length > 0)
-	        	viewFilterTitle.push("Site selection enabled ");
+	        	viewFilterTitle.push(" Site selection enabled");
 
 	        // view since?
 	        if(sinceDate.length > 0)
-	        	viewFilterTitle.push("Since " + sinceDate + " enabled ");       	
+	        	viewFilterTitle.push(" Since " + sinceDate + " enabled");       	
 	        
    			// update the view filter selection
 	        if(viewFilterTitle.length > 0)
