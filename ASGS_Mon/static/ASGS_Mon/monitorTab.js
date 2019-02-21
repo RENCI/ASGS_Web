@@ -71,6 +71,24 @@ function renderMonitorTab(siteInstance)
 	        	sites.push($(this).val());
 	        });	        
 
+	        var viewFilterTitle = [];
+	        	        
+	        if(viewActiveFlag == false)
+	        	viewFilterTitle.push("Active disabled ");
+	        
+	        if(inactives.length > 0)
+	        	viewFilterTitle.push("Inactive enabled ");
+	        
+	        if(sites.length > 0)
+	        	viewFilterTitle.push("Site selection enabled ");
+
+	        if(sinceDate.length > 0)
+	        	viewFilterTitle.push("Since " + sinceDate + " enabled ");       	
+	        
+   			// update the view filter selection
+	        if(viewFilterTitle.length > 0)
+	        	$("#viewFilterArea").text("( Filters: " + viewFilterTitle.toString() + ")");
+
 			// create/init the shells for all the site instances
 			d3.json("dataReq/?type=init" + "&viewActiveFlag=" + viewActiveFlag + "&inactives=" + inactives.toString() + "&sinceDate=" + sinceDate + "&sites=" + sites.toString(), function(error, initData)
 			{				
@@ -88,7 +106,7 @@ function renderMonitorTab(siteInstance)
 					
 				// save this data for the event message rendering later
 				latestData = initData;
-						        		
+				
 				// get the current date
 				d = new Date()
 				
