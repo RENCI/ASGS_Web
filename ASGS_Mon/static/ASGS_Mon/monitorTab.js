@@ -189,7 +189,7 @@ function renderMonitorTab(siteInstance)
 								.attr("height", "15")
 
 						// if the entire control is large
-						if(parseInt(si.style('height')) >= 75)
+						if(parseInt(si.style('height')) >= 70)
 						{
 							// make it small, showing only the header
 							si.transition()
@@ -281,7 +281,7 @@ function renderMonitorTab(siteInstance)
 				    	});				    	
 
 						// if it is large, make it small
-						if(parseInt(msgRect.node().getBoundingClientRect().height) >= 75)
+						if(parseInt(msgRect.node().getBoundingClientRect().height) >= 70)
 						{
 							// make the entire control small size
 							si.transition()
