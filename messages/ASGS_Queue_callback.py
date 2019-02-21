@@ -1,30 +1,31 @@
 import sys
 import json
+import logging.config
 
 from ASGSConstants import ASGSConstants
 from ASGS_DB import ASGS_DB
 
 class ASGS_Queue_callback:
-    def __init__(self, logger, parser):
-        # save the reference to the logger
-        self.logger = logger
-        
+    def __init__(self, parser, logger=None):
+        # load the config
+        self.logger = logger or logging.getLogger(__name__)
+
         self.logger.debug("Initializing ASGS_Queue_callback")
         
         # save the reference to the configuration params
         self.parser = parser
         
         # define and init the object used to handle ASGS constant conversions
-        self.ASGSConstants_inst = ASGSConstants(self.logger)
+        self.ASGSConstants_inst = ASGSConstants()
         
         # define and init the object that will handle ASGS DB operations
-        self.ASGS_DB_inst = ASGS_DB(self.logger, self.ASGSConstants_inst, self.parser)
+        self.ASGS_DB_inst = ASGS_DB(self.ASGSConstants_inst, self.parser)
 
         self.logger.debug("Initializing ASGS_Queue_callback complete")
 
-        #msg_obj = {"advisory_number": "2019021812", "uid": "6337", "process": "asgs_main.sh>monitorJobs()>padcirc.namforecast", "pctcomplete": "0", "message": "Still waiting for padcirc.namforecast job to start...", "physical_location": "LONI", "event_type": "FORE", "name": "asgs", "clustername": "Queenbee", "storm_number": 99, "instance_name": "namhsofs", "state": "PEND", "run_params": "hsofs:EnsSize=2:NWS=-312", "storm": "hindcast", "date-time": "2019-02-19 16:46:37"}
+        msg_obj = {"advisory_number": "2019021812", "uid": "6337", "process": "asgs_main.sh>monitorJobs()>padcirc.namforecast", "pctcomplete": "0", "message": "Still waiting for padcirc.namforecast job to start...", "physical_location": "LONI", "event_type": "FORE", "name": "asgs", "clustername": "Queenbee", "storm_number": 99, "instance_name": "namhsofs", "state": "PEND", "run_params": "hsofs:EnsSize=2:NWS=-312", "storm": "hindcast", "date-time": "2019-02-19 16:46:37"}
                 
-        #self.ASGS_DB_inst.update_event_group(2, 1482, msg_obj)
+        self.ASGS_DB_inst.update_event_group(2, 14882, msg_obj)
         
     ##########################################
     # main worker that operates on the incoming message from the queue

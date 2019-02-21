@@ -7,13 +7,13 @@
 #	handlers.keys = file
 #	logger_root.level = ERROR
 #	logger_root.handlers = file
-#	logger_receive_msg_service_pg.level = INFO, ERROR or CRITICAL
-#	logger_receive_msg_service_pg.handlers = file
+#	logger_<classes>.level = INFO, ERROR or CRITICAL
+#	logger_<classes>.handlers = file
 #####################################
 
 # specify what loggers this file will support
 [loggers]
-keys=root,receive_msg_service_pg
+keys=root,receive_msg_service_pg,ASGS_Queue_callback,ASGSConstants,ASGS_DB
 
 # specify the handlers
 [handlers]
@@ -21,14 +21,36 @@ keys=file,screen
 
 # specify logger details for the root logger
 [logger_root]
-level=ERROR
+level=NOTSET
 handlers=file
+propagate=0
 
 # specify details for the receve msg queue handler
 [logger_receive_msg_service_pg]
-level=DEBUG
-handlers=file,screen
+level=INFO
+handlers=file
 qualname=receive_msg_service_pg
+propagate=0
+
+# specify details for the ASGS_Queue_callback handler
+[logger_ASGS_Queue_callback]
+level=INFO
+handlers=file
+qualname=ASGS_Queue_callback
+propagate=0
+
+# specify details for the ASGSConstants handler
+[logger_ASGSConstants]
+level=INFO
+handlers=file
+qualname=ASGSConstants
+propagate=0
+
+# specify details for the ASGS_DB handler
+[logger_ASGS_DB]
+level=INFO
+handlers=file,screen
+qualname=ASGS_DB
 propagate=0
 
 # set the default log entry formatter
@@ -49,7 +71,6 @@ formatter=simple
 # define the console screen output handler
 # changing the level here will affect what makes it to the console screen.
 [handler_screen]
-level=NOTSET
 class=StreamHandler
-args = (sys.stdout,)
+args=(sys.stdout,)
 formatter=simple

@@ -9,21 +9,21 @@ from ASGS_Queue_callback import ASGS_Queue_callback
 ###################################
 if __name__ == "__main__":   
     # load the config
-    logging.config.fileConfig('/srv/django/ASGS_Web/messages/logging.conf')#
+    logging.config.fileConfig('logging.conf')#/srv/django/ASGS_Web/messages/
     
     # create a logger
-    logger = logging.getLogger('receive_msg_service_pg')
+    logger = logging.getLogger(__name__)
                 
     # retrieve configuration settings
     parser = ConfigParser()
-    parser.read('/srv/django/ASGS_Web/messages/msg_settings.ini')#
+    parser.read('msg_settings.ini')#/srv/django/ASGS_Web/messages/
 
     # set up AMQP credentials and connect to asgs queue
     credentials = pika.PlainCredentials(parser.get('pika', 'username'), parser.get('pika', 'password'))
     
     parameters = pika.ConnectionParameters(parser.get('pika', 'host'), parser.get('pika', 'port'), '/', credentials, socket_timeout=2)
     
-    logger.debug("Configuring ASGS Msg queue receive_msg_service")
+    logger.info("Configuring ASGS Msg queue.")
 
     connection = pika.BlockingConnection(parameters)
     
@@ -31,14 +31,13 @@ if __name__ == "__main__":
     
     channel.queue_declare(queue='asgs_queue')
     
-    logger.debug("ASGS Msg queue declared")
+    logger.info("ASGS Msg queue declared.")
     
     # get an instance to the callback handler
-    Queue_callback_inst = ASGS_Queue_callback(logger, parser)
+    Queue_callback_inst = ASGS_Queue_callback(parser)
     
     channel.basic_consume(Queue_callback_inst.callback, queue='asgs_queue', no_ack=True)
     
-    #print(' [*] Waiting for messages. To exit press CTRL+C')
     logger.info('ASGS Msg queue configured and waiting for messages...')
     
     channel.start_consuming()

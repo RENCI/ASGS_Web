@@ -2,10 +2,12 @@ import sys
 import re
 import psycopg2
 import datetime
+import logging.config
 
 class ASGS_DB:
-    def __init__(self, logger, ASGSConstants_inst, parser):
-        self.logger = logger
+    def __init__(self, ASGSConstants_inst, parser, logger=None):
+        # load the config
+        self.logger = logger or logging.getLogger(__name__)
         
         try:
             self.ASGSConstants_inst = ASGSConstants_inst
