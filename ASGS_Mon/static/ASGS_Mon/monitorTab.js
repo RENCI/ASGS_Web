@@ -354,7 +354,7 @@ function renderMonitorTab(siteInstance)
 			d3.json("dataReq/?type=event" + "&viewActiveFlag=" + viewActiveFlag + "&inactives=" + inactives.toString() + "&sinceDate=" + sinceDate + "&sites=" + sites.toString(), function(error, eventData)
 			{				
 				// erase all the site instances on error
-				if (error || eventData.length == 0) 
+				if (error || eventData == "None" || eventData.length == 0) 
 				{
 					d3.selectAll(".siteInstanceView").remove();
 					return;
