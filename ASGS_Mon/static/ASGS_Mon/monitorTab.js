@@ -90,10 +90,12 @@ function renderMonitorTab(siteInstance)
 	        if(sinceDate.length > 0)
 	        	viewFilterTitle.push(" Since " + sinceDate + " enabled");       	
 	        
-   			// update the view filter selection
+   			// update the view filter selection if needed
 	        if(viewFilterTitle.length > 0)
-	        	$("#viewFilterArea").text("( Filters: " + viewFilterTitle.toString() + ")");
-
+	        	$("#viewFilterArea").text("(Filters: " + viewFilterTitle.toString() + ")");
+	        else if ($("#viewFilterArea").text().length > 0)
+	        	$("#viewFilterArea").text("");
+	        	
 			// create/init the shells for all the site instances
 			d3.json("dataReq/?type=init" + "&viewActiveFlag=" + viewActiveFlag + "&inactives=" + inactives.toString() + "&sinceDate=" + sinceDate + "&sites=" + sites.toString(), function(error, initData)
 			{				
