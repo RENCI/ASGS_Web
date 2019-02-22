@@ -276,14 +276,16 @@ function renderMonitorTab(siteInstance)
 				    	// remove all instances of the current text messages
 				    	textarea.selectAll("foreignObject").remove();
 
+				    	// storage for the event msgs for this instance
 				    	var eventMsgs = null;
 				    	
 				    	// spin through the instances to find the one we are handling here
 				    	latestData.forEach(function(info)
 				    	{
+				    		// is this the event msgs we are looking for
 				    		if(info.instance_id == d.instance_id && info.advisory_number == d.advisory_number)
 				    		{
-						    	// get the event messages
+						    	// save the event messages
 				    			eventMsgs = info.event_raw_msgs; //d.event_raw_msgs;
 				    		}
 				    	});				    	
