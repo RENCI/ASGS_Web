@@ -253,7 +253,15 @@ function renderMonitorTab(siteInstance)
 					.attr("id", function(d) { return "_" + d.instance_id + '_' + d.advisory_number + "_rect"; })
 					.attr("class", "eventBox")
 					.attr("height", 15)
-					.attr("width", 0)
+					.attr("width", 3)						
+					.transition()
+						.duration(1000)
+						.attr("width", 595);
+
+				// output a place holder for the eventual event summary text
+	      		lastEventBox.append("g")				
+		      		.attr("transform", "translate(3, 11)")
+					.attr("id", function(d) { return "_" + d.instance_id + '_' + d.advisory_number + "_eventSummary"; })
 					.on("click", function(d) 
 					{
 						// get a ref to the rectangle the event msg is in
@@ -266,7 +274,7 @@ function renderMonitorTab(siteInstance)
 				    	var textarea = d3.select("#_" + d.instance_id + '_' + d.advisory_number + "_eventSummary");
 					  
 				    	// remove all instances of the current text messages
-				    	textarea.selectAll("text").remove();
+				    	textarea.selectAll("foreignObject").remove();
 
 				    	var eventMsgs = null;
 				    	
@@ -295,21 +303,17 @@ function renderMonitorTab(siteInstance)
 							msgRect.transition()
 								.duration(100)
 								.attr("height", "15")		
-																			
+																										
 							// insert the event area message text
-				    		textarea
-						    	.append("text")
-								.attr("class", "eventSummary")
-							    .text(function(d) 
-							    	{
-							    		var ellipsis = '';
-							    		
-							    		if(eventMsgs[0].event_summary.length > 130)
-							    			ellipsis = '...';
-
-							    		return eventMsgs[0].event_summary.substring(0, 130) + ellipsis; 
-							    	})
-								;
+							textarea
+								.append("foreignObject")
+								.attr("width", msgRect.node().getBoundingClientRect().width-3)
+								.attr("height", 11)
+								.attr("x", 0)
+								.attr("y", -9)
+								.append("xhtml:div")
+									.attr("class", "eventSummary")
+									.html(eventMsgs[0].event_summary);
 						}
 						// if the message area is small, make it large
 						else
@@ -323,36 +327,24 @@ function renderMonitorTab(siteInstance)
 							msgRect.transition()
 								.duration(300)
 								.attr("height", "75")						
-									
+
 					    	// loop through the messages and display them
 						    eventMsgs.forEach(function(info, i)
 						    	{
-						    		// output the text
-						    		textarea
-								    	.append("text")
-								    	.attr("class", "eventSummary")
-								    	.attr("transform", "translate(0, " + (i * 10) + ")")
-									    .text(function(d) 
-									    	{
-									    		var ellipsis = '';
-									    		
-									    		if(info.event_summary.length > 130)
-									    			ellipsis = '...';
-
-									    		return info.event_summary.substring(0, 130) + ellipsis; 
-									    	})
-								    	;
+									// output the event message text
+									textarea
+										.append("foreignObject")
+										.attr("transform", "translate(0, " + (i * 10) + ")")
+										.attr("width", msgRect.node().getBoundingClientRect().width-3)
+										.attr("height", 11)
+										.attr("x", 0)
+										.attr("y", -9)
+										.append("xhtml:div")
+											.attr("class", "eventSummary")
+											.html(info.event_summary);
 						    	});
 						}
-					})							
-					.transition()
-						.duration(1000)
-						.attr("width", 595);
-
-				// output a place holder for the eventual event summary text
-	      		lastEventBox.append("g")				
-		      		.attr("transform", "translate(3, 11)")
-					.attr("id", function(d) { return "_" + d.instance_id + '_' + d.advisory_number + "_eventSummary"; });
+					})	
 			});
 			
 			// load the shells for all the site instance events

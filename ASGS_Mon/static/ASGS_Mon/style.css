@@ -172,7 +172,13 @@ h2 span {
 .siteInstanceView .message { font: 16px sans-serif; fill: #999; }
 .siteInstanceView .stateSm { font: 13px sans-serif; font-weight: bold; font-style: italic;}
 .siteInstanceView .state { font: 11px sans-serif; }
-.siteInstanceView .eventSummary { font: 10px sans-serif; font-style: italic; }
+.siteInstanceView .eventSummary 
+{ 
+	font: 10px sans-serif; 
+	font-style: italic; text-overflow: ellipsis;
+  	white-space: nowrap;
+  	overflow: hidden;
+}
 .siteInstanceView .params { font: 8px sans-serif; font-style: italic;}
 
 img : hover

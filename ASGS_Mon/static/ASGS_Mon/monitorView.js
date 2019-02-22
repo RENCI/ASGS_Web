@@ -79,8 +79,8 @@
 			    	var textarea = d3.select("#_" + d.instance_id + '_' + d.advisory_number + "_eventSummary");
 				    
 			    	// remove all instances of the current event text messages
-			    	textarea.selectAll("text").remove();
-			    				    
+			    	textarea.selectAll("foreignObject").remove();
+			    
 			    	// get the event messages
 				    var eventMsgs = d.event_raw_msgs;
 				    
@@ -92,39 +92,32 @@
 			    	{
 				    	// loop through the messages
 					    eventMsgs.forEach(function(info, i)
-					    	{
-					    	
+					    	{			
 					    		// output the event message text
-					    		textarea
-							    	.append("text")
-							    	.attr("class", "eventSummary")
-							    	.attr("transform", "translate(0, " + (i * 10) +")")
-								    .text(function(d) 
-								    	{ 
-								    		var ellipsis = '';
-								    		
-								    		if(info.event_summary.length > 120)
-								    			ellipsis = '...';
-								    		
-								    		return info.event_summary.substring(0, 120) + ellipsis; 
-								    	});
+								textarea
+									.append("foreignObject")
+									.attr("transform", "translate(0, " + (i * 10) + ")")
+									.attr("width", msgRect.node().getBoundingClientRect().width-3)
+									.attr("height", 11)
+									.attr("x", 0)
+									.attr("y", -9)
+									.append("xhtml:div")
+										.attr("class", "eventSummary")
+										.html(info.event_summary);
 					    	});
 			    	}
 				    // else output the most recent one
 				    else
 				    {
-			    		textarea
-				    	.append("text")
-						.attr("class", "eventSummary")
-					    .text(function(d) 
-					    	{ 
-					    		var ellipsis = '';
-					    		
-					    		if(eventMsgs[0].event_summary.length > 120)
-					    			ellipsis = '...';
-
-					    		return eventMsgs[0].event_summary.substring(0, 120); 
-					    	});
+						textarea
+							.append("foreignObject")
+							.attr("width", msgRect.node().getBoundingClientRect().width-3)
+							.attr("height", 11)
+							.attr("x", 0)
+							.attr("y", -9)
+							.append("xhtml:div")
+								.attr("class", "eventSummary")
+								.html(eventMsgs[0].event_summary);
 				    }
 			    }
 			    
