@@ -64,23 +64,20 @@
 					<a class="nav-link" id="preferences-tab" data-toggle="tab" href="#prefsTab" role="tab">Preferences</a>
 				</li>
 				
-				{% if user.is_superuser %}
-				<li class="nav-item">
-					<a class="nav-link" id="priorResults-Tab" data-toggle="tab" href="#priorResultsTab" role="tab">Prior Results</a>
-				</li>
-				{% endif %}
-				
-				{% if user.is_superuser %}
-				<li class="nav-item">
-					<a class="nav-link" id="submit-Tab" data-toggle="tab" href="#submitTab" role="tab">Job Submission</a>
-				</li>
-				{% endif %}
 				
 				<li class="nav-item">
 					<a class="nav-link" id="config-Tab" data-toggle="tab" href="#configTab" onclick="initConfigTabList();" role="tab">Run Configurations</a>
 				</li>
 				
 				{% if user.is_superuser %}
+				<li class="nav-item">
+					<a class="nav-link" id="priorResults-Tab" data-toggle="tab" href="#priorResultsTab" role="tab">Prior Results</a>
+				</li>
+				
+				<li class="nav-item">
+					<a class="nav-link" id="submit-Tab" data-toggle="tab" href="#submitTab" role="tab">Job Submission</a>
+				</li>
+				
 				<li class="nav-item">
 					<a class="nav-link" id="admin-Tab" data-toggle="tab" href="#adminTab" role="tab">Administration</a>
 				</li>
