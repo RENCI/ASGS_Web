@@ -280,7 +280,10 @@ function renderMonitorTab(siteInstance)
 				    		}
 				    	});				    	
 
-						// if it is large, make it small
+					    // if the event message text area is expanded output all the latest messages 
+					    // note: i am keying off the size of the message area to make this determination.
+					    // apparently this can be +/- a pixel depending on the browser scaling.
+					    // so although the rect area is set to 75 sometimes it is 74.
 						if(parseInt(msgRect.node().getBoundingClientRect().height) >= 70)
 						{
 							// make the entire control small size
