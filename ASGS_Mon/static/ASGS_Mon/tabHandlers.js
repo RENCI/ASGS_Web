@@ -98,7 +98,7 @@ function initConfigTabList()
 		configList.forEach(function(info, i)
 		{
 			// tack on each entry
-			output += '<span class="input-group-text">' + info.instance_name + ' - Started on: ' + info.start_ts + '. <a href="javascript:getConfigDetails(' + info.instance_id + ', \'asgs\')">View ASGS</a>&nbsp; or &nbsp;<a href="javascript:getConfigDetails(' + info.instance_id + ', \'adcirc\')">View ADCIRC</a></span><div style="display:none; border:1px solid black; margin-top: 5px; margin-bottom: 5px" id="configdetail_' + info.instance_id + '"></div></br>';
+			output += '<span class="input-group-text">' + info.instance_name + ' - Started on: ' + info.start_ts + '. <a href="javascript:getConfigDetails(' + info.instance_id + ', \'asgs\')">View ASGS</a>&nbsp; or &nbsp;<a href="javascript:getConfigDetails(' + info.instance_id + ', \'adcirc\')">View ADCIRC</a></span><div style="display:none; border:1px solid black; margin-top: 5px; margin-bottom: 5px" id="configdetail_' + info.instance_id + '"></div><br>';
 		});
 		
 		// output the result

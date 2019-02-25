@@ -53,30 +53,31 @@
 	
 		<div class="card-body">
 			<ul class="nav nav-tabs" id="navTabs" role="tablist">
-				<li class="nav-item">
-					<a class="nav-link active" id="monitor-Tab" data-toggle="tab" href="#monitorTab" role="tab">Monitor</a>
+				<li class="nav-item">				 
+					<a data-balloon="This area is for viewing the each created ASGS process instance" data-balloon-pos="right" class="nav-link active" id="monitor-Tab" data-toggle="tab" href="#monitorTab" role="tab">Monitor</a>
 				</li>
 				
 				<li class="nav-item">
-					<a class="nav-link" id="preferences-tab" data-toggle="tab" href="#prefsTab" role="tab">Preferences</a>
+					<a data-balloon="This area is for viewing your user preferences" data-balloon-pos="up" class="nav-link" id="preferences-tab" data-toggle="tab" href="#prefsTab" role="tab">Preferences</a>
 				</li>
 				
 				
 				<li class="nav-item">
-					<a class="nav-link" id="config-Tab" data-toggle="tab" href="#configTab" onclick="initConfigTabList();" role="tab">Run Configurations</a>
+					<a data-balloon="This area is for viewing run configuration files" data-balloon-pos="up" class="nav-link" id="config-Tab" data-toggle="tab" href="#configTab" onclick="initConfigTabList();" role="tab">Run Configurations</a>
 				</li>
 				
 				{% if user.is_superuser %}
+				
 				<li class="nav-item">
-					<a class="nav-link" id="priorResults-Tab" data-toggle="tab" href="#priorResultsTab" role="tab">Prior Results</a>
+					<a data-balloon="This area is for viewing the results of ASGS runs" data-balloon-pos="up" class="nav-link" id="priorResults-Tab" data-toggle="tab" href="#priorResultsTab" role="tab">Prior Results</a>
 				</li>
 				
 				<li class="nav-item">
-					<a class="nav-link" id="submit-Tab" data-toggle="tab" href="#submitTab" role="tab">Job Submission</a>
+					<a data-balloon="This area is for submitting an ASGS process instance" data-balloon-pos="up" class="nav-link" id="submit-Tab" data-toggle="tab" href="#submitTab" role="tab">Job Submission</a>
 				</li>
 				
 				<li class="nav-item">
-					<a class="nav-link" id="admin-Tab" data-toggle="tab" href="#adminTab" role="tab">Administration</a>
+					<a data-balloon="This area is for viewing this sites adminstrative properties" data-balloon-pos="up" class="nav-link" id="admin-Tab" data-toggle="tab" href="#adminTab" role="tab">Administration</a>
 				</li>
 				{% endif %}
 			</ul>
@@ -84,7 +85,7 @@
 			<div id="browserError" align="center" style="margin-top: -50px; display: none;">
 				<span style="font-style: italic; font-size: 20px; color: red"><br><br>Microsoft browser detected!</span><br><br>
 				<img id="errImage" src=""/>
-				<span style="font-style: italic; font-size: 16px;"><br><br>Microsoft unfortunately does not support a key feature of HTML 5 that is needed to render this website.</br>Please use a different browser, ANY browser.</span>
+				<span style="font-style: italic; font-size: 16px;"><br><br>Microsoft unfortunately does not support a key feature of HTML 5 that is needed to render this web site.<br>Please use a different browser, ANY browser.</span>
 			</div>
 			
 			<div id="tabContent" class="tab-content">
@@ -97,17 +98,19 @@
 									<div class="col-lg-12">
 										<div class="card">
 											<div class="card-header">
-												<a class="card-link" data-toggle="collapse" href="#collapseFilter">View Filter</a>&nbsp;&nbsp;<span id="viewFilterArea" style="font-style: italic; font-size: 10px"></span>
+												<a data-balloon="Click here to view the filtering options" data-balloon-pos="right" class="card-link" data-toggle="collapse" href="#collapseFilter">View Filter</a>&nbsp;&nbsp;<span id="viewFilterArea" style="font-style: italic; font-size: 10px"></span>
 											</div>
 											<div class="card-body" style="margin-bottom: -26px">												
 												<div id="collapseFilter" class="collapse" data-parent="#monitorTab" style="margin-top: 5px">
-													<label class="check">Show all active
+												
+													<label>
+														<span data-balloon="Use this to filter active instance(s)" data-balloon-pos="up" class="check">Show all active
 														<input id="viewActive" type="checkbox" checked>
-													  	<span class="checkmark"></span>
+													  	<span class="checkmark"></span></span>
 													</label>
-													&nbsp;&nbsp;&nbsp;
+													
 													<label> 
-														<span style="font-style: italic; font-size: 12px">Show inactive
+														<span data-balloon="Use this to filter data by inactive instance(s)" data-balloon-pos="up" style="font-style: italic; font-size: 12px">Show inactive
 															<select id="inactiveFilter" class="selectpicker" multiple data-live-search="true">
 																<option value="3">Error</option>
 																<option value="9">Exited</option>
@@ -115,9 +118,9 @@
 															</select>
 														</span>
 													</label>																										  	
-													&nbsp;&nbsp;&nbsp;
+													
 													<label>
-														<span style="font-style: italic; font-size: 12px">Show only sites 
+														<span data-balloon="Use this to filter data by site(s)" data-balloon-pos="up" style="margin-left: 25px; font-style: italic; font-size: 12px">Show only sites 
 															<select id="siteFilter" class="selectpicker" multiple data-live-search="true">
 																<option value="4">George Mason</option>
 																<option value="6">LONI</option>
@@ -130,9 +133,9 @@
 															</select>
 														</span>
 													</label>
-													&nbsp;&nbsp;&nbsp;
+													
 													<label>
-														<span style="font-style: italic; font-size: 12px">Show filtered since 
+														<span data-balloon="Use this to filter instances created since a certain date" data-balloon-pos="up" style="margin-left: 25px; font-style: italic; font-size: 12px">Show filtered since 
 															<input type="date" autocomplete="off" id="sinceDate"></input>
 														</span>
 													</label>	
