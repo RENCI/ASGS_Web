@@ -67,7 +67,8 @@
 			    	.text(d.cluster_state)
 			    		.transition().duration(0)			    			
 			    	.transition().delay(0).duration(duration)
-			      		.attr("fill", stateTextColor);		    			    
+			      		.attr("fill", stateTextColor);		
+
 			    
 			    // get the event msg rectangle
 			    var msgRect = d3.select("#_" + d.instance_id + '_' + d.advisory_number + "_rect");
@@ -178,12 +179,12 @@
 					case _CONST_GROUP_WAIT_MSG_TYPE:
 					case _CONST_GROUP_WARN_MSG_TYPE:
 					case _CONST_GROUP_EXIT_MSG_TYPE:
-					case _CONST_GROUP_STALLED_MSG_TYPE:
 						measureColor = "goldenrod";
 						break;
 						
 					case _CONST_GROUP_CMPL_MSG_TYPE:
 					case _CONST_GROUP_NONE_MSG_TYPE:
+					case _CONST_GROUP_STALLED_MSG_TYPE:
 						measureColor = "gray";
 						break;
 						
