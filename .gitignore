@@ -3,6 +3,7 @@
 /ASGS_Mon/__pycache__
 /ASGS_Web/__pycache__
 /messages/msg_settings.ini
-messages/test/msg_settings.ini
+/messages/logging.conf
+/messages/test/msg_settings.ini
 /ASGS_Mon/migrations/__pycache__
-cron/db_settings.ini
+/cron/db_settings.ini
