@@ -115,7 +115,7 @@ function renderMonitorTab(siteInstance)
 				latestData = initData;
 				
 				// get the current date
-				d = new Date()
+				d = new Date();
 				
 				// get the current hour
 				var hour = d.getUTCHours();
