@@ -156,7 +156,8 @@ BEGIN
 				)
 				AND	i.start_ts >= _since
 				AND eg.advisory_id <> '0'
-			ORDER BY i.id DESC
+			ORDER BY i.start_ts DESC, eg.advisory_id DESC
+			LIMIT 50
 		) items;
 
 END;
@@ -284,7 +285,8 @@ BEGIN
 				)
 				AND	i.start_ts >= _since
 				AND eg.advisory_id <> '0'
-			ORDER BY i.id DESC
+			ORDER BY i.start_ts DESC, eg.advisory_id DESC
+			LIMIT 50
 			) AS items;
 END;
 
