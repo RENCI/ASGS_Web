@@ -1,0 +1,2 @@
+# every hour at 0 of hour
+0 * * * * /bin/python /srv/django/ASGS_Web/cron/run_stalled_SP.py
