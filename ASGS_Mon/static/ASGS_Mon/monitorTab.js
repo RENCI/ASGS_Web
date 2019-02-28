@@ -154,8 +154,8 @@ function renderMonitorTab(siteInstance)
 						.attr("id", function(d) {return "_" + d.instance_id + '_' + d.advisory_number;} )
 						.attr("class", "siteInstanceView")
 						.attr("width", siteInstance.width() + 30)
-						.attr("height", function(d) { // if this is an exited run collapse it by default
-							if(d.instance_status == _CONST_INSTANCE_EXIT_MSG_TYPE) 
+						.attr("height", function(d) { // if this is an exited or errored run collapse it by default
+							if(d.instance_status == _CONST_INSTANCE_EXIT_MSG_TYPE || d.instance_status == _CONST_INSTANCE_FAIL_MSG_TYPE) 
 								return '21'; 
 							else 
 								return '75';
@@ -170,7 +170,14 @@ function renderMonitorTab(siteInstance)
 			
 				// handle the expand/collapse image area that controls each view instance
 				title.append("image")
-				    .attr("xlink:href", "/static/ASGS_Mon/images/down2.gif")
+				    .attr("xlink:href",function(d) 
+				    		{ 
+				    			// if this is an exited or erred run collapse it by default
+								if(d.instance_status == _CONST_INSTANCE_EXIT_MSG_TYPE || d.instance_status == _CONST_INSTANCE_FAIL_MSG_TYPE) 
+									return '/static/ASGS_Mon/images/up2.gif'; 
+								else 
+									return '/static/ASGS_Mon/images/down2.gif';
+				    		})
 				    .attr("width", 13)
 				    .attr("height", 13)
 					.attr("x", -14)
