@@ -5,6 +5,9 @@ INSERT INTO "ASGS_Mon_site_lu" (id, name, description, cluster_name, tech_contac
 INSERT INTO "ASGS_Mon_site_lu" (id, name, description, cluster_name, tech_contact, phys_location) VALUES (3, 'UCF', '', 'UCF cluster', '', 'FL');
 INSERT INTO "ASGS_Mon_site_lu" (id, name, description, cluster_name, tech_contact, phys_location) VALUES (4, 'George Mason', '', 'GM cluster', '', 'VA');
 INSERT INTO "ASGS_Mon_site_lu" (id, name, description, cluster_name, tech_contact, phys_location) VALUES (5, 'Penguin', '', 'POD', '', 'Penguin');
+INSERT INTO "ASGS_Mon_site_lu" (id, name, description, cluster_name, tech_contact, phys_location) VALUES (6, 'LONI', '', 'Queenbee', '', 'LONI');
+INSERT INTO "ASGS_Mon_site_lu" (id, name, description, cluster_name, tech_contact, phys_location) VALUES (7, 'Seahorse', '', 'jason-desktop', 'Jason Fleming', 'Seahorse');
+INSERT INTO "ASGS_Mon_site_lu" (id, name, description, cluster_name, tech_contact, phys_location) VALUES (8, 'QB2', '', 'Queenbee2', 'Matthew Bilskie', 'QB2');
 
 delete from "ASGS_Mon_event_type_lu";
 INSERT INTO "ASGS_Mon_event_type_lu" (id, name, description, pct_complete) VALUES (0, 'RSTR', 'New run has started', 0);
