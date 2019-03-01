@@ -150,3 +150,45 @@ function getConfigDetails(id, type)
 		});
 	}
 }
+
+/**
+ * gets the date in a nice format
+ * 
+ * @param date
+ * @returns
+ */
+function formatLocalAMPM(date) 
+{
+	// get the current hours and minutes
+	var hour = date.getHours();
+	var minute = date.getMinutes();
+	
+	// determine AM/PM
+	var ampm = hour >= 12 ? 'pm' : 'am';
+	  
+	// format the hours
+	hour = hour % 12;
+	hour = (hour % 12) ? hour : 12;	  
+	  
+	// compile the formatted time
+	var strTime = hour + ':' + ('0' + minute).slice(-2) + ' ' + ampm;
+	  
+	// return to the caller
+	return strTime;
+}
+
+/** 
+ * formats the time in NCEP format
+ * 
+ */
+function formatNCEPTime(date)
+{
+	// get the hour
+	var hour = date.getHours();
+
+	// format the time into the NCEP 
+	var strTime = d.getUTCFullYear() + '/' + ('0' + (d.getUTCMonth() + 1)).slice(-2) + '/' + ('0' + d.getUTCDate()).slice(-2) + ((hour >= 18) ? ' 18z' : ((hour >= 12) ? ' 12z' : ((hour >= 6) ? ' 06z' : ' 00z')));
+	
+	// return to the caller
+	return strTime;
+}

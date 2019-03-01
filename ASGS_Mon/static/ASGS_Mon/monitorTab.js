@@ -116,12 +116,10 @@ function renderMonitorTab(siteInstance)
 				
 				// get the current date
 				d = new Date();
-				
-				// get the current hour
-				var hour = d.getUTCHours();
-							
+											
 				// update the current NCEP cycle number
-				$("#NCEP_cycle").text('Current NCEP cycle: ' + d.getUTCFullYear() + '/' + ('0' + (d.getUTCMonth() + 1)).slice(-2) + '/' + ('0' + d.getUTCDate()).slice(-2) + ((hour >= 18) ? ' 18z' : ((hour >= 12) ? ' 12z' : ((hour >= 6) ? ' 06z' : ' 00z'))));
+				$("#NCEP_cycle").text('Current NCEP cycle: ' + formatNCEPTime(d));
+				$("#local_Time").text('Current time: ' + formatLocalAMPM(d));
 				
 				// get the current rendered items
 				var curRendered = d3.selectAll(".siteInstanceView").selectAll("svg");
