@@ -38,6 +38,8 @@ GRANT EXECUTE ON FUNCTION public.get_config_detail_json(integer) TO postgres;
 
 GRANT EXECUTE ON FUNCTION public.get_config_detail_json(integer) TO PUBLIC;
 
+
+
 -- FUNCTION: public.get_config_list_json()
 
 -- DROP FUNCTION public.get_config_list_json();
@@ -76,6 +78,9 @@ GRANT EXECUTE ON FUNCTION public.get_config_list_json() TO asgs;
 GRANT EXECUTE ON FUNCTION public.get_config_list_json() TO postgres;
 
 GRANT EXECUTE ON FUNCTION public.get_config_list_json() TO PUBLIC;
+
+
+
 
 -- FUNCTION: public.get_event_json(boolean, date, text, text)
 
@@ -177,6 +182,7 @@ COMMENT ON FUNCTION public.get_event_json(boolean, date, text, text)
     IS 'Returns a recordset (json) of the active cluster events.';
 
     
+    
 -- FUNCTION: public.get_event_msgs_by_group_json(integer, character varying)
 
 -- DROP FUNCTION public.get_event_msgs_by_group_json(integer, character varying);
@@ -220,6 +226,7 @@ GRANT EXECUTE ON FUNCTION public.get_event_msgs_by_group_json(integer, character
 COMMENT ON FUNCTION public.get_event_msgs_by_group_json(integer, character varying)
     IS 'Returns a recordset (json) of the last 5 event messages for a group.';
 
+    
     
 -- FUNCTION: public.get_init_json(boolean, date, text, text)
 
@@ -304,6 +311,8 @@ GRANT EXECUTE ON FUNCTION public.get_init_json(boolean, date, text, text) TO PUB
 COMMENT ON FUNCTION public.get_init_json(boolean, date, text, text)
     IS 'Returns a recordset (json) of the running ASGS cluster instances.';
 
+    
+    
 -- FUNCTION: public.handle_stalled_event_groups()
 
 -- DROP FUNCTION public.handle_stalled_event_groups();
@@ -366,5 +375,4 @@ GRANT EXECUTE ON FUNCTION public.handle_stalled_event_groups() TO PUBLIC;
 
 COMMENT ON FUNCTION public.handle_stalled_event_groups()
     IS 'Updates event groups to a stalled status when no event messages have been received in 3 or more hours.';
-    
     
