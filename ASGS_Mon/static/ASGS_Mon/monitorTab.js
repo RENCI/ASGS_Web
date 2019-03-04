@@ -95,7 +95,7 @@ function renderMonitorTab(siteInstance)
 	        	$("#viewFilterArea").text("(Filters: " + viewFilterTitle.toString() + ")");
 	        else if ($("#viewFilterArea").text().length > 0)
 	        	$("#viewFilterArea").text("");
-	        	
+	        
 			// create/init the shells for all the site instances
 			d3.json("dataReq/?type=init" + "&viewActiveFlag=" + viewActiveFlag + "&inactives=" + inactives.toString() + "&sinceDate=" + sinceDate + "&sites=" + sites.toString(), function(error, initData)
 			{				
@@ -110,7 +110,7 @@ function renderMonitorTab(siteInstance)
 				}
 				else
 					$("#filterMsg").hide(0);
-					
+				
 				// save this data for the event message rendering later
 				latestData = initData;
 				
@@ -351,25 +351,26 @@ function renderMonitorTab(siteInstance)
 											.html(info.event_summary);
 						    	});
 						}
-					})	
-			});
-			
-			// load the shells for all the site instance events
-			d3.json("dataReq/?type=event" + "&viewActiveFlag=" + viewActiveFlag + "&inactives=" + inactives.toString() + "&sinceDate=" + sinceDate + "&sites=" + sites.toString(), function(error, eventData)
-			{				
-				// erase all the site instances on error
-				if (error || eventData == "None" || eventData.length == 0) 
-				{
-					d3.selectAll(".siteInstanceView").remove();
-					return;
-				}
+					})
 				
-	 	 		// get a reference to the visualization component
-	 			var svg = d3.select("#siteInstancesTarget").selectAll("svg");
-	 			
-	 	 		// reload the visualization with the new data
-	 			svg.data(eventData).call(siteInstance.duration(1500));
-			});
+				// load the shells for all the site instance events
+				d3.json("dataReq/?type=event" + "&viewActiveFlag=" + viewActiveFlag + "&inactives=" + inactives.toString() + "&sinceDate=" + sinceDate + "&sites=" + sites.toString(), function(error, eventData)
+				{				
+					// erase all the site instances on error
+					if (error || eventData == "None" || eventData.length == 0) 
+					{
+						d3.selectAll(".siteInstanceView").remove();
+						return;
+					}
+					
+		 	 		// get a reference to the visualization component
+		 			var svg = d3.select("#siteInstancesTarget").selectAll("svg");
+		 			
+		 	 		// reload the visualization with the new data
+		 			svg.data(eventData).call(siteInstance.duration(1500));
+				});
+
+			});			
  		}
  	}
 }
