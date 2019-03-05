@@ -6,4 +6,4 @@ where
 	schemaname in ('public') 
 order by 4 desc
 
-select pg_stat_reset();
+--select pg_stat_reset();
