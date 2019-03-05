@@ -1,0 +1,9 @@
+-- to see stats and generate select statements to determine why indexes arent being hit
+select 
+	*  
+from pg_stat_user_tables 
+where 
+	schemaname in ('public') 
+order by 4 desc
+
+select pg_stat_reset();
