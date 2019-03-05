@@ -1,3 +1,5 @@
+select * from pg_stat_activity where state='active';
+
 -- to see stats and generate select statements to determine why indexes arent being hit
 select 
 	*  
