@@ -1,11 +1,12 @@
-select * from pg_stat_activity where state='active';
+--select * from pg_stat_activity where state='active';
 
 -- to see stats and generate select statements to determine why indexes arent being hit
+-- focus is on ASGS tables. lus are excluded because small tables always do a seq scan. 
 select 
 	*  
 from pg_stat_user_tables 
 where 
-	schemaname in ('public') 
+	relname not like '%_lu' and relname like 'ASGS_Mon%'
 order by 4 desc
 
 --select pg_stat_reset();
