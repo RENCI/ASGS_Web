@@ -103,7 +103,7 @@ def dataReq(request):
                 else:
                     paramVal = param
             elif reqType == 'wellness':
-                retVal = 'retry:6000\ndata: {}\n\n'
+                retVal = 'retry:3000\ndata: {}\n\n'
             elif reqType == 'init' or reqType == 'event':
                 # get the query string items. we will always get these
                 paramVal += "'{0}'".format(request.GET.get('viewActiveFlag'))
