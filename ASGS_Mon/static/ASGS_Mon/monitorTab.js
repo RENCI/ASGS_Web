@@ -133,7 +133,7 @@ function renderMonitorTab(siteInstance)
 					
 					// save the data instance ids
 					for(i=0; i<initData.length; i++)
-						a.push("_" + initData[i].instance_id + '_' + initData[i].advisory_number);
+						a.push("_" + initData[i].instance_id + '_' + initData[i].eg_id);
 					
 					// save the current rendered ids
 					for(j=0; j<curRendered.length; j++)
@@ -149,7 +149,7 @@ function renderMonitorTab(siteInstance)
 				    .data(initData)
 				    .enter()
 			    	.append("svg")
-						.attr("id", function(d) {return "_" + d.instance_id + '_' + d.advisory_number;} )
+						.attr("id", function(d) {return "_" + d.instance_id + '_' + d.eg_id;} )
 						.attr("class", "siteInstanceView")
 						.attr("width", siteInstance.width() + 30)
 						.attr("height", function(d) { // if this is an exited or errored run collapse it by default
@@ -183,10 +183,10 @@ function renderMonitorTab(siteInstance)
 					.on("click", function(d) 
 					{
 						// get a ref to the site instance rect (main rect for each instance)
-						si = d3.select("#_" + d.instance_id + '_' + d.advisory_number);
+						si = d3.select("#_" + d.instance_id + '_' + d.eg_id);
 						
 						// get the size of the event message summary rect
-						msgRect = d3.select("#_" + d.instance_id + '_' + d.advisory_number + "_rect");
+						msgRect = d3.select("#_" + d.instance_id + '_' + d.eg_id + "_rect");
 						
 						// reset the event message area
 						msgRect.transition()
@@ -225,7 +225,7 @@ function renderMonitorTab(siteInstance)
 				// append the process run state. colored RGB later
 				title.append("text")
 					.text("Loading...")
-					.attr("id", function(d) { return "_" + d.instance_id + '_' + d.advisory_number + "_state"; })
+					.attr("id", function(d) { return "_" + d.instance_id + '_' + d.eg_id + "_state"; })
 					.attr("class", "stateSm")
 		      		.attr("fill", "gray")
 					.attr("x", siteInstance.width()/2 - 90);
@@ -235,7 +235,7 @@ function renderMonitorTab(siteInstance)
 					.attr("transform", "translate(6," + siteInstance.height() / 2 + ")")
 					.append("text")
 						.text("Loading...")
-						.attr("id", function(d) { return "_" + d.instance_id + '_' + d.advisory_number + "_operation"; })
+						.attr("id", function(d) { return "_" + d.instance_id + '_' + d.eg_id + "_operation"; })
 			      		.attr("fill", "gray")
 						.attr("class", "state")
 						.attr("dy", ".35em");
@@ -245,7 +245,7 @@ function renderMonitorTab(siteInstance)
 			      	.style("text-anchor", "end")
 					.attr("transform", "translate(" + siteInstance.width() + ", -5)")
 					.append("text")
-						.attr("id", function(d) { return "_" + d.instance_id + '_' + d.advisory_number + "_params"; })
+						.attr("id", function(d) { return "_" + d.instance_id + '_' + d.eg_id + "_params"; })
 						.attr("class", "params")
 						.text(function(d) { return "Params: " + d.run_params; });					 	 		
 
@@ -255,7 +255,7 @@ function renderMonitorTab(siteInstance)
 				
 				// load the event messages rectangle
 				lastEventBox.append("rect")
-					.attr("id", function(d) { return "_" + d.instance_id + '_' + d.advisory_number + "_rect"; })
+					.attr("id", function(d) { return "_" + d.instance_id + '_' + d.eg_id + "_rect"; })
 					.attr("class", "eventBox")
 					.attr("height", 15)
 					.attr("width", 3)						
@@ -266,17 +266,17 @@ function renderMonitorTab(siteInstance)
 				// output a place holder for the eventual event summary text
 	      		lastEventBox.append("g")				
 		      		.attr("transform", "translate(3, 11)")
-					.attr("id", function(d) { return "_" + d.instance_id + '_' + d.advisory_number + "_eventSummary"; })
+					.attr("id", function(d) { return "_" + d.instance_id + '_' + d.eg_id + "_eventSummary"; })
 					.on("click", function(d) 
 					{
 						// get a ref to the rectangle the event msg is in
-						msgRect = d3.select("#_" + d.instance_id + '_' + d.advisory_number + "_rect");
+						msgRect = d3.select("#_" + d.instance_id + '_' + d.eg_id + "_rect");
 
 						// get a ref to the site instance
-						si = d3.select("#_" + d.instance_id + '_' + d.advisory_number);
+						si = d3.select("#_" + d.instance_id + '_' + d.eg_id);
 														
 				    	// get a reference to the event text area
-				    	var textarea = d3.select("#_" + d.instance_id + '_' + d.advisory_number + "_eventSummary");
+				    	var textarea = d3.select("#_" + d.instance_id + '_' + d.eg_id + "_eventSummary");
 					  
 				    	// remove all instances of the current text messages
 				    	textarea.selectAll("foreignObject").remove();
@@ -288,7 +288,7 @@ function renderMonitorTab(siteInstance)
 				    	latestData.forEach(function(info)
 				    	{
 				    		// is this the event msgs we are looking for
-				    		if(info.instance_id == d.instance_id && info.advisory_number == d.advisory_number)
+				    		if(info.instance_id == d.instance_id && info.advisory_number == d.eg_id)
 				    		{
 						    	// save the event messages
 				    			eventMsgs = info.event_raw_msgs; //d.event_raw_msgs;
