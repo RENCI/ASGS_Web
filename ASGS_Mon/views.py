@@ -118,13 +118,18 @@ def dataReq(request):
                 if request.GET.get('sites') != '':
                     paramVal += ", _sites := '{{{0}}}'".format(request.GET.get('sites'))
                 
-            # if no errors continue
+            # if data requested continue
             if retVal == '':
                 # create the SQL. raw SQL calls using the django db model need an ID
                 theSQL = "SELECT 1 AS id, public.get_{0}_json({1}) AS data;".format(reqType, paramVal)
-                    
+
+                #import time
+                #print("start: " + time.strftime("%b %d %Y %H:%M:%S", time.localtime()))
+                
                 # get the data, account for single quotes
-                retVal = str(models.Json.objects.raw(theSQL)[0].data).replace("'", "\"")            
+                retVal = str(models.Json.objects.raw(theSQL)[0].data).replace("'", "\"")   
+                         
+                #print("done: " + time.strftime("%b %d %Y %H:%M:%S", time.localtime()))
                 
                 # reformat empty data sets
                 if retVal == "None":
