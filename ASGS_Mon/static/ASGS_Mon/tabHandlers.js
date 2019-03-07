@@ -160,31 +160,30 @@ function getConfigDetails(id, type)
 function formatLocalAMPM(date) 
 {
 	// get the current hours and minutes
-	var hour = date.getHours();
+	var theHour = date.getHours();
 	var minute = date.getMinutes();
 	
 	// determine AM/PM
-	var ampm = hour >= 12 ? 'pm' : 'am';
+	var ampm = theHour >= 12 ? 'pm' : 'am';
 	  
 	// format the hours
-	hour = hour % 12;
+	hour = theHour % 12;
 	hour = (hour % 12) ? hour : 12;	  
 	  
-	// compile the formatted time
+	// compile the formatted local time
 	var lclTime = hour + ':' + ('0' + minute).slice(-2) + ' ' + ampm;
 	  
 	// get the number of hours off UTC time
 	var timezone =  date.getTimezoneOffset() / 60;
-	
+		
 	// get the UTC hour
-	hour = hour + timezone;
-	hour = (hour % 24) ? hour : '00';
+	hour = (theHour + timezone) % 24;
 	
 	// compile the formatted utc time
-	var utcTime = hour + ':' + ('0' + minute).slice(-2) + 'z';
+	var utcTime = ('0' + hour).slice(-2) + ':' + ('0' + minute).slice(-2) + 'z';
 			
 	// return to the caller
-	return 'Local time: ' + lclTime + ', UTC time: ' + utcTime;
+	return 'Local time: ' + lclTime + ', UTC time: ' + utcTime;	
 }
 
 /** 
