@@ -288,7 +288,7 @@ function renderMonitorTab(siteInstance)
 				    	latestData.forEach(function(info)
 				    	{
 				    		// is this the event msgs we are looking for
-				    		if(info.instance_id == d.instance_id && info.advisory_number == d.eg_id)
+				    		if(info.instance_id == d.instance_id && info.eg_id == d.eg_id)
 				    		{
 						    	// save the event messages
 				    			eventMsgs = info.event_raw_msgs; //d.event_raw_msgs;
