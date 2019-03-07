@@ -118,8 +118,8 @@ function renderMonitorTab(siteInstance)
 				d = new Date();
 											
 				// update the current NCEP cycle number
-				$("#NCEP_cycle").text('Current NCEP cycle: ' + formatNCEPTime(d));
-				$("#local_Time").text('Current time: ' + formatLocalAMPM(d));
+				$("#NCEP_cycle").text(formatNCEPTime(d));
+				$("#local_Time").text(formatLocalAMPM(d));
 				
 				// get the current rendered items
 				var curRendered = d3.selectAll(".siteInstanceView").selectAll("svg");

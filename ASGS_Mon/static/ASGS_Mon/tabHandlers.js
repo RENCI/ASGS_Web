@@ -171,10 +171,20 @@ function formatLocalAMPM(date)
 	hour = (hour % 12) ? hour : 12;	  
 	  
 	// compile the formatted time
-	var strTime = hour + ':' + ('0' + minute).slice(-2) + ' ' + ampm;
+	var lclTime = hour + ':' + ('0' + minute).slice(-2) + ' ' + ampm;
 	  
+	// get the number of hours off UTC time
+	var timezone =  date.getTimezoneOffset() / 60;
+	
+	// get the UTC hour
+	hour = hour + timezone;
+	hour = (hour % 24) ? hour : '00';
+	
+	// compile the formatted utc time
+	var utcTime = hour + ':' + ('0' + minute).slice(-2) + 'z';
+			
 	// return to the caller
-	return strTime;
+	return 'Local time: ' + lclTime + ', UTC time: ' + utcTime;
 }
 
 /** 
@@ -183,12 +193,15 @@ function formatLocalAMPM(date)
  */
 function formatNCEPTime(date)
 {
+	// get the number of hours off UTC time
+	var timezone =  date.getTimezoneOffset() / 60;
+
 	// get the hour
-	var hour = date.getHours();
+	var hour = date.getHours() + timezone;
 
 	// format the time into the NCEP 
 	var strTime = d.getUTCFullYear() + '/' + ('0' + (d.getUTCMonth() + 1)).slice(-2) + '/' + ('0' + d.getUTCDate()).slice(-2) + ((hour >= 18) ? ' 18z' : ((hour >= 12) ? ' 12z' : ((hour >= 6) ? ' 06z' : ' 00z')));
 	
 	// return to the caller
-	return strTime;
+	return 'Current NCEP cycle: ' + strTime;
 }
