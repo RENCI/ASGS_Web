@@ -161,7 +161,7 @@ h2 span {
 
 .siteInstanceView { font: 10px sans-serif; border: 1px solid; border-color: silver; border-radius: 4px; margin-left: 5px; margin-top: 3px;}
 .siteInstanceView .tick line { stroke: gray; stroke-width: .5px; }
-.siteInstanceView .marker { stroke: #000; stroke-width: 2px; }
+.siteInstanceView .marker { stroke: #00FFAB; stroke-width: 5px; }
 .siteInstanceView .range.s0 { fill: #eee; stroke: gray; stroke-width: .5px;}
 .siteInstanceView .range.s1 { fill: #ddd; stroke: gray; stroke-width: .5px;}
 .siteInstanceView .range.s2 { fill: #ccc; stroke: gray; stroke-width: .5px;}

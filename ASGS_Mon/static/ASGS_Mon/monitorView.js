@@ -239,7 +239,7 @@
 						.attr("x2", x1)
 						.attr("y1", height / 6)
 						.attr("y2", height * 5 / 6);
-	
+
 				// Compute the tick format.
 				var format = tickFormat || x1.tickFormat(8);
 	
