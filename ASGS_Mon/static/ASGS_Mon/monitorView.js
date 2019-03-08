@@ -185,7 +185,7 @@
 					case _CONST_GROUP_CMPL_MSG_TYPE:
 					case _CONST_GROUP_NONE_MSG_TYPE:
 					case _CONST_GROUP_STALLED_MSG_TYPE:
-						measureColor = "gray";
+						measureColor = "lightgray";
 						break;
 						
 					case _CONST_GROUP_FAIL_MSG_TYPE:
