@@ -110,6 +110,11 @@ class ASGS_Queue_callback:
             self.logger.debug("Reusing event_group_id: {0}".format(event_group_id))
     
             # update event group with this latest state
+            # added 3/6/19 - will set status to EXIT if this is a FEND or REND event_type
+            # will hardcode this state id for now, until I get my messaging refactor delivered
+            if (event_name == 'FEND') or (event_name == 'REND'):
+                state_id = 9
+                self.logger.debug("Got FEND or REND event type: setting state_id to " + str(state_id))
             try:
                 self.ASGS_DB_inst.update_event_group(state_id, event_group_id, msg_obj)
             except:
