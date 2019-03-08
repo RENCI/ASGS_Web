@@ -118,7 +118,7 @@ BEGIN
 
 			ARRAY[100] AS ranges,
 			ARRAY[e.pct_complete] AS measures, 
-			ARRAY[0] AS markers,
+			ARRAY[e.pct_complete] AS markers,
 
 			eg.id AS eg_id, 
 			stlgrp.description AS group_state,
@@ -137,16 +137,19 @@ BEGIN
 			FROM "ASGS_Mon_instance" i
 			JOIN "ASGS_Mon_site_lu" s ON s.id=i.site_id
 			JOIN "ASGS_Mon_event_group" eg ON eg.instance_id=i.id
-			JOIN "ASGS_Mon_event" e on e.event_group_id=eg.id
+			JOIN "ASGS_Mon_event" e ON e.event_group_id=eg.id
 			JOIN "ASGS_Mon_event_type_lu" etl ON etl.id=e.event_type_id
 			JOIN "ASGS_Mon_state_type_lu" stlgrp ON stlgrp.id=eg.state_type_id
 			JOIN "ASGS_Mon_instance_state_type_lu" istlu ON istlu.id=i.inst_state_type_id
-			INNER JOIN (SELECT max(id) AS id, advisory_id from "ASGS_Mon_event" group by event_group_id, advisory_id) AS meid ON meid.id=e.id AND meid.advisory_id=eg.advisory_id
-			INNER JOIN (SELECT max(id) AS id, instance_id, advisory_id from "ASGS_Mon_event_group" group by instance_id, advisory_id) AS megid ON megid.id=eg.id AND megid.instance_id=i.id AND megid.advisory_id=eg.advisory_id	
+--			INNER JOIN (SELECT max(id) AS id, advisory_id FROM "ASGS_Mon_event" GROUP BY event_group_id, advisory_id) AS meid ON meid.id=e.id AND meid.advisory_id=eg.advisory_id
+--			INNER JOIN LATERAL (SELECT max(id) AS id, e1.advisory_id FROM "ASGS_Mon_event" e1 where e1.event_group_id=e.event_group_id and e1.advisory_id=eg.advisory_id group by e1.event_group_id, e1.advisory_id) AS meid ON meid.id=e.id AND meid.advisory_id=eg.advisory_id
+--			INNER JOIN (SELECT max(id) AS id, instance_id, advisory_id FROM "ASGS_Mon_event_group" GROUP BY instance_id, advisory_id) AS megid ON megid.id=eg.id AND megid.instance_id=i.id AND megid.advisory_id=eg.advisory_id	
+--			INNER JOIN LATERAL (SELECT max(id) AS id, instance_id, advisory_id FROM "ASGS_Mon_event_group" eg2 where eg2.instance_id=eg.instance_id and eg2.advisory_id=eg.advisory_id GROUP BY instance_id, advisory_id) AS megid ON megid.id=eg.id AND megid.instance_id=i.id AND megid.advisory_id=eg.advisory_id	
+			INNER JOIN LATERAL (SELECT id, e1.advisory_id FROM "ASGS_Mon_event" e1 where e1.event_group_id=eg.id and e1.advisory_id=eg.advisory_id ORDER BY 1 DESC LIMIT 1) AS meid ON meid.id=e.id AND meid.advisory_id=eg.advisory_id
 			WHERE														
 				(
 					CASE WHEN _viewActive = true
-						THEN i.inst_state_type_id IN (0, 1, 2, 4, 5, 6, 8) AND eg.state_type_id IN (0, 1, 2, 4, 5, 8)
+						THEN i.inst_state_type_id IN (0, 1, 2, 4, 5, 8) AND eg.state_type_id IN (0, 1, 2, 4, 5, 8)
 					END OR		
 					CASE WHEN _inactives <> ''
 						THEN i.inst_state_type_id = ANY (_inactives::int[]) OR eg.state_type_id = ANY (_inactives::int[])
@@ -162,7 +165,7 @@ BEGIN
 				AND	i.start_ts >= _since
 				AND eg.advisory_id <> '0'
 			ORDER BY i.start_ts DESC, eg.advisory_id DESC
-			LIMIT 50
+			--LIMIT 50
 		) items;
 
 END;
@@ -263,21 +266,28 @@ BEGIN
 				s.name AS title,
 				s.cluster_name AS subtitle,
 			 	eg.advisory_id AS advisory_number,
+			 	eg.id AS eg_id,
 				'' AS message,
 				ARRAY[100] AS ranges,
 				ARRAY[0] AS measures,
-				ARRAY[0] AS markers,
+				ARRAY[100] AS markers,
 				(SELECT public.get_event_msgs_by_group_json(eg.id, eg.advisory_id)) AS event_raw_msgs
 			FROM "ASGS_Mon_instance" i
 			JOIN "ASGS_Mon_site_lu" s ON s.id=i.site_id
 			JOIN "ASGS_Mon_event_group" eg ON eg.instance_id=i.id
-			JOIN "ASGS_Mon_event" e on e.event_group_id=eg.id
-			INNER JOIN (SELECT max(id) AS id, advisory_id from "ASGS_Mon_event" group by event_group_id, advisory_id) AS meid ON meid.id=e.id AND meid.advisory_id=eg.advisory_id
-			INNER JOIN (SELECT max(id) AS id, instance_id, advisory_id from "ASGS_Mon_event_group" group by instance_id, advisory_id) AS megid ON megid.id=eg.id AND megid.instance_id=i.id AND megid.advisory_id=eg.advisory_id	
+			JOIN "ASGS_Mon_event" e ON e.event_group_id=eg.id
+			JOIN "ASGS_Mon_event_type_lu" etl ON etl.id=e.event_type_id
+			JOIN "ASGS_Mon_state_type_lu" stlgrp ON stlgrp.id=eg.state_type_id
+			JOIN "ASGS_Mon_instance_state_type_lu" istlu ON istlu.id=i.inst_state_type_id
+--			INNER JOIN (SELECT max(id) AS id, advisory_id FROM "ASGS_Mon_event" GROUP BY event_group_id, advisory_id) AS meid ON meid.id=e.id AND meid.advisory_id=eg.advisory_id
+--			INNER JOIN LATERAL (SELECT max(id) AS id, e1.advisory_id FROM "ASGS_Mon_event" e1 where e1.event_group_id=e.event_group_id and e1.advisory_id=eg.advisory_id group by e1.event_group_id, e1.advisory_id) AS meid ON meid.id=e.id AND meid.advisory_id=eg.advisory_id
+--			INNER JOIN (SELECT max(id) AS id, instance_id, advisory_id FROM "ASGS_Mon_event_group" GROUP BY instance_id, advisory_id) AS megid ON megid.id=eg.id AND megid.instance_id=i.id AND megid.advisory_id=eg.advisory_id	
+--			INNER JOIN LATERAL (SELECT max(id) AS id, instance_id, advisory_id FROM "ASGS_Mon_event_group" eg2 where eg2.instance_id=eg.instance_id and eg2.advisory_id=eg.advisory_id GROUP BY instance_id, advisory_id) AS megid ON megid.id=eg.id AND megid.instance_id=i.id AND megid.advisory_id=eg.advisory_id	
+			INNER JOIN LATERAL (SELECT id, e1.advisory_id FROM "ASGS_Mon_event" e1 where e1.event_group_id=eg.id and e1.advisory_id=eg.advisory_id ORDER BY 1 DESC LIMIT 1) AS meid ON meid.id=e.id AND meid.advisory_id=eg.advisory_id
 			WHERE
 				(
 					CASE WHEN _viewActive = true
-						THEN i.inst_state_type_id IN (0, 1, 2, 4, 5, 6, 8) AND eg.state_type_id IN (0, 1, 2, 4, 5, 8)
+						THEN i.inst_state_type_id IN (0, 1, 2, 4, 5, 8) AND eg.state_type_id IN (0, 1, 2, 4, 5, 8)
 					END OR		
 					CASE WHEN _inactives <> ''
 						THEN i.inst_state_type_id = ANY (_inactives::int[]) OR eg.state_type_id = ANY (_inactives::int[])
@@ -293,7 +303,7 @@ BEGIN
 				AND	i.start_ts >= _since
 				AND eg.advisory_id <> '0'
 			ORDER BY i.start_ts DESC, eg.advisory_id DESC
-			LIMIT 50
+			--LIMIT 50
 			) AS items;
 END;
 
