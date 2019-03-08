@@ -196,7 +196,7 @@ function formatNCEPTime(date)
 	var timezone =  date.getTimezoneOffset() / 60;
 
 	// get the hour
-	var hour = date.getHours() + timezone;
+	var hour = (date.getHours() + timezone) % 24;
 
 	// format the time into the NCEP 
 	var strTime = d.getUTCFullYear() + '/' + ('0' + (d.getUTCMonth() + 1)).slice(-2) + '/' + ('0' + d.getUTCDate()).slice(-2) + ((hour >= 18) ? ' 18z' : ((hour >= 12) ? ' 12z' : ((hour >= 6) ? ' 06z' : ' 00z')));
