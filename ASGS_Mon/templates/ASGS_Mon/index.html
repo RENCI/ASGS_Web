@@ -50,8 +50,8 @@
 	
 		<audio id="audioExpand" src="/static/ASGS_Mon/sounds/expand.wav" ></audio>
 		<audio id="audioCollapse" src="/static/ASGS_Mon/sounds/collapse.wav" ></audio>
-	
-		<div class="card-body">
+		
+		<div class="card-body">			
 			<ul class="nav nav-tabs" id="navTabs" role="tablist">
 				<li class="nav-item">				 
 					<a data-balloon="This area is for viewing each ASGS process instance" data-balloon-pos="right" class="nav-link active" id="monitor-Tab" data-toggle="tab" href="#monitorTab" role="tab">Monitor</a>
@@ -88,12 +88,36 @@
 				<span style="font-style: italic; font-size: 16px;"><br><br>Microsoft unfortunately does not support a key feature of HTML 5 that is needed to render this web site.<br>Please use a different browser, ANY browser.</span>
 			</div>
 			
+			<div class="container-fluid">
+			    <div class="row d-flex d-md-block flex-nowrap wrapper">
+			        <main class="col-md-2 float-right col px-5 pl-md-2 pt-1">
+			            <div class="row">
+			                    <div id="demo" class="width collapse" aria-expanded="false">
+			                        <div class="list-group" style="margin-left: -20px; width: 290px">
+			                            <textarea rows="15" cols="20" style="font-size: 8pt;">1/1/1970 @12:00PM - Phil: This is a test.
+			                            &#13;&#10;1/1/1970 @12:01PM - Lisa: This is test 2.
+			                            &#13;&#10;1/1/1970 @12:02PM - Bob: This is test 3, a looooooooooooooooooooooooooong text.
+			                            &#13;&#10;1/1/1970 @12:03PM - Lucy: This is test 4 with some amount of text to wrap around.
+			                            &#13;&#10;1/1/1970 @12:04PM - Brian: This is test 5.
+			                            &#13;&#10;1/1/1970 @12:05PM - Eric: This is test 6.
+			                            &#13;&#10;1/1/1970 @12:06PM - Wilma: This is test 7, a looooooooooooooooooooooooooonger text.
+			                            </textarea>
+										<br><button role="button" class="btn btn-success">Send</button>
+									</div>
+			                </div>
+			             </div>
+			        </main>
+			    </div>
+			</div>			
+			
 			<div id="tabContent" class="tab-content">
 				<div id="monitorTab" class="tab-pane fade show active" role="tabpanel">
 					<div class="row">						
 						<div class="col-lg-12">
 							<div class="card">
-								<div class="card-header"><span data-balloon="Site instances are sorted by Instance creation date and Advisory number (both descending). All results are limited to the top 50 records." data-balloon-pos="right">Site instances</span></div>
+								<div class="card-header">
+									<span data-balloon="Site instances are sorted by Instance creation date and Advisory number (both descending). All results are limited to the top 50 records." data-balloon-pos="right">Site instances</span>
+								</div>
 								<div class="card-body">	
 									<div class="col-lg-12">
 										<div class="card">
@@ -353,7 +377,7 @@
 								</div>
 							</div>
 						</div>
-					</div>					
+					</div>										
 				</div>		
 				{% endif %}
 					
