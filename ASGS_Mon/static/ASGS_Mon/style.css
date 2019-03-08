@@ -160,18 +160,18 @@ h2 span {
 }
 
 .siteInstanceView { font: 10px sans-serif; border: 1px solid; border-color: silver; border-radius: 4px; margin-left: 5px; margin-top: 3px;}
-.siteInstanceView .tick line { stroke: gray; stroke-width: .5px; }
-.siteInstanceView .marker { stroke: #00FFAB; stroke-width: 5px; }
-.siteInstanceView .range.s0 { fill: #eee; stroke: gray; stroke-width: .5px;}
-.siteInstanceView .range.s1 { fill: #ddd; stroke: gray; stroke-width: .5px;}
-.siteInstanceView .range.s2 { fill: #ccc; stroke: gray; stroke-width: .5px;}
-.siteInstanceView .eventBox { fill: azure; stroke: black; stroke-width: .5px; opacity: 0.4}
-.siteInstanceView .measure { }
 .siteInstanceView .title { font-size: 14px; font-weight: bold; }
 .siteInstanceView .subtitle { fill: #999; }
-.siteInstanceView .message { font: 16px sans-serif; fill: #999; }
+.siteInstanceView .measure { opacity: 0.9; }
+.siteInstanceView .marker { stroke: #00FFAB; stroke-width: 5px; opacity: 0.8; }
+.siteInstanceView .tick line { stroke: gray; stroke-width: .5px; }
 .siteInstanceView .stateSm { font: 13px sans-serif; font-weight: bold; font-style: italic;}
 .siteInstanceView .state { font: 11px sans-serif; }
+.siteInstanceView .range.s0 { fill: #eee; stroke: gray; stroke-width: .5px; opacity: 0.6;}
+.siteInstanceView .range.s1 { fill: #ddd; stroke: gray; stroke-width: .5px;}
+.siteInstanceView .range.s2 { fill: #ccc; stroke: gray; stroke-width: .5px;}
+.siteInstanceView .message { font: 16px sans-serif; fill: #999; }
+.siteInstanceView .eventBox { fill: azure; stroke: black; stroke-width: .5px; opacity: 0.4;}
 .siteInstanceView .eventSummary 
 { 
 	font: 10px sans-serif; 

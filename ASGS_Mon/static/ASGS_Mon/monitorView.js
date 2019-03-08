@@ -159,7 +159,7 @@
 					.duration(duration)
 						.attr("width", w1)
 						.attr("x", reverse ? x1 : 0);
-	
+
 				range.transition()
 					.duration(duration)
 						.attr("x", reverse ? x1 : 0)
@@ -226,8 +226,8 @@
 					.attr("class", "marker")
 					.attr("x1", x0)
 					.attr("x2", x0)
-					.attr("y1", height / 6)
-					.attr("y2", height * 5 / 6)
+					.attr("y1", height * 3 / 6)
+					.attr("y2", height * 10 / 6)
 					.transition()
 						.duration(duration)
 							.attr("x1", x1)
@@ -237,8 +237,8 @@
 					.duration(duration)
 						.attr("x1", x1)
 						.attr("x2", x1)
-						.attr("y1", height / 6)
-						.attr("y2", height * 5 / 6);
+						.attr("y1", height * 3 / 6)
+						.attr("y2", height * 10 / 6);
 
 				// Compute the tick format.
 				var format = tickFormat || x1.tickFormat(8);
