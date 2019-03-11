@@ -4,39 +4,36 @@
 	<head>
 	  <meta charset="utf-8">
 	  
-	  <title>{% block title %}{% endblock %}</title>
+	  	<title>{% block title %}{% endblock %}</title>
 			
-			<link rel="shortcut icon" href="{% static 'ASGS_Mon/favicon.ico' %}" type="image/png">
-			<link rel="icon" href="{% static 'ASGS_Mon/favicon.ico' %}" type="image/png">
-	
-			<!-- JQuery components -->
-			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-			
-			<!-- Bootstrap components -->
-			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
-			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
-			
-			<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
-			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
-			<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
-			
-			<!-- D3 components -->
-			<script src="https://d3js.org/d3.v3.min.js"></script>
-			<script src="https://d3js.org/d3-time-format.v2.min.js"></script>
-			
-			<!-- View components -->
-			<link rel="stylesheet" href="{% static 'ASGS_Mon/style.css' %}" type="text/css">					
-			<script src="{% static 'ASGS_Mon/monitorView.js' %}"></script>
-			<script src="{% static 'ASGS_Mon/monitorTab.js' %}"></script>		
-			<script src="{% static 'ASGS_Mon/tabHandlers.js' %}"></script>	
-			
-			<!-- tool tip balloons -->
-			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/balloon-css/0.5.0/balloon.min.css">
-			
-			<script type="text/javascript">	function redirectme(target) {window.location.href = target;} </script>
-			
-<!-- 			<script src="https://use.fontawesome.com/releases/v5.0.11/css/all.css></script> -->
-				
+		<link rel="shortcut icon" href="{% static 'ASGS_Mon/favicon.ico' %}" type="image/png">
+		<link rel="icon" href="{% static 'ASGS_Mon/favicon.ico' %}" type="image/png">
+		
+		<!-- JQuery components -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		
+		<!-- Bootstrap components -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+		
+		<!-- D3 components -->
+		<script src="https://d3js.org/d3.v3.min.js"></script>
+		<script src="https://d3js.org/d3-time-format.v2.min.js"></script>
+		
+		<!-- tool tip balloons -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/balloon-css/0.5.0/balloon.min.css">		
+					
+		<!-- View components -->
+		<link rel="stylesheet" href="{% static 'ASGS_Mon/style.css' %}" type="text/css">					
+		<script src="{% static 'ASGS_Mon/monitorView.js' %}"></script>
+		<script src="{% static 'ASGS_Mon/monitorTab.js' %}"></script>		
+		<script src="{% static 'ASGS_Mon/tabHandlers.js' %}"></script>	
+		
+		<script type="text/javascript">	function redirectme(target) {window.location.href = target;} </script>					
 	</head>
 	<body>
 	  	<header>
