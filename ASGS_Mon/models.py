@@ -76,3 +76,9 @@ class User_pref(models.Model):
     username = models.CharField(max_length = 150)
     home_site = models.IntegerField()
     filter_site = JSONField()
+
+class Chat_message(models.Model):
+    id = models.AutoField(primary_key=True)
+    username = models.CharField(max_length = 150)
+    message = models.CharField(max_length = 150)
+    msg_ts = models.DateTimeField()
