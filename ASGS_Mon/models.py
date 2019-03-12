@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.postgres.fields import JSONField
 
 class State_type_lu(models.Model):
     id = models.AutoField(primary_key=True)
@@ -56,6 +57,7 @@ class Event(models.Model):
     event_ts = models.DateTimeField()
     advisory_id = models.CharField(max_length = 50)
     pct_complete = models.IntegerField()
+    sub_pct_complete = models.IntegerField()
     process = models.CharField(max_length = 100)
     raw_data = models.CharField(max_length = 4000)
 
@@ -68,3 +70,9 @@ class Instance_config(models.Model):
 
 class Json(models.Model):
     data = models.CharField(max_length = 4000)
+
+class User_pref(models.Model):
+    id = models.AutoField(primary_key=True)
+    username = models.CharField(max_length = 150)
+    home_site = models.IntegerField()
+    filter_site = JSONField()
