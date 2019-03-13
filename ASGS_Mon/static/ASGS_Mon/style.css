@@ -165,9 +165,8 @@ h2 span {
 	border-width: 1px; 
 	border-color: lightgrey;
 	margin-left: -25px;
+	margin-top: 5px;
 
-/*	min-width: 250px;	
-	max-width: 300px;*/
 }
 
 #chatCheckBox
