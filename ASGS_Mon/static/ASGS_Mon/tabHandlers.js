@@ -241,7 +241,7 @@ function scrollToBottom()
 	$('#chatMsgArea').height(newHeight);
 	
 	// if auto scroll is checked force it to the bottom
-	if($('#chatAutoScroll').is(":checked"))
+	if(!$('#chatScrollLock').is(":checked"))
 		$('#chatMsgArea').scrollTop($('#chatMsgArea')[0].scrollHeight);
 }
 

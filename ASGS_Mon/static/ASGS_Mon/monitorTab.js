@@ -72,6 +72,7 @@ function renderMonitorTab(siteInstance)
 			$("#NCEP_cycle").text(formatNCEPTime(d));
 			$("#local_Time").text(formatLocalAMPM(d));
 
+			// TODO: for demo only
 //			for(i=0; i<msgData.length; i++)
 //			{
 //				addChatMessage(currentTime() + " - " + msgData[i])
