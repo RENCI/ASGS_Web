@@ -46,20 +46,18 @@
 				    	.height(height)
 				    	.margin(margin);
 					
+					$('#chatBtnHide').show(0)
 					// fire up the tab view
 					renderMonitorTab(siteInstance);
 				}
 				
 				// add an event to the message area to scroll to the bottom on an event change if selected
 				$('#chatItems').bind('DOMNodeInserted', function(event) {scrollToBottom();});
-						
-// 				$('#chatBtn').on('click', function() 
-// 				{
-// 					scrollToBottom();
-// 				});
 				
+				// wire up the button that sends the chat message
 				$('#sendChatBtn').on('click', function() 
 				{
+					// send whatever is in the message box to the DB
 					sendChatMessage();
 				});
 				
@@ -111,24 +109,18 @@
 			<div class="container-fluid">
 				<div class="row d-flex d-md-block flex-nowrap wrapper">
 					<main class="col-sm-2 float-right col px-5 pl-sm-2 pt-1">
-						<div class="row">
-							<div id="chatArea" class="width collapse" aria-expanded="false">
-								<div class="row" style="border-style: solid; border-width: 1px; border-color: lightgrey">
-									<label style="margin-top: 13px; margin-bottom: -3px; margin-left: 5px;">
-										<span data-balloon="Use this to start/stop message auto-scrolling" data-balloon-pos="up" class="check">Message auto-scroll
-										<input id="chatAutoScroll" type="checkbox" checked>
-									  	<span class="checkmark"></span></span>
-									</label>
-									<div class="row">
-										<div id="chatMsgArea"></div>
-									</div>
-									<div class="row">
-										<div style="margin-left: 15px;">
-											<input id="sendChatText" style="margin-left: 15px; margin-top: 11px" type="text" size="30">
-											<button id="sendChatBtn" style="margin-top: -3px; margin-bottom:3px;" role="button" class="btn btn-success">Send</button>		
-										</div>
-									</div>
-								</div>
+						<div id="chatArea" class="width collapse" aria-expanded="false">
+							<div id="chatCheckBox">
+								<label>
+									<span data-balloon="Use this to start/stop message auto-scrolling" data-balloon-pos="up" class="check">Message auto-scroll
+									<input id="chatAutoScroll" type="checkbox" checked>
+								  	<span class="checkmark"></span></span>
+								</label>
+								
+								<div id="chatMsgArea"></div>
+								
+								<input id="sendChatText" type="text" size="15">
+								<button id="sendChatBtn" style="margin-top: -3px;" role="button" class="btn btn-success">Send</button>
 							</div>						
 						</div>
 					</main>

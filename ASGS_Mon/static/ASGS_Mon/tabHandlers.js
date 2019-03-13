@@ -235,7 +235,7 @@ function formatNCEPTime(date)
 function scrollToBottom() 
 {	
 	// get the current height of the area to put the messages
-	var newHeight = (($('#cardBody')[0].clientHeight - 155) > 500) ? 500 : $('#cardBody')[0].clientHeight - 155;
+	var newHeight = (($('#cardBody')[0].clientHeight - 145) > 500) ? 500 : $('#cardBody')[0].clientHeight - 145;
 
 	// set the message area height
 	$('#chatMsgArea').height(newHeight);
