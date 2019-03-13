@@ -3,6 +3,10 @@
 	
 	{% block content %}
 		<script type="text/javascript">
+		
+			// get the username
+			var username = '{{ user.first_name }} {{ user.last_name }}';
+
 			$(document).ready(function()
 			{
 				// Internet Explorer 6-11
@@ -45,13 +49,29 @@
 					// fire up the tab view
 					renderMonitorTab(siteInstance);
 				}
+				
+				// add an event to the message area to scroll to the bottom on an event change if selected
+				$('#chatItems').bind('DOMNodeInserted', function(event) {scrollToBottom();});
+						
+// 				$('#chatBtn').on('click', function() 
+// 				{
+// 					scrollToBottom();
+// 				});
+				
+				$('#sendChatBtn').on('click', function() 
+				{
+					sendChatMessage();
+				});
+				
+				// check the message area every second th=o insure we take up all the space available
+				var timer = setInterval(scrollToBottom, 1000);
 			})
 		</script>		
 	
 		<audio id="audioExpand" src="/static/ASGS_Mon/sounds/expand.wav" ></audio>
 		<audio id="audioCollapse" src="/static/ASGS_Mon/sounds/collapse.wav" ></audio>
 		
-		<div class="card-body">			
+		<div id="cardBody" class="card-body">			
 			<ul class="nav nav-tabs" id="navTabs" role="tablist">
 				<li class="nav-item">				 
 					<a data-balloon="This area is for viewing each ASGS process instance" data-balloon-pos="right" class="nav-link active" id="monitor-Tab" data-toggle="tab" href="#monitorTab" role="tab">Monitor</a>
@@ -89,26 +109,30 @@
 			</div>
 			
 			<div class="container-fluid">
-			    <div class="row d-flex d-md-block flex-nowrap wrapper">
-			        <main class="col-md-2 float-right col px-5 pl-md-2 pt-1">
-			            <div class="row">
-			                    <div id="demo" class="width collapse" aria-expanded="false">
-			                        <div class="list-group" style="margin-left: -20px; width: 290px">
-			                            <textarea rows="15" cols="20" style="font-size: 8pt;">1/1/1970 @12:00PM - Phil: This is a test.
-			                            &#13;&#10;1/1/1970 @12:01PM - Lisa: This is test 2.
-			                            &#13;&#10;1/1/1970 @12:02PM - Bob: This is test 3, a looooooooooooooooooooooooooong text.
-			                            &#13;&#10;1/1/1970 @12:03PM - Lucy: This is test 4 with some amount of text to wrap around.
-			                            &#13;&#10;1/1/1970 @12:04PM - Brian: This is test 5.
-			                            &#13;&#10;1/1/1970 @12:05PM - Eric: This is test 6.
-			                            &#13;&#10;1/1/1970 @12:06PM - Wilma: This is test 7, a looooooooooooooooooooooooooonger text.
-			                            </textarea>
-			                            <br><input type="text">
-										<br><button role="button" class="btn btn-success">Send</button>
+				<div class="row d-flex d-md-block flex-nowrap wrapper">
+					<main class="col-sm-2 float-right col px-5 pl-sm-2 pt-1">
+						<div class="row">
+							<div id="chatArea" class="width collapse" aria-expanded="false">
+								<div class="row" style="border-style: solid; border-width: 1px; border-color: lightgrey">
+									<label style="margin-top: 13px; margin-bottom: -3px; margin-left: 5px;">
+										<span data-balloon="Use this to start/stop message auto-scrolling" data-balloon-pos="up" class="check">Message auto-scroll
+										<input id="chatAutoScroll" type="checkbox" checked>
+									  	<span class="checkmark"></span></span>
+									</label>
+									<div class="row">
+										<div id="chatMsgArea"></div>
 									</div>
-			                </div>
-			             </div>
-			        </main>
-			    </div>
+									<div class="row">
+										<div style="margin-left: 15px;">
+											<input id="sendChatText" style="margin-left: 15px; margin-top: 11px" type="text" size="30">
+											<button id="sendChatBtn" style="margin-top: -3px; margin-bottom:3px;" role="button" class="btn btn-success">Send</button>		
+										</div>
+									</div>
+								</div>
+							</div>						
+						</div>
+					</main>
+				</div>
 			</div>			
 			
 			<div id="tabContent" class="tab-content">
@@ -148,7 +172,6 @@
 													<label>
 														<span data-balloon="Use this to filter data by site(s)" data-balloon-pos="up" style="margin-left: 25px; font-style: italic; font-size: 12px">Show only sites 
 															<select id="siteFilter" class="selectpicker" multiple data-live-search="true">
-																<option value="4">George Mason</option>
 																<option value="6">LONI</option>
 																<option value="2">LSU</option>
 																<option value="5">Penguin</option>
@@ -288,11 +311,10 @@
 										    <span class="input-group-text">Cluster</span>
 											<select id="clusterName" class="form-control" onchange="loadJobSubmit(this.value)">
 												<option value="-1">Select a cluster</option>
-												<option value="George Mason">George Mason</option>
 												<option value="LSU">LSU</option>
 												<option value="Penguin">Penguin</option>
 												<option value="RENCI">RENCI</option>
-												<option value=TACC>TACC</option>
+												<option value="TACC">TACC</option>
 												<option value="UCF">UCF</option>
 											</select>											
 										</div>

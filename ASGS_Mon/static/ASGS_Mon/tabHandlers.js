@@ -186,6 +186,29 @@ function formatLocalAMPM(date)
 	return 'Local time: ' + lclTime + ', UTC time: ' + utcTime;	
 }
 
+function currentTime()
+{
+	// get the current date
+	date = new Date();
+
+	// get the current hours and minutes
+	var theHour = date.getHours();
+	var minute = date.getMinutes();
+	var second = date.getSeconds();
+	
+	// determine AM/PM
+	var ampm = theHour >= 12 ? 'pm' : 'am';
+	  
+	// format the hours
+	hour = theHour % 12;
+	hour = (hour % 12) ? hour : 12;	  
+	  
+	// compile the formatted local time
+	var lclTime = hour + ':' + ('0' + minute).slice(-2) + ':' + ('0' + second).slice(-2) + ' ' + ampm;
+
+	return lclTime;
+}
+
 /** 
  * formats the time in NCEP format
  * 
@@ -203,4 +226,55 @@ function formatNCEPTime(date)
 	
 	// return to the caller
 	return 'Current NCEP cycle: ' + strTime;
+}
+
+/**
+ * sets the scroll position and window size for the message area
+ * @returns
+ */
+function scrollToBottom() 
+{	
+	// get the current height of the area to put the messages
+	var newHeight = (($('#cardBody')[0].clientHeight - 155) > 500) ? 500 : $('#cardBody')[0].clientHeight - 155;
+
+	// set the message area height
+	$('#chatMsgArea').height(newHeight);
+	
+	// if auto scroll is checked force it to the bottom
+	if($('#chatAutoScroll').is(":checked"))
+		$('#chatMsgArea').scrollTop($('#chatMsgArea')[0].scrollHeight);
+}
+
+/**
+ * persists the message in the database
+ * 
+ * @returns
+ */
+function sendChatMessage()
+{
+	// is there anything to send
+	if($('#sendChatText').val() != '')
+	{
+		// TODO: add real message upload here eventually
+		$('<div class="chatMsg">' + currentTime() + " - " + username + " says:</br>" + $('#sendChatText').val() + '</div>').appendTo("#chatMsgArea");
+	
+		// clear the message text box to make ready for the next
+		$('#sendChatText').val('');
+
+		// set the scroll position
+		scrollToBottom();
+	}
+}
+
+/**
+ * shows the chat message in the chat message area
+ * 
+ * @returns
+ */
+function addChatMessage(msg)
+{
+	$('<div class="chatMsg">' + msg + '</div>').appendTo("#chatMsgArea");
+
+	// set the scroll position
+	scrollToBottom();
 }

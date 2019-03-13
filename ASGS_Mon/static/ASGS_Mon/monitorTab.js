@@ -30,7 +30,23 @@ var _CONST_GROUP_WAIT_MSG_TYPE = 8;
 var _CONST_GROUP_EXIT_MSG_TYPE = 9;
 var _CONST_GROUP_STALLED_MSG_TYPE = 10;
 
+// global for the storeage of the last set of event messages
 var latestData;
+
+// TODO: chat test messages
+var msgData = 
+	[
+		'John says:<br>This is a test.',
+		'Betty says:<br>This is test 2.',
+		'Bob says:<br>This is test 3, a looooooooooooooooooooooooooong text.',
+		'Lucy says:<br>This is test 4 with some amount of text to wrap around.',
+		'Chris says:<br>This is test 5.',
+		'Howard says:<br>This is test 6.',
+		'Wilma says:<br>This is test 7, a looooooooooooooooooooooooooonger text.',
+		'Barney says:<br>This is test 8, a looooooooooooooooooooooooooonger text.',
+		'Bam Bam says:<br>This is test 9, a looooooooooooooooooooooooooonger text.',
+		'Betty says:<br>This is test 10, a shorter text.'
+	];
 
 /**
  * Renders the site instances and populates them with data from the database
@@ -48,7 +64,19 @@ function renderMonitorTab(siteInstance)
 	
  		// detect message receipt to a event load
  		eSource.onmessage = function(event) 
- 		{		 	 
+ 		{		 	 	        
+			// get the current date
+			d = new Date();
+
+			// update the current NCEP cycle number
+			$("#NCEP_cycle").text(formatNCEPTime(d));
+			$("#local_Time").text(formatLocalAMPM(d));
+
+			for(i=0; i<msgData.length; i++)
+			{
+				addChatMessage(currentTime() + " - " + msgData[i])
+			}
+
 			// get the value of the view all since filter
 			var viewActiveFlag = $('#viewActive').is(":checked");
 			
@@ -95,7 +123,7 @@ function renderMonitorTab(siteInstance)
 	        	$("#viewFilterArea").text("(Filters: " + viewFilterTitle.toString() + ")");
 	        else if ($("#viewFilterArea").text().length > 0)
 	        	$("#viewFilterArea").text("");
-	        
+						
 			// create/init the shells for all the site instances
 			d3.json("dataReq/?type=init" + "&viewActiveFlag=" + viewActiveFlag + "&inactives=" + inactives.toString() + "&sinceDate=" + sinceDate + "&sites=" + sites.toString(), function(error, initData)
 			{				
@@ -113,13 +141,6 @@ function renderMonitorTab(siteInstance)
 				
 				// save this data for the event message rendering later
 				latestData = initData;
-				
-				// get the current date
-				d = new Date();
-											
-				// update the current NCEP cycle number
-				$("#NCEP_cycle").text(formatNCEPTime(d));
-				$("#local_Time").text(formatLocalAMPM(d));
 				
 				// get the current rendered items
 				var curRendered = d3.selectAll(".siteInstanceView").selectAll("svg");
@@ -152,7 +173,7 @@ function renderMonitorTab(siteInstance)
 						.attr("id", function(d) {return "_" + d.instance_id + '_' + d.eg_id;} )
 						.attr("class", "siteInstanceView")
 						.attr("width", siteInstance.width() + 30)
-						.attr("height", function(d) { // if this is an exited or errored run collapse it by default
+						.attr("height", function(d) { // if this is an exited or erred run collapse it by default
 							if(d.instance_status == _CONST_INSTANCE_EXIT_MSG_TYPE || d.instance_status == _CONST_INSTANCE_FAIL_MSG_TYPE) 
 								return '21'; 
 							else 
@@ -287,7 +308,7 @@ function renderMonitorTab(siteInstance)
 				    	// spin through the instances to find the one we are handling here
 				    	latestData.forEach(function(info)
 				    	{
-				    		// is this the event msgs we are looking for
+				    		// is this the event msg we are looking for
 				    		if(info.instance_id == d.instance_id && info.eg_id == d.eg_id)
 				    		{
 						    	// save the event messages
@@ -369,7 +390,6 @@ function renderMonitorTab(siteInstance)
 		 	 		// reload the visualization with the new data
 		 			svg.data(eventData).call(siteInstance.duration(1500));
 				});
-
 			});			
  		}
  	}
