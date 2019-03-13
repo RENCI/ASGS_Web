@@ -30,7 +30,7 @@ var _CONST_GROUP_WAIT_MSG_TYPE = 8;
 var _CONST_GROUP_EXIT_MSG_TYPE = 9;
 var _CONST_GROUP_STALLED_MSG_TYPE = 10;
 
-// global for the storeage of the last set of event messages
+// global for the storage of the last set of event messages
 var latestData;
 
 // TODO: chat test messages
@@ -44,7 +44,7 @@ var msgData =
 		'Howard says:<br>This is test 6.',
 		'Wilma says:<br>This is test 7, a looooooooooooooooooooooooooonger text.',
 		'Barney says:<br>This is test 8, a looooooooooooooooooooooooooonger text.',
-		'Bam Bam says:<br>This is test 9, a looooooooooooooooooooooooooonger text.',
+		'Fred says:<br>This is test 9, a looooooooooooooooooooooooooonger text.',
 		'Betty says:<br>This is test 10, a shorter text.'
 	];
 
