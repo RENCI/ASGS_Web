@@ -256,7 +256,7 @@ function sendChatMessage()
 	if($('#sendChatText').val() != '')
 	{
 		// TODO: add real message upload here eventually
-		$('<div class="chatMsg">' + currentTime() + " - " + username + " says:</br>" + $('#sendChatText').val() + '</div>').appendTo("#chatMsgArea");
+		$('<div class="chatMsg">DEMO: ' + currentTime() + " - " + username + " says:</br>" + $('#sendChatText').val() + '</div>').appendTo("#chatMsgArea");
 	
 		// clear the message text box to make ready for the next
 		$('#sendChatText').val('');

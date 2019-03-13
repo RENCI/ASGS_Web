@@ -72,10 +72,10 @@ function renderMonitorTab(siteInstance)
 			$("#NCEP_cycle").text(formatNCEPTime(d));
 			$("#local_Time").text(formatLocalAMPM(d));
 
-			for(i=0; i<msgData.length; i++)
-			{
-				addChatMessage(currentTime() + " - " + msgData[i])
-			}
+//			for(i=0; i<msgData.length; i++)
+//			{
+//				addChatMessage(currentTime() + " - " + msgData[i])
+//			}
 
 			// get the value of the view all since filter
 			var viewActiveFlag = $('#viewActive').is(":checked");

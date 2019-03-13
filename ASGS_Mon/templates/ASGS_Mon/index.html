@@ -54,6 +54,11 @@
 				// add an event to the message area to scroll to the bottom on an event change if selected
 				$('#chatItems').bind('DOMNodeInserted', function(event) {scrollToBottom();});
 				
+				$('#chatBtn').on('click', function() {
+					// clear all messages
+					$('#chatMsgArea').html('');		
+				});
+			
 				// wire up the button that sends the chat message
 				$('#sendChatBtn').on('click', function() 
 				{
@@ -119,7 +124,7 @@
 								
 								<div id="chatMsgArea"></div>
 								
-								<input id="sendChatText" type="text" size="15">
+								<input id="sendChatText" type="text" size="17">
 								<button id="sendChatBtn" style="margin-top: -3px;" role="button" class="btn btn-success">Send</button>
 							</div>						
 						</div>
