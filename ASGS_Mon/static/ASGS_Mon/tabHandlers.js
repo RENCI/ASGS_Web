@@ -286,14 +286,18 @@ function sendChatMessage()
 	// is there anything to send
 	if($('#sendChatText').val() != '')
 	{
-        d3.json("dataReq/?type=insert_chatmsg&username=" + username + "&msg=" + $('#sendChatText').val(), function(error)
+		// get the message
+		var msg = $('#sendChatText').val();
+		
+		// clear the message text box to make ready for the next
+		$('#sendChatText').val('');				
+		
+		// save the message
+        d3.json("dataReq/?type=insert_chatmsg&username=" + username + "&msg=" + msg, function(error)
 		{		
-			// if we got good data put it away
+			// if we got an error
 			if (error) 
-				alert('There was an error inserting the chat message! ' + error); 
-			else
-				// clear the message text box to make ready for the next
-				$('#sendChatText').val('');				
+				$('#sendChatText').val('There was an error inserting the chat message!'); 
 		});
 	}
 }
