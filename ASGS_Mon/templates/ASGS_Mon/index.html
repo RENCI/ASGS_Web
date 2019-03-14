@@ -46,19 +46,15 @@
 				    	.height(height)
 				    	.margin(margin);
 					
-					$('#chatBtnHide').show(0)
+					$('#chatBtnHide').show(0);
+					
 					// fire up the tab view
 					renderMonitorTab(siteInstance);
 				}
 				
 				// add an event to the message area to scroll to the bottom on an event change if selected
 				$('#chatItems').bind('DOMNodeInserted', function(event) {scrollToBottom();});
-				
-				$('#chatBtn').on('click', function() {
-					// clear all messages
-					$('#chatMsgArea').html('');		
-				});
-			
+						
 				// wire up the button that sends the chat message
 				$('#sendChatBtn').on('click', function() 
 				{

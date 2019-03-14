@@ -79,7 +79,7 @@ def dataReq(request):
     # only allow access to authenticated users
     if request.user.is_authenticated:
         # define legal request types
-        theLegalReqTypes = ['init', 'event', 'config_list', 'config_detail', "wellness", "chatmsgs"]
+        theLegalReqTypes = ['init', 'event', 'config_list', 'config_detail', "wellness", "chatmsgs", "insert_chatmsg"]
     
         # get the request type         
         reqType = request.GET.get('type')
@@ -104,10 +104,20 @@ def dataReq(request):
                     paramVal = param
             elif reqType == 'wellness':
                 retVal = 'retry:5000\ndata: {}\n\n'
+            elif reqType == 'insert_chatmsg':
+                # these params are not optional
+                if request.GET.get('username') == '' or request.GET.get('msg') == '':
+                    retVal = 'Invalid or missing parameter.' 
+                else:                   
+                    # create the SQL. raw SQL calls using the django db model need an ID
+                    theSQL = "SELECT 1 as id, public.insert_chatmsg('{0}', '{1}') AS data;".format(request.GET.get('username'), request.GET.get('msg'))
+                
+                    # get the data, account for single quotes
+                    retVal = str(models.Json.objects.raw(theSQL)[0].data).replace("'", "\"")   
             elif reqType == 'chatmsgs':
                 # this param is optional
                 if request.GET.get('sinceDate') != '':
-                    paramVal += "_since := {0}".format(request.GET.get('sinceDate'))
+                    paramVal += "_since := '{0}'".format(request.GET.get('sinceDate'))
             elif reqType == 'init' or reqType == 'event':
                 # get the query string items. we will always get these
                 paramVal += "'{0}'".format(request.GET.get('viewActiveFlag'))

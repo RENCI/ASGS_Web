@@ -123,15 +123,15 @@ function renderMonitorTab(siteInstance)
 	        	$("#viewFilterArea").text("");
 	        	        	
 	        // get the chat messages
-	        d3.json("dataReq/?type=chatmsgs&sinceDate='" + chatMsgsSince + "'", function(error, chatMsgData)
+	        d3.json("dataReq/?type=chatmsgs&sinceDate=" + chatMsgsSince, function(error, chatMsgData)
 			{		
-	        	// save the timestamp for next time
-				chatMsgsSince = formatDateTime(d);	
-
 				// if we got good data put it away
 				if (error == null && chatMsgData.length != 0 && chatMsgData != 'None') 
 				{ 
-					chatMsgData.forEach(function(info, i) { addChatMessage('DEMO: ' + info.msg_ts + ' - ' + info.username + ' says:<br>' + info.msg); }); 
+					chatMsgData.forEach(function(info, i) { addChatMessage(info.msg_ts + ' - ' + info.username + ' says:<br>' + info.message); }); 
+					
+		        	// save the timestamp for next time
+					chatMsgsSince = formatDateTime(d);	
 				}				
 			});
 	        

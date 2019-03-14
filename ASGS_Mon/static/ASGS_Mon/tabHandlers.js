@@ -186,6 +186,11 @@ function formatLocalAMPM(date)
 	return 'Local time: ' + lclTime + ', UTC time: ' + utcTime;	
 }
 
+/**
+ * get the current time, formatted.
+ * 
+ * @returns
+ */
 function currentTime()
 {
 	// get the current date
@@ -206,6 +211,7 @@ function currentTime()
 	// compile the formatted local time
 	var lclTime = hour + ':' + ('0' + minute).slice(-2) + ':' + ('0' + second).slice(-2) + ' ' + ampm;
 
+	// return to the caller
 	return lclTime;
 }
 
@@ -249,6 +255,7 @@ function formatDateTime(date)
 	// compile the formatted local time
 	var UTCDateTime = date.getUTCFullYear() + '/' + ('0' + (date.getUTCMonth() + 1)).slice(-2) + '/' + ('0' + date.getUTCDate()).slice(-2) + ' ' + hour + ':' + ('0' + minute).slice(-2) + ':' + ('0' + second).slice(-2);
 
+	// return to the caller
 	return UTCDateTime;
 }
 
@@ -279,13 +286,16 @@ function sendChatMessage()
 	// is there anything to send
 	if($('#sendChatText').val() != '')
 	{
-		d = new Date();
-		
-		// TODO: add real message upload here eventually
-		addChatMessage('DEMO: ' + formatDateTime(d) + " - " + username + " says:</br>" + $('#sendChatText').val() + '</div>');
-	
-		// clear the message text box to make ready for the next
-		$('#sendChatText').val('');
+        d3.json("dataReq/?type=insert_chatmsg&username=" + username + "&msg=" + $('#sendChatText').val(), function(error)
+		{		
+			// if we got good data put it away
+			if (error) 
+				alert('There was an error inserting the chat message! ' + error); 
+			else
+				// clear the message text box to make ready for the next
+				$('#sendChatText').val('');
+				
+		});
 	}
 }
 
