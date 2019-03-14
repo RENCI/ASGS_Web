@@ -162,7 +162,7 @@ h2 span {
 #chatArea
 {
     border: 1px solid lightgrey;
-    border-radius: 5px;
+    border-radius: 4px;
 	margin-left: -40px;
 	margin-riight: -10px;
 	margin-top: 5px;
@@ -183,8 +183,7 @@ h2 span {
 	margin-top: -10px; 
 	margin-right: 5px; 
 	font-size: 8pt; 
-	overflow-y: auto; 
-	
+	overflow-y: auto; 	
 	width: 95%;
 }
 
@@ -204,7 +203,7 @@ h2 span {
 	width: 95%; 
 	margin-bottom: 3px; 
 	margin-left: 3px; 
-	margin-top: 3px;	
+	margin-top: 4px;	
 }
 
 .siteInstanceView { font: 10px sans-serif; border: 1px solid; border-color: silver; border-radius: 4px; margin-left: 5px; margin-top: 3px;}
