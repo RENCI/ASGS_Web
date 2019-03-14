@@ -279,14 +279,13 @@ function sendChatMessage()
 	// is there anything to send
 	if($('#sendChatText').val() != '')
 	{
+		d = new Date();
+		
 		// TODO: add real message upload here eventually
-		$('<div class="chatMsg">DEMO: ' + currentTime() + " - " + username + " says:</br>" + $('#sendChatText').val() + '</div>').appendTo("#chatMsgArea");
+		addChatMessage('DEMO: ' + formatDateTime(d) + " - " + username + " says:</br>" + $('#sendChatText').val() + '</div>');
 	
 		// clear the message text box to make ready for the next
 		$('#sendChatText').val('');
-
-		// set the scroll position
-		scrollToBottom();
 	}
 }
 
