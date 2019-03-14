@@ -293,8 +293,7 @@ function sendChatMessage()
 				alert('There was an error inserting the chat message! ' + error); 
 			else
 				// clear the message text box to make ready for the next
-				$('#sendChatText').val('');
-				
+				$('#sendChatText').val('');				
 		});
 	}
 }
