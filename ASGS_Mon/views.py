@@ -79,7 +79,7 @@ def dataReq(request):
     # only allow access to authenticated users
     if request.user.is_authenticated:
         # define legal request types
-        theLegalReqTypes = ['init', 'event', 'config_list', 'config_detail', "wellness"]
+        theLegalReqTypes = ['init', 'event', 'config_list', 'config_detail', "wellness", "chatmsgs"]
     
         # get the request type         
         reqType = request.GET.get('type')
@@ -104,6 +104,10 @@ def dataReq(request):
                     paramVal = param
             elif reqType == 'wellness':
                 retVal = 'retry:5000\ndata: {}\n\n'
+            elif reqType == 'chatmsgs':
+                # this param is optional
+                if request.GET.get('sinceDate') != '':
+                    paramVal += "_since := {0}".format(request.GET.get('sinceDate'))
             elif reqType == 'init' or reqType == 'event':
                 # get the query string items. we will always get these
                 paramVal += "'{0}'".format(request.GET.get('viewActiveFlag'))

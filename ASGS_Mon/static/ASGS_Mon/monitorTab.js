@@ -48,6 +48,9 @@ var msgData =
 		'Betty says:<br>This is test 10, a shorter text.'
 	];
 
+// the last time messages were acquired
+var chatMsgsSince = '';
+
 /**
  * Renders the site instances and populates them with data from the database
  * 
@@ -72,17 +75,11 @@ function renderMonitorTab(siteInstance)
 			$("#NCEP_cycle").text(formatNCEPTime(d));
 			$("#local_Time").text(formatLocalAMPM(d));
 
-			// TODO: for demo only
-//			for(i=0; i<msgData.length; i++)
-//			{
-//				addChatMessage(currentTime() + " - " + msgData[i])
-//			}
-
 			// get the value of the view all since filter
 			var viewActiveFlag = $('#viewActive').is(":checked");
 			
 			// get the since date
-			var sinceDate = $('#sinceDate').val(); //($('#sinceDate').val() == '') ? 'NULL' : $('#sinceDate').val();
+			var sinceDate = $('#sinceDate').val();
 			
 			// array for the selected inactives 
 	        var inactives = [];
@@ -124,7 +121,20 @@ function renderMonitorTab(siteInstance)
 	        	$("#viewFilterArea").text("(Filters: " + viewFilterTitle.toString() + ")");
 	        else if ($("#viewFilterArea").text().length > 0)
 	        	$("#viewFilterArea").text("");
-						
+	        	        	
+	        // get the chat messages
+	        d3.json("dataReq/?type=chatmsgs&sinceDate='" + chatMsgsSince + "'", function(error, chatMsgData)
+			{		
+	        	// save the timestamp for next time
+				chatMsgsSince = formatDateTime(d);	
+
+				// if we got good data put it away
+				if (error == null && chatMsgData.length != 0 && chatMsgData != 'None') 
+				{ 
+					chatMsgData.forEach(function(info, i) { addChatMessage('DEMO: ' + info.msg_ts + ' - ' + info.username + ' says:<br>' + info.msg); }); 
+				}				
+			});
+	        
 			// create/init the shells for all the site instances
 			d3.json("dataReq/?type=init" + "&viewActiveFlag=" + viewActiveFlag + "&inactives=" + inactives.toString() + "&sinceDate=" + sinceDate + "&sites=" + sites.toString(), function(error, initData)
 			{				
@@ -190,7 +200,7 @@ function renderMonitorTab(siteInstance)
 			
 				// handle the expand/collapse image area that controls each view instance
 				title.append("image")
-				    .attr("xlink:href",function(d) 
+				    .attr("xlink:href", function(d) 
 				    		{ 
 				    			// if this is an exited or erred run collapse it by default
 								if(d.instance_status == _CONST_INSTANCE_EXIT_MSG_TYPE || d.instance_status == _CONST_INSTANCE_FAIL_MSG_TYPE) 

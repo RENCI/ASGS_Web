@@ -229,6 +229,30 @@ function formatNCEPTime(date)
 }
 
 /**
+ * formats the current time for a DB time stamp
+ * @param date
+ * @returns
+ */
+function formatDateTime(date)
+{
+	// get the current hours and minutes
+	var theHour = date.getHours();
+	var minute = date.getMinutes();
+	var second = date.getSeconds();
+		  
+	// get the number of hours off UTC time
+	var timezone =  date.getTimezoneOffset() / 60;
+		
+	// get the UTC hour
+	hour = (theHour + timezone) % 24;
+
+	// compile the formatted local time
+	var UTCDateTime = date.getUTCFullYear() + '/' + ('0' + (date.getUTCMonth() + 1)).slice(-2) + '/' + ('0' + date.getUTCDate()).slice(-2) + ' ' + hour + ':' + ('0' + minute).slice(-2) + ':' + ('0' + second).slice(-2);
+
+	return UTCDateTime;
+}
+
+/**
  * sets the scroll position and window size for the message area
  * @returns
  */
@@ -272,7 +296,7 @@ function sendChatMessage()
  * @returns
  */
 function addChatMessage(msg)
-{
+{	
 	$('<div class="chatMsg">' + msg + '</div>').appendTo("#chatMsgArea");
 
 	// set the scroll position
