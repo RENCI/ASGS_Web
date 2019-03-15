@@ -98,7 +98,7 @@
 								textarea
 									.append("foreignObject")
 									.attr("transform", "translate(0, " + (i * 10) + ")")
-									.attr("width", msgRect.node().getBoundingClientRect().width-3)
+									.attr("width", msgRect.node().getBoundingClientRect().width)
 									.attr("height", 11)
 									.attr("x", 0)
 									.attr("y", -9)
@@ -112,7 +112,7 @@
 				    {
 						textarea
 							.append("foreignObject")
-							.attr("width", msgRect.node().getBoundingClientRect().width-3)
+							.attr("width", msgRect.node().getBoundingClientRect().width)
 							.attr("height", 11)
 							.attr("x", 0)
 							.attr("y", -9)
