@@ -134,7 +134,7 @@ function renderMonitorTab(siteInstance)
 					chatMsgsSince = formatDateTime(d);
 					
 					// if the chat box is already open do not set the glyph
-					if($("#chatMsgArea").height() <= 0)
+					if($("#chatMsgArea")[0].clientHeight <= 0)
 						$("#chatBtnI").addClass("fa fa-eye");
 				}				
 			});
