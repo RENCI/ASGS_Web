@@ -74,8 +74,8 @@ class Json(models.Model):
 class User_pref(models.Model):
     id = models.AutoField(primary_key=True)
     username = models.CharField(max_length = 150)
-    home_site = models.IntegerField()
-    filter_site = JSONField()
+    home_site = models.IntegerField(null = True)
+    filter_site = JSONField(null = True)
 
 class Chat_message(models.Model):
     id = models.AutoField(primary_key=True)
