@@ -14,16 +14,16 @@
 date
 
 echo "vac/analyze public.ASGS_Mon_event"
-psql -d asgs_dashboard -c 'vacuum full analyze verbose public."ASGS_Mon_event";'
+psql -d asgs_dashboard -c 'vacuum full analyze verbose public."ASGS_Mon_event"';
 
 echo "vac/analyze public.ASGS_Mon_event_group"
-psql -d asgs_dashboard -c 'vacuum full analyze verbose public."ASGS_Mon_event_group";'
+psql -d asgs_dashboard -c 'vacuum full analyze verbose public."ASGS_Mon_event_group"';
 
 echo "vac/analyze public.ASGS_Mon_instance"
-psql -d asgs_dashboard -c 'vacuum full analyze verbose public."ASGS_Mon_instance";'
+psql -d asgs_dashboard -c 'vacuum full analyze verbose public."ASGS_Mon_instance"';
 
 echo "vac/analyze public.ASGS_Mon_instance_config"
-psql -d asgs_dashboard -c 'vacuum full analyze verbose public."ASGS_Mon_instance_config";'
+psql -d asgs_dashboard -c 'vacuum full analyze verbose public."ASGS_Mon_instance_config"';
 
 #
 # Django admin tables
@@ -31,9 +31,9 @@ psql -d asgs_dashboard -c 'vacuum full analyze verbose public."ASGS_Mon_instance
 date
 
 echo "vac/analyze public.auth_user"
-psql -d asgs_dashboard -c 'vacuum full analyze verbose public."auth_user";'
+psql -d asgs_dashboard -c 'vacuum full analyze verbose public."auth_user"';
 
 echo "vac/analyze public.django_session"
-psql -d asgs_dashboard -c 'vacuum full analyze verbose public."django_session";'
+psql -d asgs_dashboard -c 'vacuum full analyze verbose public."django_session"';
 
 date
