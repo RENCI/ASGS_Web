@@ -133,8 +133,9 @@ function renderMonitorTab(siteInstance)
 		        	// save the timestamp for next time
 					chatMsgsSince = formatDateTime(d);
 					
-					// set the chat view button a different class to indicate something new came in.
-					$("#chatBtnI").addClass("fa fa-eye");
+					// if the chat box is already open do not set the glyph
+					if($("#chatMsgArea").height() <= 0)
+						$("#chatBtnI").addClass("fa fa-eye");
 				}				
 			});
 	        
