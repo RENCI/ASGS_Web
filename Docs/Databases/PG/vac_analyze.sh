@@ -3,13 +3,12 @@
 # to see stats, determine why indexes arent being hit and generate vac/analyze statements
 #
 # select 
-#    'echo "vac/analyze ' || schemaname || '.' || relname || '"' || E'\n' || 'psql -d asgs_dashboard -c ''vacuum full analyze verbose ' || schemaname || '."' || relname || '";'''
+#    'echo "vac/analyze ' || schemaname || '.' || relname || '"' || E'\n' || 'psql -d asgs_dashboard -c ''vacuum full analyze verbose ' || schemaname || '."' || relname || '"'';'
 # 	 ,*  
 # from pg_stat_user_tables 
 # where 
 #	 schemaname = 'public'
 # order by 4,5 desc
-#
            
 date
 
