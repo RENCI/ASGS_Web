@@ -49,6 +49,9 @@
 					// hide the chat button area
 					$('#chatBtnHide').show(0);
 					
+					// load the user preferences
+					getUserPrefs();
+					
 					// fire up the tab view
 					renderMonitorTab(siteInstance);
 				}
@@ -140,7 +143,7 @@
 									<span data-balloon="Site instances are sorted by Instance creation date and Advisory number (both descending). All results are limited to the top 50 records." data-balloon-pos="right">Site instances</span>
 								</div>
 								<div class="card-body">	
-									<div class="col-lg-12">
+									<div class="col-lg-10">
 										<div class="card">
 											<div class="card-header">
 												<a data-balloon="Click here to view the filtering options" data-balloon-pos="right" class="card-link" data-toggle="collapse" href="#collapseFilter">View Filter</a>&nbsp;&nbsp;<span id="viewFilterArea" style="font-style: italic; font-size: 10px"></span>
@@ -204,53 +207,57 @@
 				
 				<div id="prefsTab" class="tab-pane fade" role="tabpanel">
 					<div class="row">
-						<div class="col-lg-6">
+						<div class="col-lg-8">
 							<div class="card">
-								<div class="card-header">Set your preferences</div>
+							<div class="card-header">Your preferences</div>
 								<div class="card-body">
-									<form role="form" method="POST" action="/login/">
-										<div style="margin-top: 15px;">
-											<span style="font-size: 14px; margin-left: 15px;"><a href="{% url 'change_password' %}">Click to change your Password</a></span>
-										</div>	
-										<div style="margin-top: 25px">							  	
-											<label>
-												<span data-balloon="Specify your perferred site." data-balloon-pos="up" style="margin-left: 15px; font-size: 14px">Select your preferred site 
-													<select id="siteFilterx" class="selectpicker" multiple data-live-search="true">
-														<option value="6">LONI</option>
-														<option value="2">LSU</option>
-														<option value="5">Penguin</option>
-														<option value="8">QB2</option>
-														<option value="0">RENCI</option>
-														<option value="7">Seahorse</option>														
-														<option value="1">TACC</option>
-														<option value="3">UCF</option>
-													</select>
-												</span>
-											</label>
+									<div style="margin-top: 15px;">
+										<span style="font-size: 14px; margin-left: 15px;"><a href="{% url 'change_password' %}">Click to change your Password</a></span>
+									</div>	
+																	
+									<div class="card" style=" margin-top: 25px">
+										<div class="card-header">Set your startup preferences</div>
+										<div class="card-body">
+											<form onsubmit="sendUserPrefs();return false">
+												<label>
+													<span data-balloon="Specify your perferred site." data-balloon-pos="up" style="margin-left: 15px; font-size: 14px">Select your preferred site 
+														<select id="pref_site" class="selectpicker" data-live-search="true">
+															<option value="-1">Select a site</option>
+															<option value="6">LONI</option>
+															<option value="2">LSU</option>
+															<option value="5">Penguin</option>
+															<option value="8">QB2</option>
+															<option value="0">RENCI</option>
+															<option value="7">Seahorse</option>														
+															<option value="1">TACC</option>
+															<option value="3">UCF</option>
+														</select>
+													</span>
+												</label>
+								
+												<label>
+													<span data-balloon="Set your default site filter to view only these sites." data-balloon-pos="up" style="margin-left: 15px; font-size: 14px">Select your default site filtering 
+														<select id="filter_site" class="selectpicker" multiple data-live-search="true">
+															<option value="6">LONI</option>
+															<option value="2">LSU</option>
+															<option value="5">Penguin</option>
+															<option value="8">QB2</option>
+															<option value="0">RENCI</option>
+															<option value="7">Seahorse</option>														
+															<option value="1">TACC</option>
+															<option value="3">UCF</option>
+														</select>
+													</span>
+												</label>									
+												<input id="sendUserPref" class="btn btn-info" type="submit" value="Submit"></input>										
+											</form>
 										</div>
-										
-										<div style="margin-top: 15px">							  	
-											<label>
-												<span data-balloon="Set your default site filter to view only these sites." data-balloon-pos="up" style="margin-left: 15px; font-size: 14px">Select your default site filtering 
-													<select id="siteFilterx2" class="selectpicker" multiple data-live-search="true">
-														<option value="6">LONI</option>
-														<option value="2">LSU</option>
-														<option value="5">Penguin</option>
-														<option value="8">QB2</option>
-														<option value="0">RENCI</option>
-														<option value="7">Seahorse</option>														
-														<option value="1">TACC</option>
-														<option value="3">UCF</option>
-													</select>
-												</span>
-											</label>
-										</div>
-									</form>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>					
-				</div>
+					</div>
+				</div>					
 						
 				<div id="configTab" class="tab-pane fade" role="tabpanel">
 					<div class="row">

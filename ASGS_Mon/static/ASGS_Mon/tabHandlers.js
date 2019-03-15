@@ -318,3 +318,60 @@ function addChatMessage(msg)
 	// set the scroll position
 	scrollToBottom();
 }
+
+/**
+ * sends the user preferences to the database
+ * 
+ * @returns
+ */
+function sendUserPrefs()
+{
+	// get the preferred site
+	var pref_site = $("#pref_site").val();
+	
+	// declare space for the selected site filters
+	var filter_site = [];
+
+	// get all the selected values into an array
+    $.each($("#filter_site option:selected"), function(){            
+    	filter_site.push($(this).val());
+    });	        
+	
+	// save the message
+    d3.json("dataReq?type=update_user_pref&username=" + username + "&pref_site=" + pref_site.toString() + "&filter_site=" + filter_site.toString(), function(error)
+	{		
+		// if we got an error
+		if (error) 
+			alert('There was an error sending the your preferences!');
+	});
+}
+
+/**
+ * gets the user preferences from the database
+ * 
+ * @returns
+ */
+function getUserPrefs()
+{
+	// save the message
+    d3.json("dataReq?type=user_pref&username=" + username, function(error, prefs)
+	{		
+		// if we got an error
+		if (error) 
+			alert('There was an error getting your preferences!');
+		else
+		{
+			// put away the home site pref on the selection tab	
+			$("#pref_site > [value='" + prefs.home_site + "']").attr("selected", "true");
+			
+			// put away the additional filter site prefs on the selection tab
+			$("#filter_site").val(prefs.filter_site);
+			
+			// merge the primary and additional sites
+			prefs.filter_site.push(prefs.home_site);
+			
+			// save the filters
+			$("#siteFilter").val(prefs.filter_site);
+		}
+	});
+}

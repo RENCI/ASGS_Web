@@ -79,7 +79,7 @@ def dataReq(request):
     # only allow access to authenticated users
     if request.user.is_authenticated:
         # define legal request types
-        theLegalReqTypes = ['init', 'event', 'config_list', 'config_detail', "wellness", "chatmsgs", "insert_chatmsg"]
+        theLegalReqTypes = ['init', 'event', 'config_list', 'config_detail', "wellness", "chatmsgs", "insert_chatmsg", "user_pref", "update_user_pref"]
     
         # get the request type         
         reqType = request.GET.get('type')
@@ -102,22 +102,42 @@ def dataReq(request):
                     retVal = 'Invalid or missing parameter.' 
                 else:
                     paramVal = param
+            
             elif reqType == 'wellness':
                 retVal = 'retry:5000\ndata: {}\n\n'
+            
             elif reqType == 'insert_chatmsg':
                 # these params are not optional
                 if request.GET.get('username') == '' or request.GET.get('msg') == '':
-                    retVal = 'Invalid or missing parameter.' 
+                    retVal = 'Invalid or missing parameter(s).' 
                 else:                   
                     # create the SQL. raw SQL calls using the django db model need an ID
                     theSQL = "SELECT 1 as id, public.insert_chatmsg('{0}', '{1}') AS data;".format(request.GET.get('username'), request.GET.get('msg'))
                 
                     # get the data, account for single quotes
                     retVal = str(models.Json.objects.raw(theSQL)[0].data).replace("'", "\"")   
+            
+            elif reqType == 'update_user_pref':
+                 # these params are not optional
+                if request.GET.get('username') == '':
+                    retVal = 'Invalid or missing parameter{s}.' 
+                else:   
+                    # create the SQL. raw SQL calls using the django db model need an ID
+                    theSQL = "SELECT 1 as id, public.insert_user_pref('{0}', '{1}', '[{2}]') AS data;".format(request.GET.get('username'), request.GET.get('pref_site'), request.GET.get('filter_site'))
+                
+                    # get the data, account for single quotes
+                    retVal = str(models.Json.objects.raw(theSQL)[0].data).replace("'", "\"")   
+            
             elif reqType == 'chatmsgs':
                 # this param is optional
                 if request.GET.get('sinceDate') != '':
                     paramVal += "_since := '{0}'".format(request.GET.get('sinceDate'))
+            
+            elif reqType == 'user_pref':
+                # this param is optional
+                if request.GET.get('username') != '':
+                    paramVal += "_username := '{0}'".format(request.GET.get('username'))
+            
             elif reqType == 'init' or reqType == 'event':
                 # get the query string items. we will always get these
                 paramVal += "'{0}'".format(request.GET.get('viewActiveFlag'))
@@ -136,14 +156,9 @@ def dataReq(request):
             if retVal == '':
                 # create the SQL. raw SQL calls using the django db model need an ID
                 theSQL = "SELECT 1 AS id, public.get_{0}_json({1}) AS data;".format(reqType, paramVal)
-
-                #import time
-                #print("start: " + time.strftime("%b %d %Y %H:%M:%S", time.localtime()))
                 
                 # get the data, account for single quotes
                 retVal = str(models.Json.objects.raw(theSQL)[0].data).replace("'", "\"")   
-                         
-                #print("done: " + time.strftime("%b %d %Y %H:%M:%S", time.localtime()))
                 
                 # reformat empty data sets
                 if retVal == "None":
