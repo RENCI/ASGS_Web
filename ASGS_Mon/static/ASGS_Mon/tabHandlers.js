@@ -297,7 +297,7 @@ function sendChatMessage()
 		{		
 			// if we got an error
 			if (error) 
-				$('#sendChatText').val('There was an error inserting the chat message!'); 
+				alert('There was an error sending the chat message!'); 
 		});
 	}
 }
