@@ -46,6 +46,7 @@
 				    	.height(height)
 				    	.margin(margin);
 					
+					// hide the chat button area
 					$('#chatBtnHide').show(0);
 					
 					// fire up the tab view
@@ -53,14 +54,14 @@
 				}
 				
 				// add an event to the message area to scroll to the bottom on an event change if selected
-				$('#chatItems').bind('DOMNodeInserted', function(event) {scrollToBottom();});
+				$('#chatItems').bind('DOMNodeInserted', function(event) { scrollToBottom(); });
 						
 				// wire up the button that sends the chat message
-// 				$('#sendChatBtn').on('click', function() 
-// 				{
-// 					// send whatever is in the message box to the DB
-// 					sendChatMessage();
-// 				});
+				$('#chatBtn').on('click', function() 
+				{
+					// reset the new mssage indicator
+					$("#chatBtnI").removeClass("fa fa-eye");
+				});
 				
 				// check the message area every second th=o insure we take up all the space available
 				var timer = setInterval(scrollToBottom, 1000);

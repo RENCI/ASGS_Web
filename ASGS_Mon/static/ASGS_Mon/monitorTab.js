@@ -131,7 +131,10 @@ function renderMonitorTab(siteInstance)
 					chatMsgData.forEach(function(info, i) { addChatMessage(info.msg_ts + ' - ' + info.username + ' says:<br>' + info.message); }); 
 					
 		        	// save the timestamp for next time
-					chatMsgsSince = formatDateTime(d);	
+					chatMsgsSince = formatDateTime(d);
+					
+					// set the chat view button a different class to indicate something new came in.
+					$("#chatBtnI").addClass("fa fa-eye");
 				}				
 			});
 	        
