@@ -1,3 +1,53 @@
+-- FUNCTION: public.get_chatmsgs_json(timestamp without time zone)
+
+-- DROP FUNCTION public.get_chatmsgs_json(timestamp without time zone);
+
+CREATE OR REPLACE FUNCTION public.get_chatmsgs_json(
+	_since timestamp without time zone DEFAULT (
+	now(
+	) - '1 day'::interval))
+    RETURNS TABLE(document jsonb) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+
+BEGIN
+  -- gather the records and return them in json format
+	RETURN QUERY
+
+	SELECT jsonb_agg(items)
+		FROM
+			(
+				SELECT 
+					username,
+					to_char(msg_ts, 'YYYY/MM/DD HH24:MI:SS') AS msg_ts,
+					message
+				FROM
+					public."ASGS_Mon_chat" 
+				WHERE
+					msg_ts >= _since
+				ORDER BY msg_ts
+			) AS items;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.get_chatmsgs_json(timestamp without time zone)
+    OWNER TO powen;
+
+GRANT EXECUTE ON FUNCTION public.get_chatmsgs_json(timestamp without time zone) TO powen;
+
+GRANT EXECUTE ON FUNCTION public.get_chatmsgs_json(timestamp without time zone) TO asgs;
+
+GRANT EXECUTE ON FUNCTION public.get_chatmsgs_json(timestamp without time zone) TO PUBLIC;
+
+COMMENT ON FUNCTION public.get_chatmsgs_json(timestamp without time zone)
+    IS 'Returns a recordset (json) of the chat messages since the last update.';
+
+    
 -- FUNCTION: public.get_config_detail_json(integer)
 
 -- DROP FUNCTION public.get_config_detail_json(integer);
@@ -78,7 +128,6 @@ GRANT EXECUTE ON FUNCTION public.get_config_list_json() TO asgs;
 GRANT EXECUTE ON FUNCTION public.get_config_list_json() TO postgres;
 
 GRANT EXECUTE ON FUNCTION public.get_config_list_json() TO PUBLIC;
-
 
 
 
@@ -184,7 +233,6 @@ GRANT EXECUTE ON FUNCTION public.get_event_json(boolean, date, text, text) TO PU
 COMMENT ON FUNCTION public.get_event_json(boolean, date, text, text)
     IS 'Returns a recordset (json) of the active cluster events.';
 
-    
     
 -- FUNCTION: public.get_event_msgs_by_group_json(integer, character varying)
 
@@ -345,7 +393,7 @@ BEGIN
 	JOIN "ASGS_Mon_instance" i ON i.id=eg.instance_id
 	WHERE 
 		e.event_ts = (SELECT MAX(e1.event_ts) FROM "ASGS_Mon_event" e1 WHERE e1.event_group_id = eg.id AND e1.advisory_id = eg.advisory_id)
-		AND i.inst_state_type_id NOT IN (0, 3, 6, 7, 9, 10) AND eg.state_type_id NOT IN (0, 3, 6, 7, 9, 10)
+		AND i.inst_state_type_id NOT IN (3, 6, 7, 9, 10) AND eg.state_type_id NOT IN (3, 6, 7, 9, 10)
 		AND e.event_ts < now() - interval '3 hours'
 		AND eg.advisory_id <> '0'
 	ORDER BY 1,2,3,4
@@ -360,7 +408,7 @@ BEGIN
 		JOIN "ASGS_Mon_instance" i ON i.id=eg.instance_id
 		WHERE 
 			e.event_ts = (SELECT MAX(e1.event_ts) FROM "ASGS_Mon_event" e1 WHERE e1.event_group_id = eg.id AND e1.advisory_id = eg.advisory_id)
-			AND i.inst_state_type_id NOT IN (0, 3, 6, 7, 9, 10) AND eg.state_type_id NOT IN (0, 3, 6, 7, 9, 10)
+			AND i.inst_state_type_id NOT IN (3, 6, 7, 9, 10) AND eg.state_type_id NOT IN (3, 6, 7, 9, 10)
 			AND e.event_ts < now() - interval '3 hours'
 			AND eg.advisory_id <> '0'
 	);
@@ -385,4 +433,42 @@ GRANT EXECUTE ON FUNCTION public.handle_stalled_event_groups() TO PUBLIC;
 
 COMMENT ON FUNCTION public.handle_stalled_event_groups()
     IS 'Updates event groups to a stalled status when no event messages have been received in 3 or more hours.';
+
+    
+    
+-- FUNCTION: public.insert_chatmsg(text, text)
+
+-- DROP FUNCTION public.insert_chatmsg(text, text);
+
+CREATE OR REPLACE FUNCTION public.insert_chatmsg(
+	_username text,
+	_msg text)
+    RETURNS integer
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+AS $BODY$
+
+BEGIN
+	INSERT INTO public."ASGS_Mon_chat" (username, message, msg_ts) VALUES (_username, _msg, NOW());
+
+	RETURN 0;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.insert_chatmsg(text, text)
+    OWNER TO powen;
+
+GRANT EXECUTE ON FUNCTION public.insert_chatmsg(text, text) TO powen;
+
+GRANT EXECUTE ON FUNCTION public.insert_chatmsg(text, text) TO asgs;
+
+GRANT EXECUTE ON FUNCTION public.insert_chatmsg(text, text) TO PUBLIC;
+
+COMMENT ON FUNCTION public.insert_chatmsg(text, text)
+    IS 'Inserts a chat message.';
+
+    
     
