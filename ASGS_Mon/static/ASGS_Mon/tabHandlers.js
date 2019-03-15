@@ -89,7 +89,7 @@ function updateMsg(val)
 function initConfigTabList()
 {
 	// get the list and render the html
-	d3.json("dataReq/?type=config_list", function(error, configList) 
+	d3.json("dataReq?type=config_list", function(error, configList) 
 	{
 		// init the output
 		var output = '';
@@ -124,7 +124,7 @@ function getConfigDetails(id, type)
 	else 
 	{
 		// get the render the configuration params
-		d3.json("dataReq/?type=config_detail&param=" + id, function(error, configDetail) 
+		d3.json("dataReq?type=config_detail&param=" + id, function(error, configDetail) 
 		{	
 			// init the return
 			var retVal = '';
@@ -293,7 +293,7 @@ function sendChatMessage()
 		$('#sendChatText').val('');				
 		
 		// save the message
-        d3.json("dataReq/?type=insert_chatmsg&username=" + username + "&msg=" + msg, function(error)
+        d3.json("dataReq?type=insert_chatmsg&username=" + username + "&msg=" + msg, function(error)
 		{		
 			// if we got an error
 			if (error) 

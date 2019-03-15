@@ -123,7 +123,7 @@ function renderMonitorTab(siteInstance)
 	        	$("#viewFilterArea").text("");
 	        	        	
 	        // get the chat messages
-	        d3.json("dataReq/?type=chatmsgs&sinceDate=" + chatMsgsSince, function(error, chatMsgData)
+	        d3.json("dataReq?type=chatmsgs&sinceDate=" + chatMsgsSince, function(error, chatMsgData)
 			{		
 				// if we got good data put it away
 				if (error == null && chatMsgData.length != 0 && chatMsgData != 'None') 
@@ -136,7 +136,7 @@ function renderMonitorTab(siteInstance)
 			});
 	        
 			// create/init the shells for all the site instances
-			d3.json("dataReq/?type=init" + "&viewActiveFlag=" + viewActiveFlag + "&inactives=" + inactives.toString() + "&sinceDate=" + sinceDate + "&sites=" + sites.toString(), function(error, initData)
+			d3.json("dataReq?type=init" + "&viewActiveFlag=" + viewActiveFlag + "&inactives=" + inactives.toString() + "&sinceDate=" + sinceDate + "&sites=" + sites.toString(), function(error, initData)
 			{				
 				// erase all the site instances on error or no data
 				if (error || initData.length == 0 || initData == 'None') 
@@ -386,7 +386,7 @@ function renderMonitorTab(siteInstance)
 					})
 				
 				// load the shells for all the site instance events
-				d3.json("dataReq/?type=event" + "&viewActiveFlag=" + viewActiveFlag + "&inactives=" + inactives.toString() + "&sinceDate=" + sinceDate + "&sites=" + sites.toString(), function(error, eventData)
+				d3.json("dataReq?type=event" + "&viewActiveFlag=" + viewActiveFlag + "&inactives=" + inactives.toString() + "&sinceDate=" + sinceDate + "&sites=" + sites.toString(), function(error, eventData)
 				{				
 					// erase all the site instances on error
 					if (error || eventData == "None" || eventData.length == 0) 
