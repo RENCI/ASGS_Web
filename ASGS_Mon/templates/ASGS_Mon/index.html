@@ -220,7 +220,7 @@
 										<div class="card-body" style="margin-top: 5px">
 											<form onsubmit="sendUserPrefs();return false">
 												<label>
-													<span data-balloon="Specify your perferred site." data-balloon-pos="up" style="margin-left: 15px; font-size: 14px">Select your preferred site 
+													<span data-balloon="Specify your preferred site. This will be your default site filter." data-balloon-pos="up" style="margin-left: 15px; font-size: 14px">Select your preferred site 
 														<select id="pref_site" class="selectpicker" data-live-search="true">
 															<option value="-1">Select a site</option>
 															<option value="6">LONI</option>
@@ -236,8 +236,8 @@
 												</label>
 								
 												<label>
-													<span data-balloon="Set your default site filter to view only these sites." data-balloon-pos="up" style="margin-left: 15px; font-size: 14px">Select your default site filtering 
-														<select id="filter_site" class="selectpicker" multiple data-live-search="true">
+													<span data-balloon="Set your additional site filters to view these sites at login." data-balloon-pos="up" style="margin-left: 15px; font-size: 14px">Select your additional site filtering 
+														<select id="filter_site" caass="selectpicker" multiple data-live-search="true">
 															<option value="6">LONI</option>
 															<option value="2">LSU</option>
 															<option value="5">Penguin</option>
@@ -248,8 +248,9 @@
 															<option value="3">UCF</option>
 														</select>
 													</span>
-												</label>									
-												<input id="sendUserPref" class="btn btn-info" type="submit" value="Submit"></input><div id="prefsSaveMsg" style="display: none;"><span style="color: red">There was an error saving your preferences.</span></div>								
+												</label>		
+																			
+												<input id="sendUserPrefs" class="btn btn-info" type="submit" value="Submit"></input><div id="prefsSaveMsg" style="display: none;"></div>								
 											</form>
 										</div>
 									</div>
