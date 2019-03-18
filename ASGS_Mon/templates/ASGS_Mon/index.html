@@ -31,6 +31,9 @@
 				}
 				else
 				{
+					// load the user preferences
+					getUserPrefs();
+
 					// set the location of the individual site component
 					var margin = {top: 20, right: 15, bottom: 20, left: 15};
 					
@@ -64,9 +67,6 @@
 
 					// check the message area every second th=o insure we take up all the space available
 					var timer = setInterval(scrollToBottom, 1000);
-
-					// load the user preferences
-					getUserPrefs();
 				}
 			})
 		</script>		
