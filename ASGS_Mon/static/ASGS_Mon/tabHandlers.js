@@ -270,7 +270,7 @@ function formatDateTime(date)
 function scrollToBottom() 
 {	
 	// get the current height of the area to put the messages
-	var newHeight = (($('#cardBody')[0].clientHeight - 175) > 500) ? 500 : $('#cardBody')[0].clientHeight - 175;
+	var newHeight = (($('#cardBody')[0].clientHeight - 210) > 500) ? 500 : $('#cardBody')[0].clientHeight - 210;
 
 	// set the message area height
 	$('#chatMsgArea').height(newHeight);

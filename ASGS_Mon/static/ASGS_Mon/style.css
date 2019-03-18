@@ -161,10 +161,10 @@ h2 span {
 
 #chatArea
 {
-    border: 1px solid lightgrey;
+/*     border: 1px solid lightgrey; */
     border-radius: 4px;
-	margin-left: -40px;
-	margin-riight: -10px;
+	margin-left: -25px;
+	margin-right: -10px;
 	margin-top: 5px;
 /* 	min-width: 230px; */
 }
@@ -195,7 +195,8 @@ h2 span {
 
 .chatMsg
 {
-	margin-top: 5px;	
+	margin-top: 5px;
+	margin-left: 3px;	
 }
 
 #sendChatBtn

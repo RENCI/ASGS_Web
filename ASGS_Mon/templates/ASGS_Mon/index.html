@@ -89,8 +89,7 @@
 					<a data-balloon="This area is for viewing run configuration files" data-balloon-pos="up" class="nav-link" id="config-Tab" data-toggle="tab" href="#configTab" onclick="initConfigTabList();" role="tab">Run Configurations</a>
 				</li>
 				
-				{% if user.is_superuser %}
-				
+				{% if user.is_superuser %}				
 				<li class="nav-item">
 					<a data-balloon="This area is for viewing the results of ASGS runs" data-balloon-pos="up" class="nav-link" id="priorResults-Tab" data-toggle="tab" href="#priorResultsTab" role="tab">Prior Results</a>
 				</li>
@@ -113,24 +112,29 @@
 			
 			<div class="container-fluid">
 				<div class="row d-flex d-md-block flex-nowrap wrapper">
-					<main style="margin-right: -10px" class="col-sm-2 float-right col">
+					<div style="" class="col-sm-2 float-right col">
 						<div id="chatArea" class="width collapse" aria-expanded="false">
-							<div id="chatCheckBox">
-								<label>
-									<span data-balloon="Use this to start/stop message auto-scrolling" data-balloon-pos="up" class="check">Message scroll lock
-									<input id="chatScrollLock" type="checkbox">
-								  	<span class="checkmark"></span></span>
-								</label>
-								
-								<div id="chatMsgArea"></div>
-								
-								<form onsubmit="sendChatMessage();return false">
-									<input id="sendChatText" type="text" style="width: 95%"><br>
-									<input id="sendChatBtn" class="btn btn-info" type="submit" value="Send"></input>
-								</form>
+							<div class="card">		
+								<div class="card-header">ASGS Chat</div>
+								<div class="card-body">												
+									<label>
+										<span data-balloon="Use this to start/stop message auto-scrolling" data-balloon-pos="up" class="check">Scroll lock
+										<input id="chatScrollLock" type="checkbox">
+									  	<span class="checkmark"></span></span>
+									</label>
+
+									<div id="chatCheckBox">									
+										<div id="chatMsgArea"></div>
+										
+										<form onsubmit="sendChatMessage();return false">
+											<input id="sendChatText" type="text" style="width: 95%"><br>
+											<input id="sendChatBtn" class="btn btn-info" type="submit" value="Send"></input>
+										</form>
+									</div>
+								</div>
 							</div>						
 						</div>
-					</main>
+					</div>
 				</div>
 			</div>			
 			
