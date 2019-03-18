@@ -313,10 +313,8 @@ function sendChatMessage()
  */
 function addChatMessage(msg)
 {	
+	// add the message
 	$('<div class="chatMsg">' + msg + '</div>').appendTo("#chatMsgArea");
-
-	// set the scroll position
-	scrollToBottom();
 }
 
 /**
@@ -333,7 +331,7 @@ function sendUserPrefs()
 	var filter_site = [];
 
 	// get all the selected values into an array
-    $.each($("#filter_site option:selected"), function(){            
+    $.each($("#filter_site option:selected"), function() {            
     	filter_site.push($(this).val());
     });	        
 	
@@ -387,6 +385,7 @@ function getUserPrefs()
 			// save the filters
 			$("#siteFilter").val(prefs.filter_site);
 			
+			// refresh all the filter controls
 			$('#siteFilter').selectpicker('refresh');
 			$('#pref_site').selectpicker('refresh');
 			$('#filter_site').selectpicker('refresh');

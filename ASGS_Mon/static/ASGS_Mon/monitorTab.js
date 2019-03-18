@@ -113,9 +113,12 @@ function renderMonitorTab(siteInstance)
 				// if we got good data put it away
 				if (error == null && chatMsgData.length != 0 && chatMsgData != 'None') 
 				{ 
+					// put away the chat messages
 					chatMsgData.forEach(function(info, i) { addChatMessage(info.msg_ts + ' - ' + info.username + ' says:<br>' + info.message); }); 
 					
-		        	// save the timestamp for next time
+					scrollToBottom();
+					
+		        	// save the timeestamp for filtering messages created after this load.
 					chatMsgsSince = formatDateTime(d);
 					
 					// if the chat box is already open do not set the glyph
@@ -130,8 +133,10 @@ function renderMonitorTab(siteInstance)
 				// erase all the site instances on error or no data
 				if (error || initData.length == 0 || initData == 'None') 
 				{
+					// remove the site/advisory instances
 					d3.selectAll(".siteInstanceView").remove();
 					
+					// show the no data message
 					$("#filterMsg").show(1000);
 					
 					return;
