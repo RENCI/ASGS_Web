@@ -148,8 +148,10 @@ h2 span {
 	margin-left: 5px;
 }
 
-#filterArea
+#viewFilterArea, #siteCount
 {
+	font-style: italic; 
+	font-size: 10px
 }
 
 #siteInstancesTarget

@@ -148,7 +148,7 @@ function renderMonitorTab(siteInstance)
 					$("#filterMsg").hide(0);
 					
 		   			// update the instances in view count
-		        	$("#siteCount").text("(There are a total of " + initData.length + " site instance(s) in view)");
+		        	$("#siteCount").text("(Currently displaying " + initData.length + " site instance(s).)");
 				}
 				
 				// save this data for the event message rendering later
