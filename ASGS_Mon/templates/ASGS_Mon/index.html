@@ -218,7 +218,7 @@
 									<div class="card" style=" margin-top: 25px">
 										<div class="card-header">Set your startup preferences</div>
 										<div class="card-body" style="margin-top: 5px">
-											<form onsubmit="sendUserPrefs(); return false;">
+											<form onsubmit="sendUserPrefs(); return false;">										
 												<label>
 													<span data-balloon="Specify your preferred site. This will be your default site filter." data-balloon-pos="up" style="margin-left: 15px; font-size: 14px">Select your preferred site 
 														<select id="pref_site" class="selectpicker" data-live-search="true">
@@ -248,9 +248,10 @@
 															<option value="3">UCF</option>
 														</select>
 													</span>
-												</label>		
-																			
-												<input id="sendUserPref" class="btn btn-info" type="submit" value="Submit"></input><div id="prefsSaveMsg" style="display: none;"></div>								
+												</label>	
+													
+												<input id="sendUserPref" class="btn btn-info" type="submit" value="Submit"></input>		
+												<div id="prefsSaveMsg" style="margin-bottom: 5px; display: none;"></div>																																					
 											</form>
 										</div>
 									</div>
