@@ -139,10 +139,17 @@ function renderMonitorTab(siteInstance)
 					// show the no data message
 					$("#filterMsg").show(1000);
 					
-					return;
+		        	$("#siteCount").text("");
+
+		        	return;
 				}
 				else
+				{
 					$("#filterMsg").hide(0);
+					
+		   			// update the instances in view count
+		        	$("#siteCount").text("(There are a total of " + initData.length + " site instance(s) in view)");
+				}
 				
 				// save this data for the event message rendering later
 				latestData = initData;
