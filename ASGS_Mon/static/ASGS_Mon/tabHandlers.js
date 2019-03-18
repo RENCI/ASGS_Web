@@ -269,12 +269,12 @@ function formatDateTime(date)
  */
 function scrollToBottom() 
 {	
-	// get the current height of the area to put the messages
-	var newHeight = (($('#cardBody')[0].clientHeight - 210) > 500) ? 500 : $('#cardBody')[0].clientHeight - 210;
-
-	// set the message area height
-	$('#chatMsgArea').height(newHeight);
-	
+//	// get the current height of the area to put the messages
+//	var newHeight = (($('#cardBody')[0].clientHeight - 210) > 500) ? 500 : $('#cardBody')[0].clientHeight - 210;
+//
+//	// set the message area height
+//	$('#chatMsgArea').height(newHeight);
+//	
 	// if auto scroll is checked force it to the bottom
 	if(!$('#chatScrollLock').is(":checked"))
 		$('#chatMsgArea').scrollTop($('#chatMsgArea')[0].scrollHeight);

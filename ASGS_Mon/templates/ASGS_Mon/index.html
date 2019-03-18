@@ -75,7 +75,7 @@
 		<audio id="audioCollapse" src="/static/ASGS_Mon/sounds/collapse.wav" ></audio>
 		
 		<div id="cardBody" class="card-body">			
-			<ul class="nav nav-tabs" id="navTabs" role="tablist">
+			<ul class="nav nav-tabs" id="navTabs" role="tablist" style="margin-left:10px; margin-bottom: 7px">
 				<li class="nav-item">				 
 					<a data-balloon="This area is for viewing each ASGS process instance" data-balloon-pos="right" class="nav-link active" id="monitor-Tab" data-toggle="tab" href="#monitorTab" role="tab">Monitor</a>
 				</li>
@@ -110,352 +110,360 @@
 				<span style="font-style: italic; font-size: 16px;"><br><br>Microsoft unfortunately does not support a key feature of HTML 5 that is needed to render this web site.<br>Please use a different browser, ANY browser.</span>
 			</div>
 			
-			<div class="container-fluid">
-				<div class="row d-flex d-md-block flex-nowrap wrapper">
-					<div style="" class="col-sm-2 float-right col">
-						<div id="chatArea" class="width collapse" aria-expanded="false">
-							<div class="card">		
-								<div class="card-header">ASGS Chat</div>
-								<div class="card-body">												
-									<label>
-										<span data-balloon="Use this to start/stop message auto-scrolling" data-balloon-pos="up" class="check">Scroll lock
-										<input id="chatScrollLock" type="checkbox">
-									  	<span class="checkmark"></span></span>
-									</label>
-
-									<div id="chatCheckBox">									
-										<div id="chatMsgArea"></div>
-										
-										<form onsubmit="sendChatMessage();return false">
-											<input id="sendChatText" type="text" style="width: 95%"><br>
-											<input id="sendChatBtn" class="btn btn-info" type="submit" value="Send"></input>
-										</form>
-									</div>
-								</div>
-							</div>						
-						</div>
-					</div>
-				</div>
-			</div>			
-			
-			<div id="tabContent" class="tab-content">
-				<div id="monitorTab" class="tab-pane fade show active" role="tabpanel">
-					<div class="row">						
-						<div class="col-lg-12">
-							<div class="card">
-								<div class="card-header">
-									<span data-balloon="Site instances are sorted by Instance creation date and Advisory number (both descending)." data-balloon-pos="right">Site instances</span>&nbsp;&nbsp;<span id="siteCount" style="font-style: italic; font-size: 10px"></span>
-								</div>
-								<div class="card-body">	
-									<div class="col-lg-10">
-										<div class="card">
-											<div class="card-header">
-												<a data-balloon="Click here to view the filtering options" data-balloon-pos="right" class="card-link" data-toggle="collapse" href="#collapseFilter">View Filter</a>&nbsp;&nbsp;<span id="viewFilterArea" style="font-style: italic; font-size: 10px"></span>
-											</div>
-											<div class="card-body" style="margin-bottom: -26px">												
-												<div id="collapseFilter" class="collapse" data-parent="#monitorTab" style="margin-top: 5px">
-												
+			<div class="row">						
+				<div class="col-lg-12">
+					<div class="card" style="border: 0px;">
+						<div class="card-body">	
+						
+							<div class="container-fluid">
+								<div class="row d-flex d-md-block flex-nowrap wrapper">
+									<div style="" class="col-sm-2 float-right col">
+										<div id="chatArea" class="width collapse" aria-expanded="false">
+											<div class="card">		
+												<div class="card-header">ASGS Chat</div>
+												<div class="card-body">												
 													<label>
-														<span data-balloon="Use this to filter active instance(s)" data-balloon-pos="up" class="check">Show all active
-														<input id="viewActive" type="checkbox" checked>
+														<span data-balloon="Use this to start/stop message auto-scrolling" data-balloon-pos="up" class="check">Scroll lock
+														<input id="chatScrollLock" type="checkbox">
 													  	<span class="checkmark"></span></span>
 													</label>
-													
-													<label> 
-														<span data-balloon="Use this to filter data by inactive instance(s)" data-balloon-pos="up" style="font-style: italic; font-size: 12px">Show inactive
-															<select id="inactiveFilter" class="selectpicker" multiple data-live-search="true">
-																<option value="6">Completed</option>
-																<option value="3">Error</option>
-																<option value="9">Exited</option>
-																<option value="10">Stalled</option>
-															</select>
-														</span>
-													</label>																										  	
-													
-													<label>
-														<span data-balloon="Use this to filter data by site(s)" data-balloon-pos="up" style="margin-left: 25px; font-style: italic; font-size: 12px">Show only sites 
-															<select id="siteFilter" class="selectpicker" multiple data-live-search="true">
-																<option value="6">LONI</option>
-																<option value="2">LSU</option>
-																<option value="5">Penguin</option>
-																<option value="8">QB2</option>
-																<option value="0">RENCI</option>
-																<option value="7">Seahorse</option>														
-																<option value="1">TACC</option>
-																<option value="3">UCF</option>
-															</select>
-														</span>
-													</label>
-													
-													<label>
-														<span data-balloon="Use this to filter instances created since a certain date" data-balloon-pos="up" style="margin-left: 25px; font-style: italic; font-size: 12px">Show filtered since 
-															<input type="date" autocomplete="off" id="sinceDate"></input>
-														</span>
-													</label>	
+				
+													<div id="chatCheckBox">									
+														<div id="chatMsgArea" style="height: 300px;"></div>
+														
+														<form onsubmit="sendChatMessage();return false">
+															<input id="sendChatText" type="text"><br>
+															<input id="sendChatBtn" class="btn btn-info" type="submit" value="Send"></input>
+														</form>
+													</div>
 												</div>
-											</div>
-								        </div>
-									</div>
-									
-									<div class="card-body">	
-										<div class="card">
-											<div id="filterMsg" style="margin-top: 5px; margin-left: 5px; display: none;"><span style="color: red">No data is being returned. It could be no active processes or your filtering selections.</span></div>
-											<div id="siteInstancesTarget"></div>
+											</div>						
 										</div>
 									</div>
 								</div>
-							</div>
-						</div>					
-					</div>
-				</div>
-				
-				<div id="prefsTab" class="tab-pane fade" role="tabpanel">
-					<div class="row">
-						<div class="col-lg-8">
-							<div class="card">
-							<div class="card-header">Your preferences</div>
-								<div class="card-body">
-									<div style="margin-top: 15px;">
-										<span style="font-size: 14px; margin-left: 15px;"><a href="{% url 'change_password' %}">Click to change your Password</a></span>
-									</div>	
+							</div>			
+																									
+							<div id="tabContent" class="tab-content">
+								<div id="monitorTab" class="tab-pane fade show active" role="tabpanel">
+									<div class="row">						
+										<div class="col-lg-12">
+											<div class="card">
+												<div class="card-header">
+													<span data-balloon="Site instances are sorted by Instance creation date and Advisory number (both descending)." data-balloon-pos="right">Site instances</span>&nbsp;&nbsp;<span id="siteCount" style="font-style: italic; font-size: 10px"></span>
+												</div>
+												<div class="card-body">	
+													<div class="col-lg-10">
+														<div class="card">
+															<div class="card-header">
+																<a data-balloon="Click here to view the filtering options" data-balloon-pos="right" class="card-link" data-toggle="collapse" href="#collapseFilter">View Filter</a>&nbsp;&nbsp;<span id="viewFilterArea" style="font-style: italic; font-size: 10px"></span>
+															</div>
+															<div class="card-body" style="margin-bottom: -26px">												
+																<div id="collapseFilter" class="collapse" data-parent="#monitorTab" style="margin-top: 5px">
+																
+																	<label>
+																		<span data-balloon="Use this to filter active instance(s)" data-balloon-pos="up" class="check">Show all active
+																		<input id="viewActive" type="checkbox" checked>
+																	  	<span class="checkmark"></span></span>
+																	</label>
 																	
-									<div class="card" style=" margin-top: 25px">
-										<div class="card-header">Set your startup preferences</div>
-										<div class="card-body" style="margin-top: 5px">
-											<form onsubmit="sendUserPrefs(); return false;">										
-												<label>
-													<span data-balloon="Specify your preferred site. This will be your default site filter." data-balloon-pos="up" style="margin-left: 15px; font-size: 14px">Select your preferred site 
-														<select id="pref_site" class="selectpicker" data-live-search="true">
-															<option value="-1">Select a site</option>
-															<option value="6">LONI</option>
-															<option value="2">LSU</option>
-															<option value="5">Penguin</option>
-															<option value="8">QB2</option>
-															<option value="0">RENCI</option>
-															<option value="7">Seahorse</option>														
-															<option value="1">TACC</option>
-															<option value="3">UCF</option>
-														</select>
-													</span>
-												</label>
-								
-												<label>
-													<span data-balloon="Set your additional site filters to view these sites at login." data-balloon-pos="up" style="margin-left: 15px; font-size: 14px">Select your additional site filtering 
-														<select id="filter_site" caass="selectpicker" multiple data-live-search="true">
-															<option value="6">LONI</option>
-															<option value="2">LSU</option>
-															<option value="5">Penguin</option>
-															<option value="8">QB2</option>
-															<option value="0">RENCI</option>
-															<option value="7">Seahorse</option>														
-															<option value="1">TACC</option>
-															<option value="3">UCF</option>
-														</select>
-													</span>
-												</label>	
+																	<label> 
+																		<span data-balloon="Use this to filter data by inactive instance(s)" data-balloon-pos="up" style="font-style: italic; font-size: 12px">Show inactive
+																			<select id="inactiveFilter" class="selectpicker" multiple data-live-search="true">
+																				<option value="6">Completed</option>
+																				<option value="3">Error</option>
+																				<option value="9">Exited</option>
+																				<option value="10">Stalled</option>
+																			</select>
+																		</span>
+																	</label>																										  	
+																	
+																	<label>
+																		<span data-balloon="Use this to filter data by site(s)" data-balloon-pos="up" style="margin-left: 25px; font-style: italic; font-size: 12px">Show only sites 
+																			<select id="siteFilter" class="selectpicker" multiple data-live-search="true">
+																				<option value="6">LONI</option>
+																				<option value="2">LSU</option>
+																				<option value="5">Penguin</option>
+																				<option value="8">QB2</option>
+																				<option value="0">RENCI</option>
+																				<option value="7">Seahorse</option>														
+																				<option value="1">TACC</option>
+																				<option value="3">UCF</option>
+																			</select>
+																		</span>
+																	</label>
+																	
+																	<label>
+																		<span data-balloon="Use this to filter instances created since a certain date" data-balloon-pos="up" style="margin-left: 25px; font-style: italic; font-size: 12px">Show filtered since 
+																			<input type="date" autocomplete="off" id="sinceDate"></input>
+																		</span>
+																	</label>	
+																</div>
+															</div>
+												        </div>
+													</div>
 													
-												<input id="sendUserPref" class="btn btn-info" type="submit" value="Submit"></input>		
-												<div id="prefsSaveMsg" style="margin-bottom: 5px; display: none;"></div>																																					
-											</form>
+													<div class="card-body">	
+														<div class="card">
+															<div id="filterMsg" style="margin-top: 5px; margin-left: 5px; display: none;"><span style="color: red">No data is being returned. It could be no active processes or your filtering selections.</span></div>
+															<div id="siteInstancesTarget"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>					
+									</div>
+								</div>
+								
+								<div id="prefsTab" class="tab-pane fade" role="tabpanel">
+									<div class="row">
+										<div class="col-lg-8">
+											<div class="card">
+											<div class="card-header">Your preferences</div>
+												<div class="card-body">
+													<div style="margin-top: 15px;">
+														<span style="font-size: 14px; margin-left: 15px;"><a href="{% url 'change_password' %}">Click to change your Password</a></span>
+													</div>	
+																					
+													<div class="card" style=" margin-top: 25px">
+														<div class="card-header">Set your startup preferences</div>
+														<div class="card-body" style="margin-top: 5px">
+															<form onsubmit="sendUserPrefs(); return false;">										
+																<label>
+																	<span data-balloon="Specify your preferred site. This will be your default site filter." data-balloon-pos="up" style="margin-left: 15px; font-size: 14px">Select your preferred site 
+																		<select id="pref_site" class="selectpicker" data-live-search="true">
+																			<option value="-1">Select a site</option>
+																			<option value="6">LONI</option>
+																			<option value="2">LSU</option>
+																			<option value="5">Penguin</option>
+																			<option value="8">QB2</option>
+																			<option value="0">RENCI</option>
+																			<option value="7">Seahorse</option>														
+																			<option value="1">TACC</option>
+																			<option value="3">UCF</option>
+																		</select>
+																	</span>
+																</label>
+												
+																<label>
+																	<span data-balloon="Set your additional site filters to view these sites at login." data-balloon-pos="up" style="margin-left: 15px; font-size: 14px">Select your additional site filtering 
+																		<select id="filter_site" caass="selectpicker" multiple data-live-search="true">
+																			<option value="6">LONI</option>
+																			<option value="2">LSU</option>
+																			<option value="5">Penguin</option>
+																			<option value="8">QB2</option>
+																			<option value="0">RENCI</option>
+																			<option value="7">Seahorse</option>														
+																			<option value="1">TACC</option>
+																			<option value="3">UCF</option>
+																		</select>
+																	</span>
+																</label>	
+																	
+																<input id="sendUserPref" class="btn btn-info" type="submit" value="Submit"></input>		
+																<div id="prefsSaveMsg" style="margin-bottom: 5px; display: none;"></div>																																					
+															</form>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>					
+										
+								<div id="configTab" class="tab-pane fade" role="tabpanel">
+									<div class="row">
+										<div class="col-lg-6">
+											<div class="card">
+												<div class="card-header">Run configurations, sorted by most recent</div>
+												<div class="card-body">
+												  	<div class="input-group-prepend" style="margin-bottom: 150px;">								  	
+														<div id="configTabList"></div>
+													</div>					
+												</div>			
+											</div>					
 										</div>
 									</div>
 								</div>
-							</div>
-						</div>
-					</div>
-				</div>					
-						
-				<div id="configTab" class="tab-pane fade" role="tabpanel">
-					<div class="row">
-						<div class="col-lg-6">
-							<div class="card">
-								<div class="card-header">Run configurations, sorted by most recent</div>
-								<div class="card-body">
-								  	<div class="input-group-prepend" style="margin-bottom: 150px;">								  	
-										<div id="configTabList"></div>
+								
+								<div id="priorResultsTab" class="tab-pane fade" role="tabpanel">
+									<div class="row">
+										<div class="col-lg-6">
+											<div class="card">
+												<div class="card-header">Prior run results, sorted by most recent</div>
+												<div style="margin-bottom: 150px;">
+													<div id="prevRun_17" class="modal fade" role='dialog'>
+													    <div class="modal-dialog modal-lg">
+															<div class="modal-content"">
+																<div class="modal-header">
+																	<h4 class="modal-title">RENCI run 17 "Storm Delta" - 12-05-2018</h4>
+																</div>
+																<div class="modal-body">
+																	<img src="/static/ASGS_Mon/images/cera_img.JPG">       
+																	<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Delta<br> File Name: RENCI_img17.jpg<br> Processing time: 23 minutes.</div>    
+																</div>
+															</div>
+													  	</div>
+													</div>
+													
+													<div id="prevRun_16" class="modal fade" role='dialog'>
+													    <div class="modal-dialog modal-lg">
+															<div class="modal-content">
+																<div class="modal-header">
+																	<h4 class="modal-title">RENCI run 16 "Storm Charlie" - 12/04/2018</h4>
+																</div>
+																<div class="modal-body">
+																	<img src="/static/ASGS_Mon/images/cera_img.JPG"> 
+																	<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Charlie<br> File Name: RENCI_img16.jpg<br> Processing time: 32 minutes.</div>    
+																</div>
+															</div>
+													  	</div>
+													</div>
+													
+													<div id="prevRun_15" class="modal fade" role='dialog'>
+													    <div class="modal-dialog modal-lg">
+															<div class="modal-content">
+																<div class="modal-header">
+																	<h4 class="modal-title">RENCI run 15 "Storm Beta" - 12/03/2018</h4>
+																</div>
+																<div class="modal-body">
+																	<img src="/static/ASGS_Mon/images/cera_img.JPG"> 
+																	<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Beta<br> File Name: RENCI_img15.jpg<br> Processing time: 61 minutes.</div>    
+																</div>
+															</div>
+													  	</div>
+													</div>
+													
+													<div id="prevRun_14" class="modal fade" role='dialog'>
+													    <div class="modal-dialog modal-lg">
+															<div class="modal-content">
+																<div class="modal-header">
+																	<h4 class="modal-title">RENCI run 14 "Storm Alpha" - 12/02/2018</h4>
+																</div>
+																<div class="modal-body">
+																	<img src="/static/ASGS_Mon/images/cera_img.JPG"> 
+																	<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Alpha<br> File Name: RENCI_img14.jpg<br> Processing time: 45 minutes.</div>    
+																</div>
+															</div>
+													  	</div>
+													</div>
+													
+													<div style="margin-left: 10px; margin-top: 5px; margin-bottom: 5px;">
+														<dl class="row">
+															<dt class="col-sm-3 text-truncate">Storm Delta</dt>
+															<dd class="col-sm-9"><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_17">RENCI run 17 - 12/05/2018</a></dd>
+															
+															<dt class="col-sm-3 text-truncate">Storm Charlie</dt>
+															<dd class="col-sm-9"><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_16">RENCI run 16 - 12/04/2018</a></dd>
+															
+															<dt class="col-sm-3 text-truncate">Storm Beta</dt>
+															<dd class="col-sm-9"><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_15">RENCI run 15 - 12/03/2018</a></dd>
+															
+															<dt class="col-sm-3 text-truncate">Storm Alpha</dt>
+															<dd class="col-sm-9"><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_14">RENCI run 14 - 12/02/2018</a></dd>										
+														</dl>
+													</div>								
+												</div>
+											</div>					
+										</div>
+									</div>
+								</div>
+								
+								<div id="submitTab" class="tab-pane fade" role="tabpanel">
+									<div class="row">
+										<div class="col-lg-6">
+											<div class="card">
+												<div class="card-header">Enter job submission parameters</div>
+												<div style="margin-bottom: 150px;">
+													<div class="card-body">
+														<form role="form" method="post" action="">
+															<div class="input-group-prepend">
+															    <span class="input-group-text">Cluster</span>
+																<select id="clusterName" class="form-control" onchange="loadJobSubmit(this.value)">
+																	<option value="-1">Select a cluster</option>
+																	<option value="LSU">LSU</option>
+																	<option value="Penguin">Penguin</option>
+																	<option value="RENCI">RENCI</option>
+																	<option value="TACC">TACC</option>
+																	<option value="UCF">UCF</option>
+																</select>											
+															</div>
+															<div id="selectedCluster" style="display: none;">
+																<div id="clusterUtilArea">
+																	<span id="clusterVal" style="margin-left: 5px;"></span>
+																	<div id="chartID" class="chart"></div>
+																</div>	
+																<br>
+															  	<div class="input-group-prepend">
+															    	<span class="input-group-text">Run parameters</span>
+															    	<input id="msg" type="text" class="form-control" name="msg" placeholder="Enter the run parameters">
+															  	</div>
+															  	<br>
+															  	<div class="input-group-prepend">
+																	<button type="button" class="btn btn-info" value="Submit" onclick="updateMsg('jsMsg');">Submit</button>
+																	<div style="margin-top: 5px"><span id="jsMsg" style="display: none; color: darkgreen;"></span></div>													
+																</div>
+															</div>									
+														</form>
+													</div>
+												</div>
+											</div>
+										</div>
 									</div>					
-								</div>			
-							</div>					
+								</div>	
+								
+								{% if user.is_superuser %}
+								<div id="adminTab" class="tab-pane fade" role="tabpanel">
+									<div class="row">
+										<div class="col-lg-6">
+											<div class="card">
+												<div class="card-header">Site Administration</div>
+												<div style="margin-bottom: 150px;">
+													<div class="card-body">
+														<form role="form" method="post" action="">
+														  	<div class="input-group-prepend">
+															    <span class="input-group-text">User</span>
+																<select class="form-control" id="userName" onchange="loadUser(this.value)">
+																	<option value="-1">Select a user</option>
+																	<option value="JSmith">John Smith</option>
+																	<option value="MJones">Mark Jones</option>
+																	<option value="FWhite">Fred White</option>
+																	<option value="MJames">Mark James</option>												
+																</select>											
+															</div>
+															<div id="selectedUserAdmin" style="display: none;">
+																<div id="userAdminArea">										
+																	<span id="userVal" style="margin-top: 10px;"></span>	
+																</div>
+																<br>
+																<div class="input-group-prepend">			
+															    	<span class="input-group-text">Role</span>
+																	<select class="form-control" id="userRole">
+																		<option value="-1">Select a new role</option>
+																		<option value="Administrator">Administrator</option>
+																		<option value="Job Submitter">Job Submitter</option>
+																		<option value="User" selected>User</option>
+																	</select>											
+																</div>														
+																<div class="checkbox">
+																	<label><input type="checkbox" value="">Disable user</label>
+																</div>								  												
+															  	<div class="input-group">
+																	<button type="button" class="btn btn-info" value="Submit" onclick="updateMsg('saMsg');">Submit</button>
+																	<div style="margin-top: 5px"><span id="saMsg" style="display: none; color: darkgreen;"></span></div>
+																</div>
+															</div>
+														</form>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>										
+								</div>		
+								{% endif %}
+							</div>
 						</div>
 					</div>
 				</div>
-				
-				<div id="priorResultsTab" class="tab-pane fade" role="tabpanel">
-					<div class="row">
-						<div class="col-lg-6">
-							<div class="card">
-								<div class="card-header">Prior run results, sorted by most recent</div>
-								<div style="margin-bottom: 150px;">
-									<div id="prevRun_17" class="modal fade" role='dialog'>
-									    <div class="modal-dialog modal-lg">
-											<div class="modal-content"">
-												<div class="modal-header">
-													<h4 class="modal-title">RENCI run 17 "Storm Delta" - 12-05-2018</h4>
-												</div>
-												<div class="modal-body">
-													<img src="/static/ASGS_Mon/images/cera_img.JPG">       
-													<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Delta<br> File Name: RENCI_img17.jpg<br> Processing time: 23 minutes.</div>    
-												</div>
-											</div>
-									  	</div>
-									</div>
-									
-									<div id="prevRun_16" class="modal fade" role='dialog'>
-									    <div class="modal-dialog modal-lg">
-											<div class="modal-content">
-												<div class="modal-header">
-													<h4 class="modal-title">RENCI run 16 "Storm Charlie" - 12/04/2018</h4>
-												</div>
-												<div class="modal-body">
-													<img src="/static/ASGS_Mon/images/cera_img.JPG"> 
-													<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Charlie<br> File Name: RENCI_img16.jpg<br> Processing time: 32 minutes.</div>    
-												</div>
-											</div>
-									  	</div>
-									</div>
-									
-									<div id="prevRun_15" class="modal fade" role='dialog'>
-									    <div class="modal-dialog modal-lg">
-											<div class="modal-content">
-												<div class="modal-header">
-													<h4 class="modal-title">RENCI run 15 "Storm Beta" - 12/03/2018</h4>
-												</div>
-												<div class="modal-body">
-													<img src="/static/ASGS_Mon/images/cera_img.JPG"> 
-													<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Beta<br> File Name: RENCI_img15.jpg<br> Processing time: 61 minutes.</div>    
-												</div>
-											</div>
-									  	</div>
-									</div>
-									
-									<div id="prevRun_14" class="modal fade" role='dialog'>
-									    <div class="modal-dialog modal-lg">
-											<div class="modal-content">
-												<div class="modal-header">
-													<h4 class="modal-title">RENCI run 14 "Storm Alpha" - 12/02/2018</h4>
-												</div>
-												<div class="modal-body">
-													<img src="/static/ASGS_Mon/images/cera_img.JPG"> 
-													<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Alpha<br> File Name: RENCI_img14.jpg<br> Processing time: 45 minutes.</div>    
-												</div>
-											</div>
-									  	</div>
-									</div>
-									
-									<div style="margin-left: 10px; margin-top: 5px; margin-bottom: 5px;">
-										<dl class="row">
-											<dt class="col-sm-3 text-truncate">Storm Delta</dt>
-											<dd class="col-sm-9"><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_17">RENCI run 17 - 12/05/2018</a></dd>
-											
-											<dt class="col-sm-3 text-truncate">Storm Charlie</dt>
-											<dd class="col-sm-9"><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_16">RENCI run 16 - 12/04/2018</a></dd>
-											
-											<dt class="col-sm-3 text-truncate">Storm Beta</dt>
-											<dd class="col-sm-9"><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_15">RENCI run 15 - 12/03/2018</a></dd>
-											
-											<dt class="col-sm-3 text-truncate">Storm Alpha</dt>
-											<dd class="col-sm-9"><a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#prevRun_14">RENCI run 14 - 12/02/2018</a></dd>										
-										</dl>
-									</div>								
-								</div>
-							</div>					
-						</div>
-					</div>
-				</div>
-				
-				<div id="submitTab" class="tab-pane fade" role="tabpanel">
-					<div class="row">
-						<div class="col-lg-6">
-							<div class="card">
-								<div class="card-header">Enter job submission parameters</div>
-								<div style="margin-bottom: 150px;">
-									<div class="card-body">
-										<form role="form" method="post" action="">
-											<div class="input-group-prepend">
-											    <span class="input-group-text">Cluster</span>
-												<select id="clusterName" class="form-control" onchange="loadJobSubmit(this.value)">
-													<option value="-1">Select a cluster</option>
-													<option value="LSU">LSU</option>
-													<option value="Penguin">Penguin</option>
-													<option value="RENCI">RENCI</option>
-													<option value="TACC">TACC</option>
-													<option value="UCF">UCF</option>
-												</select>											
-											</div>
-											<div id="selectedCluster" style="display: none;">
-												<div id="clusterUtilArea">
-													<span id="clusterVal" style="margin-left: 5px;"></span>
-													<div id="chartID" class="chart"></div>
-												</div>	
-												<br>
-											  	<div class="input-group-prepend">
-											    	<span class="input-group-text">Run parameters</span>
-											    	<input id="msg" type="text" class="form-control" name="msg" placeholder="Enter the run parameters">
-											  	</div>
-											  	<br>
-											  	<div class="input-group-prepend">
-													<button type="button" class="btn btn-info" value="Submit" onclick="updateMsg('jsMsg');">Submit</button>
-													<div style="margin-top: 5px"><span id="jsMsg" style="display: none; color: darkgreen;"></span></div>													
-												</div>
-											</div>									
-										</form>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>					
-				</div>	
-				
-				{% if user.is_superuser %}
-				<div id="adminTab" class="tab-pane fade" role="tabpanel">
-					<div class="row">
-						<div class="col-lg-6">
-							<div class="card">
-								<div class="card-header">Site Administration</div>
-								<div style="margin-bottom: 150px;">
-									<div class="card-body">
-										<form role="form" method="post" action="">
-										  	<div class="input-group-prepend">
-											    <span class="input-group-text">User</span>
-												<select class="form-control" id="userName" onchange="loadUser(this.value)">
-													<option value="-1">Select a user</option>
-													<option value="JSmith">John Smith</option>
-													<option value="MJones">Mark Jones</option>
-													<option value="FWhite">Fred White</option>
-													<option value="MJames">Mark James</option>												
-												</select>											
-											</div>
-											<div id="selectedUserAdmin" style="display: none;">
-												<div id="userAdminArea">										
-													<span id="userVal" style="margin-top: 10px;"></span>	
-												</div>
-												<br>
-												<div class="input-group-prepend">			
-											    	<span class="input-group-text">Role</span>
-													<select class="form-control" id="userRole">
-														<option value="-1">Select a new role</option>
-														<option value="Administrator">Administrator</option>
-														<option value="Job Submitter">Job Submitter</option>
-														<option value="User" selected>User</option>
-													</select>											
-												</div>														
-												<div class="checkbox">
-													<label><input type="checkbox" value="">Disable user</label>
-												</div>								  												
-											  	<div class="input-group">
-													<button type="button" class="btn btn-info" value="Submit" onclick="updateMsg('saMsg');">Submit</button>
-													<div style="margin-top: 5px"><span id="saMsg" style="display: none; color: darkgreen;"></span></div>
-												</div>
-											</div>
-										</form>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>										
-				</div>		
-				{% endif %}
-					
 			</div>
 		</div>
 	{% endblock %}
