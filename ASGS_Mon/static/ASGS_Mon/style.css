@@ -409,3 +409,15 @@ img : hover
   -webkit-transition-timing-function: ease-out;
   transition-timing-function: ease-out;
 }
+
+.error
+{
+	color: red;
+	margin-left: 25px;
+}
+
+.pass
+{
+	color: darkgreen;
+	margin-left: 25px;
+}

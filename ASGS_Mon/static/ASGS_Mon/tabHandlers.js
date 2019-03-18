@@ -340,9 +340,23 @@ function sendUserPrefs()
 	// save the message
     d3.json("dataReq?type=update_user_pref&username=" + username + "&pref_site=" + pref_site.toString() + "&filter_site=" + filter_site.toString(), function(error)
 	{		
-		// if we got an error
-		if (error) 
-			alert('There was an error sending the your preferences!');
+    	$("#prefsSaveMsg").removeClass();
+    	
+    	// display the pass/fail message
+		if (error)
+		{
+			$("#prefsSaveMsg").text('There was a problem saving your preferences.');
+			$("#prefsSaveMsg").addClass("error");
+		}
+		else
+		{
+			$("#prefsSaveMsg").text('Preferences saved.');
+			$("#prefsSaveMsg").addClass("pass");
+		}
+
+		// show/hide the message
+		$("#prefsSaveMsg").show(500);
+		$("#prefsSaveMsg").hide(3000);
 	});
 }
 
@@ -372,6 +386,10 @@ function getUserPrefs()
 			
 			// save the filters
 			$("#siteFilter").val(prefs.filter_site);
+			
+			$('#siteFilter').selectpicker('refresh');
+			$('#pref_site').selectpicker('refresh');
+			$('#filter_site').selectpicker('refresh');
 		}
 	});
 }

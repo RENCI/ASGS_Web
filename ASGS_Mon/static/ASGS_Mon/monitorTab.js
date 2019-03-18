@@ -33,21 +33,6 @@ var _CONST_GROUP_STALLED_MSG_TYPE = 10;
 // global for the storage of the last set of event messages
 var latestData;
 
-// TODO: chat test messages
-var msgData = 
-	[
-		'John says:<br>This is a test.',
-		'Betty says:<br>This is test 2.',
-		'Bob says:<br>This is test 3, a looooooooooooooooooooooooooong text.',
-		'Lucy says:<br>This is test 4 with some amount of text to wrap around.',
-		'Chris says:<br>This is test 5.',
-		'Howard says:<br>This is test 6.',
-		'Wilma says:<br>This is test 7, a looooooooooooooooooooooooooonger text.',
-		'Barney says:<br>This is test 8, a looooooooooooooooooooooooooonger text.',
-		'Fred says:<br>This is test 9, a looooooooooooooooooooooooooonger text.',
-		'Betty says:<br>This is test 10, a shorter text.'
-	];
-
 // the last time messages were acquired
 var chatMsgsSince = '';
 

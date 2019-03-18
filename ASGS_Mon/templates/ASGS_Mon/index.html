@@ -45,29 +45,29 @@
 				    	.width(width)
 				    	.height(height)
 				    	.margin(margin);
+
+					// fire up the tab view
+					renderMonitorTab(siteInstance);									
 					
-					// hide the chat button area
+					// add an event to the message area to scroll to the bottom on an event change if selected
+					$('#chatItems').bind('DOMNodeInserted', function(event) { scrollToBottom(); });
+							
+					// wire up the button that sends the chat message
+					$('#chatBtn').on('click', function() 
+					{
+						// reset the new mssage indicator
+						$("#chatBtnI").removeClass("fa fa-eye");
+					});
+					
+					// show the chat button area
 					$('#chatBtnHide').show(0);
-					
+
+					// check the message area every second th=o insure we take up all the space available
+					var timer = setInterval(scrollToBottom, 1000);
+
 					// load the user preferences
 					getUserPrefs();
-					
-					// fire up the tab view
-					renderMonitorTab(siteInstance);
 				}
-				
-				// add an event to the message area to scroll to the bottom on an event change if selected
-				$('#chatItems').bind('DOMNodeInserted', function(event) { scrollToBottom(); });
-						
-				// wire up the button that sends the chat message
-				$('#chatBtn').on('click', function() 
-				{
-					// reset the new mssage indicator
-					$("#chatBtnI").removeClass("fa fa-eye");
-				});
-				
-				// check the message area every second th=o insure we take up all the space available
-				var timer = setInterval(scrollToBottom, 1000);
 			})
 		</script>		
 	
@@ -217,7 +217,7 @@
 																	
 									<div class="card" style=" margin-top: 25px">
 										<div class="card-header">Set your startup preferences</div>
-										<div class="card-body">
+										<div class="card-body" style="margin-top: 5px">
 											<form onsubmit="sendUserPrefs();return false">
 												<label>
 													<span data-balloon="Specify your perferred site." data-balloon-pos="up" style="margin-left: 15px; font-size: 14px">Select your preferred site 
@@ -249,7 +249,7 @@
 														</select>
 													</span>
 												</label>									
-												<input id="sendUserPref" class="btn btn-info" type="submit" value="Submit"></input>										
+												<input id="sendUserPref" class="btn btn-info" type="submit" value="Submit"></input><div id="prefsSaveMsg" style="display: none;"><span style="color: red">There was an error saving your preferences.</span></div>								
 											</form>
 										</div>
 									</div>
