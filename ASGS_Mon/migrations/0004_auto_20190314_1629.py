@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='Chat_message',
+            name='Chat',
             fields=[
                 ('id', models.AutoField(primary_key=True, serialize=False)),
                 ('username', models.CharField(max_length = 150)),
