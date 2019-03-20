@@ -47,7 +47,7 @@ GRANT EXECUTE ON FUNCTION public.get_chatmsgs_json(timestamp without time zone) 
 COMMENT ON FUNCTION public.get_chatmsgs_json(timestamp without time zone)
     IS 'Returns a recordset (json) of the chat messages since the last update.';
 
-    
+
 -- FUNCTION: public.get_config_detail_json(integer)
 
 -- DROP FUNCTION public.get_config_detail_json(integer);
@@ -167,7 +167,7 @@ BEGIN
 
 			ARRAY[100] AS ranges,
 			ARRAY[e.pct_complete] AS measures, 
-			ARRAY[e.pct_complete] AS markers,
+			ARRAY[e.sub_pct_complete] AS markers,
 
 			eg.id AS eg_id, 
 			stlgrp.description AS group_state,
@@ -190,10 +190,6 @@ BEGIN
 			JOIN "ASGS_Mon_event_type_lu" etl ON etl.id=e.event_type_id
 			JOIN "ASGS_Mon_state_type_lu" stlgrp ON stlgrp.id=eg.state_type_id
 			JOIN "ASGS_Mon_instance_state_type_lu" istlu ON istlu.id=i.inst_state_type_id
---			INNER JOIN (SELECT max(id) AS id, advisory_id FROM "ASGS_Mon_event" GROUP BY event_group_id, advisory_id) AS meid ON meid.id=e.id AND meid.advisory_id=eg.advisory_id
---			INNER JOIN LATERAL (SELECT max(id) AS id, e1.advisory_id FROM "ASGS_Mon_event" e1 where e1.event_group_id=e.event_group_id and e1.advisory_id=eg.advisory_id group by e1.event_group_id, e1.advisory_id) AS meid ON meid.id=e.id AND meid.advisory_id=eg.advisory_id
---			INNER JOIN (SELECT max(id) AS id, instance_id, advisory_id FROM "ASGS_Mon_event_group" GROUP BY instance_id, advisory_id) AS megid ON megid.id=eg.id AND megid.instance_id=i.id AND megid.advisory_id=eg.advisory_id	
---			INNER JOIN LATERAL (SELECT max(id) AS id, instance_id, advisory_id FROM "ASGS_Mon_event_group" eg2 where eg2.instance_id=eg.instance_id and eg2.advisory_id=eg.advisory_id GROUP BY instance_id, advisory_id) AS megid ON megid.id=eg.id AND megid.instance_id=i.id AND megid.advisory_id=eg.advisory_id	
 			INNER JOIN LATERAL (SELECT id, e1.advisory_id FROM "ASGS_Mon_event" e1 where e1.event_group_id=eg.id and e1.advisory_id=eg.advisory_id ORDER BY 1 DESC LIMIT 1) AS meid ON meid.id=e.id AND meid.advisory_id=eg.advisory_id
 			WHERE														
 				(
@@ -233,7 +229,6 @@ GRANT EXECUTE ON FUNCTION public.get_event_json(boolean, date, text, text) TO PU
 COMMENT ON FUNCTION public.get_event_json(boolean, date, text, text)
     IS 'Returns a recordset (json) of the active cluster events.';
 
-    
 -- FUNCTION: public.get_event_msgs_by_group_json(integer, character varying)
 
 -- DROP FUNCTION public.get_event_msgs_by_group_json(integer, character varying);
@@ -277,7 +272,7 @@ GRANT EXECUTE ON FUNCTION public.get_event_msgs_by_group_json(integer, character
 COMMENT ON FUNCTION public.get_event_msgs_by_group_json(integer, character varying)
     IS 'Returns a recordset (json) of the last 5 event messages for a group.';
 
-    
+
     
 -- FUNCTION: public.get_init_json(boolean, date, text, text)
 
@@ -327,10 +322,6 @@ BEGIN
 			JOIN "ASGS_Mon_event_type_lu" etl ON etl.id=e.event_type_id
 			JOIN "ASGS_Mon_state_type_lu" stlgrp ON stlgrp.id=eg.state_type_id
 			JOIN "ASGS_Mon_instance_state_type_lu" istlu ON istlu.id=i.inst_state_type_id
---			INNER JOIN (SELECT max(id) AS id, advisory_id FROM "ASGS_Mon_event" GROUP BY event_group_id, advisory_id) AS meid ON meid.id=e.id AND meid.advisory_id=eg.advisory_id
---			INNER JOIN LATERAL (SELECT max(id) AS id, e1.advisory_id FROM "ASGS_Mon_event" e1 where e1.event_group_id=e.event_group_id and e1.advisory_id=eg.advisory_id group by e1.event_group_id, e1.advisory_id) AS meid ON meid.id=e.id AND meid.advisory_id=eg.advisory_id
---			INNER JOIN (SELECT max(id) AS id, instance_id, advisory_id FROM "ASGS_Mon_event_group" GROUP BY instance_id, advisory_id) AS megid ON megid.id=eg.id AND megid.instance_id=i.id AND megid.advisory_id=eg.advisory_id	
---			INNER JOIN LATERAL (SELECT max(id) AS id, instance_id, advisory_id FROM "ASGS_Mon_event_group" eg2 where eg2.instance_id=eg.instance_id and eg2.advisory_id=eg.advisory_id GROUP BY instance_id, advisory_id) AS megid ON megid.id=eg.id AND megid.instance_id=i.id AND megid.advisory_id=eg.advisory_id	
 			INNER JOIN LATERAL (SELECT id, e1.advisory_id FROM "ASGS_Mon_event" e1 where e1.event_group_id=eg.id and e1.advisory_id=eg.advisory_id ORDER BY 1 DESC LIMIT 1) AS meid ON meid.id=e.id AND meid.advisory_id=eg.advisory_id
 			WHERE
 				(
@@ -351,7 +342,6 @@ BEGIN
 				AND	i.start_ts >= _since
 				AND eg.advisory_id <> '0'
 			ORDER BY i.start_ts DESC, eg.advisory_id DESC
-			--LIMIT 50
 			) AS items;
 END;
 
@@ -368,6 +358,57 @@ GRANT EXECUTE ON FUNCTION public.get_init_json(boolean, date, text, text) TO PUB
 
 COMMENT ON FUNCTION public.get_init_json(boolean, date, text, text)
     IS 'Returns a recordset (json) of the running ASGS cluster instances.';
+
+-- FUNCTION: public.get_user_pref_json(text)
+
+-- DROP FUNCTION public.get_user_pref_json(text);
+
+CREATE OR REPLACE FUNCTION public.get_user_pref_json(
+	_username text)
+    RETURNS TABLE(document jsonb) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+
+BEGIN
+	-- if the record does not exist insert an empty one
+	IF NOT EXISTS (SELECT 1 FROM public."ASGS_Mon_user_pref" WHERE username=_username) THEN
+		INSERT INTO public."ASGS_Mon_user_pref" (username, home_site, filter_site) VALUES (_username, -1, '[]');
+	END IF;
+
+	RETURN QUERY
+	
+	-- get the preferences
+	SELECT to_jsonb(item)
+		FROM
+			(
+				SELECT 
+					username,
+					home_site,
+					filter_site
+				FROM
+					public."ASGS_Mon_user_pref" 
+				WHERE
+					username = _username
+			) AS item;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.get_user_pref_json(text)
+    OWNER TO powen;
+
+GRANT EXECUTE ON FUNCTION public.get_user_pref_json(text) TO powen;
+
+GRANT EXECUTE ON FUNCTION public.get_user_pref_json(text) TO asgs;
+
+GRANT EXECUTE ON FUNCTION public.get_user_pref_json(text) TO PUBLIC;
+
+COMMENT ON FUNCTION public.get_user_pref_json(text)
+    IS 'Returns a recordset (json) of the user preferences.';
 
     
     
@@ -434,8 +475,7 @@ GRANT EXECUTE ON FUNCTION public.handle_stalled_event_groups() TO PUBLIC;
 COMMENT ON FUNCTION public.handle_stalled_event_groups()
     IS 'Updates event groups to a stalled status when no event messages have been received in 3 or more hours.';
 
-    
-    
+
 -- FUNCTION: public.insert_chatmsg(text, text)
 
 -- DROP FUNCTION public.insert_chatmsg(text, text);
@@ -469,6 +509,110 @@ GRANT EXECUTE ON FUNCTION public.insert_chatmsg(text, text) TO PUBLIC;
 
 COMMENT ON FUNCTION public.insert_chatmsg(text, text)
     IS 'Inserts a chat message.';
+ 
+    
+-- FUNCTION: public.insert_user_pref(text, integer, jsonb)
+
+-- DROP FUNCTION public.insert_user_pref(text, integer, jsonb);
+
+CREATE OR REPLACE FUNCTION public.insert_user_pref(
+	_username text,
+	_home_site integer,
+	_filter_site jsonb)
+    RETURNS integer
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+AS $BODY$
+BEGIN
+	IF EXISTS (SELECT 1 FROM public."ASGS_Mon_user_pref" WHERE username=_username) THEN
+		UPDATE public."ASGS_Mon_user_pref" SET home_site = _home_site, filter_site = _filter_site WHERE username=_username;
+	ELSE
+		INSERT INTO public."ASGS_Mon_user_pref" (username, home_site, filter_site) VALUES (_username, _home_site, _filter_site);
+	END IF;
+
+	RETURN 0;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.insert_user_pref(text, integer, jsonb)
+    OWNER TO powen;
+
+GRANT EXECUTE ON FUNCTION public.insert_user_pref(text, integer, jsonb) TO powen;
+
+GRANT EXECUTE ON FUNCTION public.insert_user_pref(text, integer, jsonb) TO asgs;
+
+GRANT EXECUTE ON FUNCTION public.insert_user_pref(text, integer, jsonb) TO PUBLIC;
+
+COMMENT ON FUNCTION public.insert_user_pref(text, integer, jsonb)
+    IS 'Updates or inserts a users preferences.';
+
+
+-- FUNCTION: public.pg_stat_statements(boolean)
+
+-- DROP FUNCTION public.pg_stat_statements(boolean);
+
+CREATE OR REPLACE FUNCTION public.pg_stat_statements(
+	showtext boolean,
+	OUT userid oid,
+	OUT dbid oid,
+	OUT queryid bigint,
+	OUT query text,
+	OUT calls bigint,
+	OUT total_time double precision,
+	OUT min_time double precision,
+	OUT max_time double precision,
+	OUT mean_time double precision,
+	OUT stddev_time double precision,
+	OUT rows bigint,
+	OUT shared_blks_hit bigint,
+	OUT shared_blks_read bigint,
+	OUT shared_blks_dirtied bigint,
+	OUT shared_blks_written bigint,
+	OUT local_blks_hit bigint,
+	OUT local_blks_read bigint,
+	OUT local_blks_dirtied bigint,
+	OUT local_blks_written bigint,
+	OUT temp_blks_read bigint,
+	OUT temp_blks_written bigint,
+	OUT blk_read_time double precision,
+	OUT blk_write_time double precision)
+    RETURNS SETOF record 
+    LANGUAGE 'c'
+
+    COST 1
+    VOLATILE STRICT PARALLEL SAFE
+    ROWS 1000
+AS '$libdir/pg_stat_statements', 'pg_stat_statements_1_3'
+;
+
+ALTER FUNCTION public.pg_stat_statements(boolean)
+    OWNER TO postgres;
 
     
+    
+-- FUNCTION: public.pg_stat_statements_reset()
+
+-- DROP FUNCTION public.pg_stat_statements_reset();
+
+CREATE OR REPLACE FUNCTION public.pg_stat_statements_reset(
+	)
+    RETURNS void
+    LANGUAGE 'c'
+
+    COST 1
+    VOLATILE PARALLEL SAFE
+AS '$libdir/pg_stat_statements', 'pg_stat_statements_reset'
+;
+
+ALTER FUNCTION public.pg_stat_statements_reset()
+    OWNER TO postgres;
+
+GRANT EXECUTE ON FUNCTION public.pg_stat_statements_reset() TO postgres;
+
+GRANT EXECUTE ON FUNCTION public.pg_stat_statements_reset() TO pg_read_all_stats;
+
+REVOKE ALL ON FUNCTION public.pg_stat_statements_reset() FROM PUBLIC;
     
