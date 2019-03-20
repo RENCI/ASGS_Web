@@ -28,7 +28,7 @@
 				    
 					// show the image area with the image source
 					$('#browserError').show(0);					
-					$("#errImage").attr("src", "/static/ASGS_Mon/images/error" + rndNum + ".gif");					
+					$("#errImage").attr("src", "{% static 'ASGS_Mon/images/error' %}" + rndNum + ".gif");					
 				}
 				else
 				{
@@ -72,8 +72,8 @@
 			})
 		</script>		
 	
-		<audio id="audioExpand" src="/static/ASGS_Mon/sounds/expand.wav" ></audio>
-		<audio id="audioCollapse" src="/static/ASGS_Mon/sounds/collapse.wav" ></audio>
+		<audio id="audioExpand" src="{% static 'ASGS_Mon/sounds/expand.wav' %}" ></audio>
+		<audio id="audioCollapse" src="{% static 'ASGS_Mon/sounds/collapse.wav' %}" ></audio>
 		
 		<div id="cardBody" class="card-body">			
 			<ul class="nav nav-tabs" id="navTabs" role="tablist" style="margin-left:10px; margin-bottom: 7px">
@@ -299,7 +299,7 @@
 																	<h4 class="modal-title">RENCI run 17 "Storm Delta" - 12-05-2018</h4>
 																</div>
 																<div class="modal-body">
-																	<img src="/static/ASGS_Mon/images/cera_img.JPG">       
+																	<img src="{% static 'ASGS_Mon/images/cera_img.JPG' %}">       
 																	<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Delta<br> File Name: RENCI_img17.jpg<br> Processing time: 23 minutes.</div>    
 																</div>
 															</div>
@@ -313,7 +313,7 @@
 																	<h4 class="modal-title">RENCI run 16 "Storm Charlie" - 12/04/2018</h4>
 																</div>
 																<div class="modal-body">
-																	<img src="/static/ASGS_Mon/images/cera_img.JPG"> 
+																	<img src="{% static 'ASGS_Mon/images/cera_img.JPG' %}"> 
 																	<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Charlie<br> File Name: RENCI_img16.jpg<br> Processing time: 32 minutes.</div>    
 																</div>
 															</div>
@@ -327,7 +327,7 @@
 																	<h4 class="modal-title">RENCI run 15 "Storm Beta" - 12/03/2018</h4>
 																</div>
 																<div class="modal-body">
-																	<img src="/static/ASGS_Mon/images/cera_img.JPG"> 
+																	<img src="{% static 'ASGS_Mon/images/cera_img.JPG' %}"> 
 																	<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Beta<br> File Name: RENCI_img15.jpg<br> Processing time: 61 minutes.</div>    
 																</div>
 															</div>
@@ -341,7 +341,7 @@
 																	<h4 class="modal-title">RENCI run 14 "Storm Alpha" - 12/02/2018</h4>
 																</div>
 																<div class="modal-body">
-																	<img src="/static/ASGS_Mon/images/cera_img.JPG"> 
+																	<img src="{% static 'ASGS_Mon/images/cera_img.JPG' %}"> 
 																	<div style="float: right; text-align: left;"> Image statistics:<br> Storm: Alpha<br> File Name: RENCI_img14.jpg<br> Processing time: 45 minutes.</div>    
 																</div>
 															</div>
