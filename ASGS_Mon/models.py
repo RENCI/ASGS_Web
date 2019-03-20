@@ -69,6 +69,7 @@ class Instance_config(models.Model):
     asgs_config = models.TextField()
 
 class Json(models.Model):
+    id = models.AutoField(primary_key=True)
     data = models.CharField(max_length = 4000)
 
 class User_pref(models.Model):
