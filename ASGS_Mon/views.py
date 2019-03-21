@@ -55,12 +55,8 @@ def change_password_complete(request):
 def custom_login(request):    
     # if they get here close the session
     logout(request)
-    
-    print(request.POST)
    
     retVal = login(request, template_name='core/login.html')
-    
-    print(retVal)
     
     # head over to the login page
     return login(request, template_name='core/login.html')
