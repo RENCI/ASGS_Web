@@ -205,9 +205,9 @@ function renderMonitorTab(siteInstance)
 				    		{ 
 				    			// if this is an exited or erred run collapse it by default
 								if(d.instance_status == _CONST_INSTANCE_EXIT_MSG_TYPE || d.instance_status == _CONST_INSTANCE_FAIL_MSG_TYPE) 
-									return '/static/ASGS_Mon/images/up2.gif'; 
+									return staticDir + 'ASGS_Mon/images/up2.gif'; 
 								else 
-									return '/static/ASGS_Mon/images/down2.gif';
+									return staticDir + 'ASGS_Mon/images/down2.gif';
 				    		})
 				    .attr("width", 13)
 				    .attr("height", 13)
@@ -235,7 +235,7 @@ function renderMonitorTab(siteInstance)
 									.attr("height", "21");
 							
 							// adjust the direction image
-							d3.select(this).attr({"xlink:href": "/static/ASGS_Mon/images/up2.gif"});
+							d3.select(this).attr({"xlink:href": staticDir + 'ASGS_Mon/images/up2.gif'});
 						}
 						// shrink the entire control
 						else
@@ -246,7 +246,7 @@ function renderMonitorTab(siteInstance)
 								.attr("height", "75");
 															
 							// adjust the direction image
-							d3.select(this).attr({"xlink:href": "/static/ASGS_Mon/images/down2.gif"});
+							d3.select(this).attr({"xlink:href": staticDir + 'ASGS_Mon/images/down2.gif'});
 						}
 					})
 

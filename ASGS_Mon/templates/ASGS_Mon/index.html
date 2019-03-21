@@ -7,7 +7,10 @@
 		
 			// get the username
 			var username = '{{ user.first_name }} {{ user.last_name }}';
-
+	
+			// global var for the static directory location
+			var staticDir = '{% static  '' %}';
+			
 			// page is rendered, load up the details from the DB
 			$(document).ready(function()
 			{
