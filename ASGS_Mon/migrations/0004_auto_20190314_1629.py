@@ -12,12 +12,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Json',
-            fields=[
-                ('data', models.CharField(max_length = 4000)),
-            ],
-        ),
-        migrations.CreateModel(
             name='User_pref',
             fields=[
                 ('id', models.AutoField(primary_key=True, serialize=False)),
