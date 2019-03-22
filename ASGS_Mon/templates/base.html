@@ -46,7 +46,7 @@
 						<span style="font-size: 18px;"><div id="local_Time" style="margin-right: 20px; margin-top: 5px; text-align: center;"></div></span>					
 										
 					{% if user.is_authenticated %}
-						<div style="margin-right: 20px; margin-top: 5px; text-align: center;"><span style="font-size: 16px; font-style: italic">Good day, {{ user.first_name }} {{ user.last_name }}.</span>&nbsp;&nbsp;&nbsp;<span style="font-size: 16px;"><a href="{% url 'logout' %}">Log out</a></span>
+						<div style="margin-right: 20px; margin-top: 5px; text-align: center;"><span style="font-size: 16px; font-style: italic">Good day, {{ user.get_full_name }}.</span>&nbsp;&nbsp;&nbsp;<span style="font-size: 16px;"><a href="{% url 'logout' %}">Log out</a></span>
 						
 						{% if user.is_superuser %}
 							&nbsp;&nbsp;&nbsp;<span style="font-size: 16px;"><a href="{% url 'admin:index' %}">Go to admin site</a></span>							

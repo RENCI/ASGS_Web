@@ -5,8 +5,9 @@
 	{% block content %}
 		<script type="text/javascript">
 		
-			// get the username
-			var username = '{{ user.first_name }} {{ user.last_name }}';
+			// get the user full name and user login id
+			var userfullname = '{{ user.get_full_name }}';
+			var username = '{{ user.get_username }}';
 	
 			// global var for the static directory location
 			var staticDir = '{% static  '' %}';
