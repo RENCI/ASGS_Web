@@ -65,6 +65,25 @@ h2 span {
     margin-top: 5px;
 }
 
+.footer 
+{
+    position: fixed;
+	border: 2px solid; 
+	border-color: black;
+	border-radius: 5px;  
+    height: 35px;
+    margin-left: -3px;
+    margin-bottom: 5px;
+    bottom: 0;
+    color:#fff;
+    padding-top:8px;
+    width: 98%;
+    background: #00003E;
+    background: -webkit-linear-gradient(to right, azure, #31BDE6); 
+    background: linear-gradient(to right, azure, #31BDE6);
+    text-align:center;
+}
+
 .chart div 
 {
 	font: 10px sans-serif;
@@ -82,7 +101,8 @@ h2 span {
 .card-header 
 {
   	padding: 3px 15px !important;
-	background-color: azure;
+    background: -webkit-linear-gradient(to right, azure, #31BDE6); 
+    background: linear-gradient(to right, azure, #31BDE6);
 }
 
 .card-body 
@@ -132,14 +152,15 @@ h2 span {
 
 #pagehdr {  
 	width: 98%;
-  	border: 2px solid black;
+  	border: 1px solid black;
     border-radius: 5px;
     margin-top: -30px;
     margin-left: auto;
     margin-right: auto;
   	text-align: center; 
   	font-size: 18pt;
-  	background-color: azure;
+    background: -webkit-linear-gradient(to right, azure, #31BDE6); 
+    background: linear-gradient(to right, azure, #31BDE6);
 }
 
 #monitorTab, #priorResultsTab, #prefsTab, #submitTab, #configTab, #adminTab
