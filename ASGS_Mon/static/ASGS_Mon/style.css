@@ -68,20 +68,21 @@ h2 span {
 .footer 
 {
     position: fixed;
-	border: 2px solid; 
+	border: 1px solid; 
 	border-color: black;
-	border-radius: 5px;  
-    height: 35px;
+	border-radius: 3px;  
+    height: 25px;
     margin-left: -3px;
-    margin-bottom: 5px;
+    margin-bottom: 3px;
     bottom: 0;
     color:#fff;
-    padding-top:8px;
+    padding-top:6px;
     width: 98%;
     background: #00003E;
     background: -webkit-linear-gradient(to right, azure, #31BDE6); 
     background: linear-gradient(to right, azure, #31BDE6);
     text-align:center;
+	font: 10px sans-serif;
 }
 
 .chart div 
