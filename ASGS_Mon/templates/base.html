@@ -40,7 +40,27 @@
 	  	<header>
 			<table id="pagehdr">
 				<tr>
-					<td align="left"><a href="{% url 'about' %}" target="_blank"><img class="imgASGSLogo" src="{% static 'ASGS_Mon/images/ASGSlogo.jpg' %}" style="width: 70px; height: 55px;"/></a></td>
+					<td align="left"><a href="{% url 'about' %}" target="_blank"><img class="imgASGSLogo" src="{% static 'ASGS_Mon/images/ASGSlogo.jpg' %}" style="width: 85px; height: 70px;"/></a></td>
+					
+					<td align="center">						
+						<dd>
+							<a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#NCEP">
+								<img class="imgASGSLogo" src="https://www.wpc.ncep.noaa.gov/NationalForecastChart/staticmaps/noaad1.png" style="width: 100px; height: 75px;"/>
+							</a>
+							<span style="font-size: 18px;">NCEP</span>
+						</dd>
+						
+						<div id="NCEP" class="modal fade" role='dialog'>
+						    <div class="modal-dialog modal-lg">
+								<div class="modal-content"">
+									<div class="modal-body">
+										<img style="width: 750px; height: 540px;" src="https://www.wpc.ncep.noaa.gov/NationalForecastChart/staticmaps/noaad1.png">       
+									</div>
+								</div>
+							</div>
+						</div>
+					</td>					
+
 					<td style="text-align: center;">ASGS Operational Awareness Dashboard
 						<span style="font-size: 18px;"><div id="NCEP_cycle" style="margin-right: 20px; margin-top: 5px; text-align: center;"></div></span>	
 						<span style="font-size: 18px;"><div id="local_Time" style="margin-right: 20px; margin-top: 5px; text-align: center;"></div></span>					
@@ -57,6 +77,26 @@
 						<div style="margin-right: 20px; margin-top: 5px; text-align: center;"><span style="font-size: 16px;"><a href="{% url 'login' %}">Login</a></span></div>
 					{% endif %}
 					</td>
+
+					<td align="center">						
+						<dd>
+							<a href="javascript:void(0);" class="priorResultLink" data-toggle="modal" data-target="#NHC-NOAA">
+								<img class="imgASGSLogo" src="https://www.nhc.noaa.gov/overview_atl/tafb_atl_graphics.png" style="width: 100px; height: 75px;"/>
+							</a>
+							<span style="font-size: 18px;">NHC-NOAA</span>
+						</dd>
+						
+						<div id="NHC-NOAA" class="modal fade" role='dialog'>
+						    <div class="modal-dialog modal-lg">
+								<div class="modal-content"">
+									<div class="modal-body">
+										<img style="width: 750px; height: 540px;" src="https://www.nhc.noaa.gov/overview_atl/tafb_atl_graphics.png">       
+									</div>
+								</div>
+							</div>
+						</div>
+					</td>					
+
 					<td align="right">
 						<a href="https://renci.org/" target="_blank"><img class="imgRENCILogo" src="{% static 'ASGS_Mon/images/RENCIlogo.jpg' %}" style="width: 90px; height: 55px;"/></a><br>
 					{% if user.is_authenticated %}
