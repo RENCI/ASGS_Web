@@ -178,11 +178,11 @@
 					case _CONST_GROUP_IDLE_MSG_TYPE:
 					case _CONST_GROUP_WAIT_MSG_TYPE:
 					case _CONST_GROUP_WARN_MSG_TYPE:
-					case _CONST_GROUP_EXIT_MSG_TYPE:
 						measureColor = "goldenrod";
 						break;
 						
 					case _CONST_GROUP_CMPL_MSG_TYPE:
+					case _CONST_GROUP_EXIT_MSG_TYPE:
 					case _CONST_GROUP_NONE_MSG_TYPE:
 					case _CONST_GROUP_STALLED_MSG_TYPE:
 						measureColor = "lightgray";
