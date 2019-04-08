@@ -78,7 +78,7 @@ def find_stalled(cursor):
                 # update the instance and event group state types to 'STALLED'
                 logging.info("find_stalled: updating state to stalled for instance:" + str(id[0]) + ", event grp:" + str(event_grp_id[0]))
 
-                # 02/26/19 Discussion with Phil - do not mark Instances as stalled - only groups
+                # 02/26/19 Discussion with Phil - do not mark Instances as stalled - only Groups
                 # also change expiration time from 6 to 3 hours
                 # update_str = 'update "ASGS_Mon_instance" set inst_state_type_id=' + str(stalled_state_id) + " WHERE id=" + str(id[0])
                 # cursor.execute(update_str);

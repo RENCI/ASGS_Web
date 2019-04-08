@@ -114,7 +114,7 @@ class ASGS_Queue_callback:
             # will hardcode this state id for now, until I get my messaging refactor delivered
             if (event_name == 'FEND') or (event_name == 'REND'):
                 state_id = 9
-                self.logger.debug("Got FEND or REND event type: setting state_id to " + str(state_id))
+                self.logger.debug("Got FEND event type: setting state_id to " + str(state_id))
             try:
                 self.ASGS_DB_inst.update_event_group(state_id, event_group_id, msg_obj)
             except:
