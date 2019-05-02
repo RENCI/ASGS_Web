@@ -212,6 +212,9 @@ class ASGS_DB:
         # get the percent complete from a LU lookup
         pct_complete = self.ASGSConstants_inst.getLuId(str(event_type_id), "pct_complete")
 
+        # get the sub percent complete from the message object
+        sub_pct_complete = msg_obj.get("subpctcomplete", pct_complete)
+
         # if there was a message included parse and add it
         if (msg_obj.get("message") is not None and len(msg_obj["message"]) > 0):
             # get rid of any special chars that might mess up postgres
@@ -225,7 +228,7 @@ class ASGS_DB:
             msg_line = ''
         
         # create the fields
-        sql_stmt = 'INSERT INTO "ASGS_Mon_event" (site_id, event_group_id, event_type_id, event_ts, advisory_id, pct_complete, sub_pct_complete, process{0}) VALUES ({1}, {2}, {3}, \'{4}\', \'{5}\', {6}, {7}, \'{8}\'{9})'.format(rawDataCol, site_id, event_group_id, event_type_id, event_ts, advisory_id, pct_complete, pct_complete, process, msg_line)
+        sql_stmt = 'INSERT INTO "ASGS_Mon_event" (site_id, event_group_id, event_type_id, event_ts, advisory_id, pct_complete, sub_pct_complete, process{0}) VALUES ({1}, {2}, {3}, \'{4}\', \'{5}\', {6}, {7}, \'{8}\'{9})'.format(rawDataCol, site_id, event_group_id, event_type_id, event_ts, advisory_id, pct_complete, sub_pct_complete, process, msg_line)
     
         self.exec_sql(sql_stmt)
         
