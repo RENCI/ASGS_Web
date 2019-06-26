@@ -261,7 +261,7 @@ function renderMonitorTab(siteInstance)
 					.attr("id", function(d) { return "_" + d.instance_id + '_' + d.eg_id + "_state"; })
 					.attr("class", "stateSm")
 		      		.attr("fill", "gray")
-					.attr("x", siteInstance.width()/2 - 90);
+					.attr("x", siteInstance.width()/2 - 75);
 
 				// append the event operation message text that goes inside the bar graph
 				svg.append("g")
@@ -370,21 +370,22 @@ function renderMonitorTab(siteInstance)
 
 					    	// loop through the messages and display them
 						    eventMsgs.forEach(function(info, i)
-						    	{
-									// output the event message text
-									textarea
-										.append("foreignObject")
-										.attr("transform", "translate(0, " + (i * 10) + ")")
-										.attr("width", msgRect.node().getBoundingClientRect().width-3)
-										.attr("height", 11)
-										.attr("x", 0)
-										.attr("y", -9)
-										.append("xhtml:div")
-											.attr("class", "eventSummary")
-											.html(info.event_summary);
-						    	});
+					    	{
+								// output the event message text
+								textarea
+									.append("foreignObject")
+									.attr("transform", "translate(0, " + (i * 10) + ")")
+									.attr("width", msgRect.node().getBoundingClientRect().width-3)
+									.attr("height", 11)
+									.attr("x", 0)
+									.attr("y", -9)
+									.append("xhtml:div")
+										.attr("class", "eventSummary")
+										.html(info.event_summary);
+					    	});
 						}
-					})
+					}
+				)
 				
 				// load the shells for all the site instance events
 				d3.json("dataReq?type=event" + "&viewActiveFlag=" + viewActiveFlag + "&inactives=" + inactives.toString() + "&sinceDate=" + sinceDate + "&sites=" + sites.toString(), function(error, eventData)

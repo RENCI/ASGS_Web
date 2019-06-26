@@ -295,6 +295,13 @@
 			});
 			
 			d3.timer.flush();
+			
+			// this is needed for firefox browsers
+			// for some reason the foreign object control is not refreshed properly after creation
+	        $.each($(".siteInstanceView"), function(){            
+	        	$(this).hide(0);
+	        	$(this).show(0);
+	        });	
 		}
 	
 		// left, right, top, bottom
