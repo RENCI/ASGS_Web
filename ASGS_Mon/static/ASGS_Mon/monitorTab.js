@@ -276,7 +276,7 @@ function renderMonitorTab(siteInstance)
 				// append the run parameters text
 				svg.append("g")
 			      	.style("text-anchor", "end")
-					.attr("transform", "translate(" + siteInstance.width() + ", -5)")
+					.attr("transform", "translate(" + (siteInstance.width()+10) + ", -5)")
 					.append("text")
 						.attr("id", function(d) { return "_" + d.instance_id + '_' + d.eg_id + "_params"; })
 						.attr("class", "params")
