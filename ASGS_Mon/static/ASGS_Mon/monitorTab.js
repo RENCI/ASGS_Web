@@ -261,7 +261,7 @@ function renderMonitorTab(siteInstance)
 					.attr("id", function(d) { return "_" + d.instance_id + '_' + d.eg_id + "_state"; })
 					.attr("class", "stateSm")
 		      		.attr("fill", "gray")
-					.attr("x", siteInstance.width()/2 - 75);
+					.attr("x", siteInstance.width()/2 - 45);
 
 				// append the event operation message text that goes inside the bar graph
 				svg.append("g")
