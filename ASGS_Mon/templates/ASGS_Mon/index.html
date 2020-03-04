@@ -56,7 +56,7 @@
 				    	.margin(margin);
 
 					// fire up the tab view
-					renderMonitorTab(siteInstance);									
+					renderMonitorTab(siteInstance);			
 					
 					// add an event to the message area to scroll to the bottom on an event change if selected
 					$('#chatItems').bind('DOMNodeInserted', function(event) { scrollToBottom(); });
@@ -83,14 +83,17 @@
 		<div id="cardBody" class="card-body">			
 			<ul class="nav nav-tabs" id="navTabs" role="tablist" style="margin-left:10px; margin-bottom: 7px">
 				<li class="nav-item">				 
-					<a data-balloon="This area is for viewing each ASGS process instance" data-balloon-pos="right" class="nav-link active" id="monitor-Tab" data-toggle="tab" href="#monitorTab" role="tab">Monitor</a>
+					<a data-balloon="This area is for viewing each ASGS process instance" data-balloon-pos="right" class="nav-link active" id="monitor-Tab" data-toggle="tab" href="#monitorTab" role="tab">Panel Monitor</a>
 				</li>
-				
+							
+				<li class="nav-item">
+					<a data-balloon="This area is for viewing each ASGS process instances in a grid format" data-balloon-pos="up" class="nav-link" id="grid-Tab" data-toggle="tab" href="#gridTab" role="tab">Grid Monitor</a>
+				</li>
+
 				<li class="nav-item">
 					<a data-balloon="This area is for viewing your user preferences" data-balloon-pos="up" class="nav-link" id="preferences-tab" data-toggle="tab" href="#prefsTab" role="tab">Preferences</a>
 				</li>
-				
-				
+								
 				<li class="nav-item">
 					<a data-balloon="This area is for viewing run configuration files" data-balloon-pos="up" class="nav-link" id="config-Tab" data-toggle="tab" href="#configTab" onclick="initConfigTabList();" role="tab">Run Configurations</a>
 				</li>
@@ -217,6 +220,21 @@
 												</div>
 											</div>
 										</div>					
+									</div>
+								</div>
+								
+								<div id="gridTab" class="tab-pane fade" role="tabpanel">
+									<div class="row">						
+										<div class="col-lg-12">
+											<div class="card">
+												<div class="card-header">
+													<span data-balloon="Site instances are sorted by Instance creation date and Advisory number (both descending)." data-balloon-pos="right">Site instances - Grid view</span>&nbsp;&nbsp;
+												</div>
+
+												<svg id="gridView"></svg>
+
+											</div>
+										</div>
 									</div>
 								</div>
 								
