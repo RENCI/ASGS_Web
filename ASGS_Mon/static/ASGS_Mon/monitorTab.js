@@ -403,162 +403,146 @@ function renderMonitorTab(siteInstance)
 		 	 		// reload the visualization with the new data
 		 			svg.data(eventData).call(siteInstance.duration(1500));
 		 			
-		 			refreshTable(eventData);
+		 			theGridData = eventData;
+		 			
+		 			renderGridView(globalSortOn);
 				});
 			});			
  		}
  	}
 }
 
-function renderGridView(eventData)
-{
-	sortOn = true;
-	
-	var top = d3.select('#gridView').html('');
-	
-	var table = top.append('table').attr("border", 1);
-	
-	table.append('thead')
-	table.append('tbody');
-	
-	// create the table header
-	var thead = table.select("thead").selectAll("th")
-		.data(d3.keys(eventData[0]))
-		.enter().append("th").text(function(d){return d;})
-		.on("click", function(d){ return renderGridView(d);});
-
-	// fill the table	
-	var tr = table.select("tbody").selectAll("tr").data(eventData);	
-	
-	tr.enter().append("tr");
-
-	// create cells
-	var td = tr.selectAll("td").data(function(d){return d3.values(d);});	
-	
-	td.enter().append("td").text(function(d) {return d;});
-	
-	//update?
-	if(sortOn !== null) 
-	{			
-		// update rows
-		if(sortOn != previousSort)
-		{
-			tr.sort(function(a,b){return sort(a[sortOn], b[sortOn]);});
-			previousSort = sortOn;
-		}
-		else
-		{
-			tr.sort(function(a,b){return sort(b[sortOn], a[sortOn]);});
-			previousSort = null;
-		}
-		
-		//update cells
-		td.text(function(d) {return d;});
-	}
-}
-
-
-sortOn = true;
+var globalSortOn = null;
 var previousSort = null;
+var format = d3.time.format("%a %b %d %Y");
+var theGridData = null;
 
-function refreshTable(eventData)
+renderGridView(null);
+
+/**
+ * Renders the grid view with data from the database
+ * 
+ * @param enventData - the data from the database
+ * 
+ */
+function renderGridView(sortOn)
 {	
-	var margin = {top: 20, right: 30, bottom: 30, left: 40},
-	width = 2300 - margin.left - margin.right,
-	height = 500 - margin.top - margin.bottom;
+	// set the margins of the grid in the tab
+	var 
+		margin = {top: 20, right: 10, bottom: 5, left: 10},
+		width = 2000 - margin.left - margin.right,
+		height = 500 - margin.top - margin.bottom;
 	
-	d3.select("#gridView").html('');
+	// clear out what is in the grid
+	d3.select("#gridDataView").html('');
 	
-	var canvas = d3.select("#gridView")
-	.attr("width", width + margin.left + margin.right)
-	.attr("height", height + margin.top + margin.bottom)
-	.append("g")
-	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	// get a handle to the grid view area and set the dimensions
+	var gridDataArea = d3.select("#gridDataView")
+		.attr("width", width + margin.left + margin.right)
+		.attr("height", height + margin.top + margin.bottom)
+		.append("g")
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 	
-	var headerGrp = canvas.append("g").attr("class", "headerGrp");
-	var rowsGrp = canvas.append("g").attr("class","rowsGrp");
+	// create the header and body of the grid table
+	var headerGrp = gridDataArea.append("g").attr("class", "headerGrp");
+	var rowsGrp = gridDataArea.append("g").attr("class","rowsGrp");
 	
+	// set the row height and cell width
 	var fieldHeight = 30;
 	var fieldWidth = 90;
-	
-	var previousSort = null;
-	var format = d3.time.format("%a %b %d %Y");
-	
-	// create the table header	
+		
+	// create and fill in the table column header	
 	var header = headerGrp.selectAll("g")
-		.data(d3.keys(eventData[0]))
+		.data(d3.keys(theGridData[0]))
 		.enter().append("g")
 		.attr("class", "header")
 		.attr("transform", function (d, i){
 			return "translate(" + i * fieldWidth + ",0)";
 		})
-		.on("click", function(d){ return refreshTable(d);});
+		.on("click", function(d){ return renderGridView(d);});
 	
+	// 
 	header.append("rect")
 		.attr("width", fieldWidth-1)
 		.attr("height", fieldHeight);
 		
+	// 
 	header.append("text")
 		.attr("x", fieldWidth / 2)
 		.attr("y", fieldHeight / 2)
 		.attr("dy", ".35em")
 		.text(String);
 	
-	// fill the table	
-	// select rows
-	var rows = rowsGrp.selectAll("g.row").data(eventData, function(d){ return d.eg_id; });
+	// get the table data
+	var rows = rowsGrp.selectAll("g.row").data(theGridData, function(d){ return d.eg_id; });
 	
-	// create rows	
+	if(globalSortOn !== null)
+		rows.sort(function(a,b){return sort(a[globalSortOn], b[globalSortOn]);});			
+	
+	// render the rows
 	var rowsEnter = rows.enter().append("svg:g")
 		.attr("class","row")
 		.attr("transform", function (d, i){
 			return "translate(0," + (i+1) * (fieldHeight+1) + ")";
 		});
 	
-	// select cells
+	// get the cell data
 	var cells = rows.selectAll("g.cell").data(function(d){return d3.values(d);});
 	
-	// create cells
+	// render the cells
 	var cellsEnter = cells.enter().append("svg:g")
 		.attr("class", "cell")
 		.attr("transform", function (d, i){
 			return "translate(" + i * fieldWidth + ",0)";
 		});
 		
+	// 
 	cellsEnter.append("rect")
 		.attr("width", fieldWidth-1)
 		.attr("height", fieldHeight);	
 		
+	// 
 	cellsEnter.append("text")
 		.attr("x", fieldWidth / 2)
 		.attr("y", fieldHeight / 2)
 		.attr("dy", ".35em")
 		.text(String);
 	
-	//update if not in initialization
-	if(sortOn !== null) {
-			// update rows
-			if(sortOn != previousSort){
-				rows.sort(function(a,b){return sort(a[sortOn], b[sortOn]);});			
-				previousSort = sortOn;
-			}
-			else{
-				rows.sort(function(a,b){return sort(b[sortOn], a[sortOn]);});
-				previousSort = null;
-			}
-			rows.transition()
-				.duration(500)
-				.attr("transform", function (d, i){
-					return "translate(0," + (i+1) * (fieldHeight+1) + ")";
-				});
+	// update if not in initialization
+	if(sortOn !== null) 
+	{
+		globalSortOn = sortOn;
+		
+		// update rows
+		if(sortOn != previousSort)
+		{
+			rows.sort(function(a,b){return sort(a[sortOn], b[sortOn]);});			
+			previousSort = sortOn;
+		}
+		else
+		{
+			rows.sort(function(a,b){return sort(b[sortOn], a[sortOn]);});
+			previousSort = null;
+		}
+		
+		rows.transition()
+			.duration(500)
+			.attr("transform", function (d, i)
+			{
+				return "translate(0," + (i+1) * (fieldHeight+1) + ")";
+			});
 	}
 }
 	
-function sort(a,b)
+// simple sorting
+function sort(a, b)
 {
-	if(typeof a == "string"){
+	if(typeof a == "string")
+	{
 		var parseA = format.parse(a);
-		if(parseA){
+		
+		if(parseA)
+		{
 			var timeA = parseA.getTime();
 			var timeB = format.parse(b).getTime();
 			return timeA > timeB ? 1 : timeA == timeB ? 0 : -1;
@@ -566,10 +550,12 @@ function sort(a,b)
 		else 
 			return a.localeCompare(b);
 	}
-	else if(typeof a == "number"){
+	else if(typeof a == "number")
+	{
 		return a > b ? 1 : a == b ? 0 : -1;
 	}
-	else if(typeof a == "boolean"){
+	else if(typeof a == "boolean")
+	{
 		return b ? 1 : a ? -1 : 0;
 	}
 }
