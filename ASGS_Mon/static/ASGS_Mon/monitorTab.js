@@ -430,8 +430,8 @@ function renderGridView(sortOn)
 	// set the margins of the grid in the tab
 	var 
 		margin = {top: 20, right: 10, bottom: 5, left: 10},
-		width = 2000 - margin.left - margin.right,
-		height = 500 - margin.top - margin.bottom;
+		width = 1000 - margin.left - margin.right,
+		height = 400 - margin.top - margin.bottom;
 	
 	// clear out what is in the grid
 	d3.select("#gridDataView").html('');
@@ -451,6 +451,27 @@ function renderGridView(sortOn)
 	var fieldHeight = 30;
 	var fieldWidth = 90;
 		
+	// remove unwanted elements
+	var newFilteredData;
+	
+	if(theGridData != null)
+	{
+		for(var i=0; i<theGridData.length; i++)
+		{
+			delete theGridData[i]['event_raw_msgs'];
+			delete theGridData[i]['event_operation'];
+			delete theGridData[i]['message'];
+			delete theGridData[i]['storm'];
+			delete theGridData[i]['storm_number'];
+			delete theGridData[i]['cluster_state_id'];
+			delete theGridData[i]['process_id'];
+			delete theGridData[i]['instance_id'];
+			delete theGridData[i]['ranges'];
+			delete theGridData[i]['measures'];
+			delete theGridData[i]['group_state_id'];
+		}
+	}
+	
 	// create and fill in the table column header	
 	var header = headerGrp.selectAll("g")
 		.data(d3.keys(theGridData[0]))
