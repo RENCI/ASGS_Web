@@ -148,11 +148,12 @@ function renderMonitorTab(siteInstance)
 					$("#filterMsg").hide(0);
 					
 		   			// update the instances in view count
-		        	$("#siteCount").text("(Currently displaying " + initData.length + " site instance(s).)");
+		        	$("#siteCount").text("(Currently displaying " + initData.length + " site instance(s).)");		        			        	
 				}
 				
 				// save this data for the event message rendering later
 				latestData = initData;
+				theGridData[0] = initData;
 				
 				// get the current rendered items
 				var curRendered = d3.selectAll(".siteInstanceView").selectAll("svg");
@@ -403,7 +404,7 @@ function renderMonitorTab(siteInstance)
 		 	 		// reload the visualization with the new data
 		 			svg.data(eventData).call(siteInstance.duration(1500));
 		 			
-		 			theGridData = eventData;
+		 			theGridData[1] = eventData;
 		 			
 		 			renderGridView(globalSortOn);
 				});
@@ -415,7 +416,7 @@ function renderMonitorTab(siteInstance)
 var globalSortOn = null;
 var previousSort = null;
 var format = d3.time.format("%a %b %d %Y");
-var theGridData = null;
+var theGridData = [null, null];
 
 renderGridView(null);
 
@@ -430,7 +431,7 @@ function renderGridView(sortOn)
 	// set the margins of the grid in the tab
 	var 
 		margin = {top: 20, right: 10, bottom: 5, left: 10},
-		width = 1000 - margin.left - margin.right,
+		width = 1500 - margin.left - margin.right,
 		height = 400 - margin.top - margin.bottom;
 	
 	// clear out what is in the grid
@@ -438,7 +439,7 @@ function renderGridView(sortOn)
 	
 	// get a handle to the grid view area and set the dimensions
 	var gridDataArea = d3.select("#gridDataView")
-		.attr("width", width + margin.left + margin.right)
+		.attr("width", "100%")
 		.attr("height", height + margin.top + margin.bottom)
 		.append("g")
 			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -449,32 +450,49 @@ function renderGridView(sortOn)
 	
 	// set the row height and cell width
 	var fieldHeight = 30;
-	var fieldWidth = 90;
+	var fieldWidth = 150;
 		
-	// remove unwanted elements
-	var newFilteredData;
+	// save desired data
+	var newGridData = [];
 	
-	if(theGridData != null)
+	if(theGridData[1] != null)
 	{
-		for(var i=0; i<theGridData.length; i++)
-		{
-			delete theGridData[i]['event_raw_msgs'];
-			delete theGridData[i]['event_operation'];
-			delete theGridData[i]['message'];
-			delete theGridData[i]['storm'];
-			delete theGridData[i]['storm_number'];
-			delete theGridData[i]['cluster_state_id'];
-			delete theGridData[i]['process_id'];
-			delete theGridData[i]['instance_id'];
-			delete theGridData[i]['ranges'];
-			delete theGridData[i]['measures'];
-			delete theGridData[i]['group_state_id'];
+		for(var i=0; i<theGridData[1].length; i++)
+		{			
+			//newGridData[i]['Instance ID'] = theGridData[1][i]['instance_id'];
+			
+			var instance_id = theGridData[1][i]['instance_id'];
+			
+			var instance_name = '';
+			
+			for(j=0; j<theGridData[0].length; j++)
+			{
+				if(theGridData[0][j].instance_id == instance_id)
+				{
+					instance_name = theGridData[0][j].title + " - " + theGridData[0][j].instance_name;
+					break;
+				}
+			}
+				
+			elements = 
+			{
+				'Instance': instance_name,
+				'Cluster': theGridData[1][i]['cluster_name'],
+				'Process state': theGridData[1][i]['cluster_state'],
+				'Process type': theGridData[1][i]['type'],
+				'Complete': theGridData[1][i]['pct_complete'] + "% / " + theGridData[1][i]['markers'] + "%",
+				'Date': theGridData[1][i]['datetime'],
+				'Advisory number': theGridData[1][i]['advisory_number']
+				//,'eg_id': theGridData[1][i]['eg_id']
+			};
+			
+			newGridData.push(elements);
 		}
 	}
 	
 	// create and fill in the table column header	
 	var header = headerGrp.selectAll("g")
-		.data(d3.keys(theGridData[0]))
+		.data(d3.keys(newGridData[0]))
 		.enter().append("g")
 		.attr("class", "header")
 		.attr("transform", function (d, i){
@@ -495,7 +513,7 @@ function renderGridView(sortOn)
 		.text(String);
 	
 	// get the table data
-	var rows = rowsGrp.selectAll("g.row").data(theGridData, function(d){ return d.eg_id; });
+	var rows = rowsGrp.selectAll("g.row").data(newGridData, function(d){ return d.Instance + d["Advisory number"]; });
 	
 	if(globalSortOn !== null)
 		rows.sort(function(a,b){return sort(a[globalSortOn], b[globalSortOn]);});			
