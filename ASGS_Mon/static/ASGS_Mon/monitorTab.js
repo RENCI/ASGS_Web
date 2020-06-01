@@ -459,8 +459,6 @@ function renderGridView(sortOn)
 	{
 		for(var i=0; i<theGridData[1].length; i++)
 		{			
-			//newGridData[i]['Instance ID'] = theGridData[1][i]['instance_id'];
-			
 			var instance_id = theGridData[1][i]['instance_id'];
 			
 			var instance_name = '';
@@ -469,7 +467,7 @@ function renderGridView(sortOn)
 			{
 				if(theGridData[0][j].instance_id == instance_id)
 				{
-					instance_name = theGridData[0][j].title + " - " + theGridData[0][j].instance_name;
+					instance_name = theGridData[0][j].instance_name;
 					break;
 				}
 			}
@@ -477,13 +475,12 @@ function renderGridView(sortOn)
 			elements = 
 			{
 				'Instance': instance_name,
+				'Advisory number': theGridData[1][i]['advisory_number'],
 				'Cluster': theGridData[1][i]['cluster_name'],
 				'Process state': theGridData[1][i]['cluster_state'],
 				'Process type': theGridData[1][i]['type'],
-				'Complete': theGridData[1][i]['pct_complete'] + "% / " + theGridData[1][i]['markers'] + "%",
-				'Date': theGridData[1][i]['datetime'],
-				'Advisory number': theGridData[1][i]['advisory_number']
-				//,'eg_id': theGridData[1][i]['eg_id']
+				'Complete (overall/sub proc)': theGridData[1][i]['pct_complete'] + "% / " + theGridData[1][i]['markers'] + "%",
+				'Date': theGridData[1][i]['datetime']
 			};
 			
 			newGridData.push(elements);
