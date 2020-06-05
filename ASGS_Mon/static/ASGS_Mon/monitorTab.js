@@ -432,7 +432,7 @@ function renderGridView(sortOn)
 	var 
 		margin = {top: 20, right: 10, bottom: 5, left: 10},
 		width = 1500 - margin.left - margin.right,
-		height = 400 - margin.top - margin.bottom;
+		height = 800 - margin.top - margin.bottom;
 	
 	// clear out what is in the grid
 	d3.select("#gridDataView").html('');
@@ -449,41 +449,56 @@ function renderGridView(sortOn)
 	var rowsGrp = gridDataArea.append("g").attr("class","rowsGrp");
 	
 	// set the row height and cell width
-	var fieldHeight = 30;
-	var fieldWidth = 150;
+	var fieldHeight = 25;
+	var fieldWidth = 120;
 		
 	// save desired data
 	var newGridData = [];
 	
+	// do we have all the data
 	if(theGridData[1] != null)
 	{
+		// for each data row (site instance)
 		for(var i=0; i<theGridData[1].length; i++)
 		{			
+			// save the instance id
 			var instance_id = theGridData[1][i]['instance_id'];
 			
+			// reset the name for this pass
 			var instance_name = '';
 			
+			// search for the instance we are look at
 			for(j=0; j<theGridData[0].length; j++)
 			{
+				// did we get a match
 				if(theGridData[0][j].instance_id == instance_id)
 				{
-					instance_name = theGridData[0][j].instance_name;
+					// save the instance name
+					instance_name = theGridData[0][j].instance_name.substr(0, 20);
+					
+					// no need to continue
 					break;
 				}
 			}
 				
-			elements = 
+			if(instance_name != '')
 			{
-				'Instance': instance_name,
-				'Advisory number': theGridData[1][i]['advisory_number'],
-				'Cluster': theGridData[1][i]['cluster_name'],
-				'Process state': theGridData[1][i]['cluster_state'],
-				'Process type': theGridData[1][i]['type'],
-				'Complete (overall/sub proc)': theGridData[1][i]['pct_complete'] + "% / " + theGridData[1][i]['markers'] + "%",
-				'Date': theGridData[1][i]['datetime']
-			};
-			
-			newGridData.push(elements);
+				// save the elements in a new format so the column name appear correctly
+				elements = 
+				{
+					'Instance ID': theGridData[1][i]['instance_id'],
+					'Instance': instance_name,
+					'Advisory #': theGridData[1][i]['advisory_number'],
+					'Cluster': theGridData[1][i]['cluster_name'],
+					'State': theGridData[1][i]['cluster_state'],
+					'Step': theGridData[1][i]['type'],
+					'% complete': theGridData[1][i]['pct_complete'] + "% / " + theGridData[1][i]['markers'] + "%",
+					'Last event': theGridData[1][i]['datetime']
+				};
+				
+				// and save the new instance data to render
+				newGridData.push(elements);
+			}
 		}
 	}
 	
@@ -494,8 +509,8 @@ function renderGridView(sortOn)
 		.attr("class", "header")
 		.attr("transform", function (d, i){
 			return "translate(" + i * fieldWidth + ",0)";
-		})
-		.on("click", function(d){ return renderGridView(d);});
+		});
+		//.on("click", function(d){ return renderGridView(d);});
 	
 	// 
 	header.append("rect")
@@ -510,7 +525,7 @@ function renderGridView(sortOn)
 		.text(String);
 	
 	// get the table data
-	var rows = rowsGrp.selectAll("g.row").data(newGridData, function(d){ return d.Instance + d["Advisory number"]; });
+	var rows = rowsGrp.selectAll("g.row").data(newGridData, function(d){ return d["Instance ID"] + d["Advisory #"]; });
 	
 	if(globalSortOn !== null)
 		rows.sort(function(a,b){return sort(a[globalSortOn], b[globalSortOn]);});			
