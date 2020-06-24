@@ -79,7 +79,7 @@ def dataReq(request):
     # only allow access to authenticated users
     if request.user.is_authenticated:
         # define legal request types
-        theLegalReqTypes = ['init', 'event', 'config_list', 'config_detail', "wellness", "chatmsgs", "insert_chatmsg", "user_pref", "update_user_pref"]
+        theLegalReqTypes = ['init', 'event', 'config_list', 'config_detail', "wellness", "chatmsgs", "insert_chatmsg", "user_pref", "update_user_pref", "config_items"]
     
         # get the request type         
         reqType = request.GET.get('type')
@@ -91,9 +91,9 @@ def dataReq(request):
         if reqType in theLegalReqTypes and request.user.is_authenticated:   
             # init the param value
             paramVal = ''
-                         
-            # config details need a parameter
-            if reqType == 'config_detail':            
+                                     
+            # config items need a instance ID parameter
+            if reqType == 'config_items':            
                 # get any params if there are any
                 param = request.GET.get('param')
             
@@ -151,7 +151,7 @@ def dataReq(request):
                 
                 if request.GET.get('sites') != '':
                     paramVal += ", _sites := '{{{0}}}'".format(request.GET.get('sites'))
-                
+
             # if data requested continue
             if retVal == '':
                 # create the SQL. raw SQL calls using the django db model need an ID

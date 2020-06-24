@@ -101,7 +101,7 @@ function initConfigTabList()
 			configList.forEach(function(info, i)
 			{
 				// tack on each entry
-				output += '<span class="input-group-text">' + info.instance_name + ' - Started on: ' + info.start_ts + '. <a href="javascript:getConfigDetails(' + info.instance_id + ', \'asgs\')">View ASGS</a>&nbsp; or &nbsp;<a href="javascript:getConfigDetails(' + info.instance_id + ', \'adcirc\')">View ADCIRC</a></span><div style="display:none; border:1px solid black; margin-top: 5px; margin-bottom: 5px" id="configdetail_' + info.instance_id + '"></div><br>';
+				output += '<span class="input-group-text" style="margin-top: -3px">' + info.instance_name + '&nbsp;(ID: ' + info.id + ')&nbsp;<a href="javascript:getConfigDetails(' + info.id + ', \'asgs\')">View details</a></span><div style="display:none; border:1px solid black; margin-top: 5px; margin-bottom: 1px" id="configdetail_' + info.id + '"></div><br>';
 			});
 			
 			// output the result
@@ -128,7 +128,7 @@ function getConfigDetails(id, type)
 	else 
 	{
 		// get the render the configuration params
-		d3.json("dataReq?type=config_detail&param=" + id, function(error, configDetail) 
+		d3.json("dataReq?type=config_items&param=" + id, function(error, configitems) 
 		{	
 			// init the return
 			var retVal = '';
@@ -138,19 +138,23 @@ function getConfigDetails(id, type)
 			else
 			{
 				// get the type of data to display
-				if(configDetail == undefined)
-					retVal = '<span style="color:red">Error retrieving information.</span>';
-				else if(type == "asgs")
-					retVal = configDetail.asgs_config;
-				else if(type == "adcirc")
-					retVal = configDetail.adcirc_config;
+				if(configitems == undefined)
+					retVal = '<span style="color:red">&nbsp;&nbsp;Error retrieving information.&nbsp;&nbsp;</span>';
+				else if(configitems == 'None')
+					retVal = '<span style="color:red">&nbsp;&nbsp;Sorry, no configuration parameters found for this instance.&nbsp;&nbsp;</span>';
 				else
-					retVal = '<span style="color:red">Error retrieving information.</span>';
+				{
+					retVal += '<span style="margin-left: 3px">Name : Value</span><br><span style="margin-left: 3px">--------------------</span>';
+					
+					configitems.forEach(function(info, i){
+						retVal += '<br><span style="margin-left: 3px">' + info.key + ' : ' + info.value + '</span>';
+					});
+				}
 			}
 			
 			// render the data
 			$('#configdetail_' + id).html(retVal);
-			$('#configdetail_' + id).show(1500);
+			$('#configdetail_' + id).show(500);
 		});
 	}
 }

@@ -83,3 +83,10 @@ class Chat(models.Model):
     username = models.CharField(max_length = 150)
     message = models.CharField(max_length = 150)
     msg_ts = models.DateTimeField()
+    
+class Config_item(models.Model):
+    id = models.AutoField(primary_key=True)
+    instance = models.ForeignKey(Instance, on_delete=models.PROTECT)
+    key = models.CharField(max_length = 255)
+    value = models.CharField(max_length = 1024)
+    
