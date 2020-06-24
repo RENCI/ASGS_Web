@@ -130,3 +130,24 @@ class ASGS_Queue_callback:
             e = sys.exc_info()[0]
             self.logger.error("FAILURE - Cannot update event group. error {0}".format(str(e)))
             return
+
+    def cfg_callback(self, ch, method, properties, body):
+        """
+        The callback function for things that land on the configuration queue
+        
+        """
+        
+        #print(" [x] Received %r" % body)
+        self.logger.info("Received %r" % body)
+        
+        # load the message
+        msg_obj = json.loads(body)
+        
+        # get the instance id from the message
+        instance_id = msg_obj.get("instance_id", "N/A")
+
+        # get the configuration params
+        param_list = msg_obj.get("config_params", "N/A")
+        
+        # insert the records
+        self.ASGS_DB.insert_config_items(instance_id, param_list)

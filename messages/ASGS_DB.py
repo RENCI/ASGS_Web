@@ -288,3 +288,20 @@ class ASGS_DB:
 
         return inst
         
+    def insert_config_items(self, instance_id, param_list):
+        """
+        Inserts the configuration parameters into the database
+        """
+        
+        # create the baseline sql statement
+        sql_stmt = 'INSERT INTO "ASGS_Mon_config_item" (instance_id, key, value) VALUES '
+
+        for item in param_list:
+            sql_stmt += f'({instance_id}, {item.key}, {item.value}),'
+            
+        # remove the trailing comma
+        sql_stmt = sql_stmt[:-1]
+        
+        # execute the sql
+        inst = self.exec_sql(sql_stmt)
+        
