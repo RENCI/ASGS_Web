@@ -293,11 +293,14 @@ class ASGS_DB:
         Inserts the configuration parameters into the database
         """
         
+        # remove all records that may already exist
+        inst = self.exec_sql('DELETE FROM public."ASGS_Mon_config_item" WHERE instance_id = {0}'.format(instance_id))
+        
         # create the baseline sql statement
-        sql_stmt = 'INSERT INTO "ASGS_Mon_config_item" (instance_id, key, value) VALUES '
+        sql_stmt = 'INSERT INTO public."ASGS_Mon_config_item" (instance_id, key, value) VALUES '
 
         for item in param_list:
-            sql_stmt += "({0}, {1}, {2}),".format(instance_id, item[0], item[1])
+            sql_stmt += "({0}, '{1}', '{2}'),".format(instance_id, item[0], item[1])
             
         # remove the trailing comma
         sql_stmt = sql_stmt[:-1]
