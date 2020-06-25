@@ -297,7 +297,7 @@ class ASGS_DB:
         sql_stmt = 'INSERT INTO "ASGS_Mon_config_item" (instance_id, key, value) VALUES '
 
         for item in param_list:
-            sql_stmt += f"({0}, {1}, {2}),".format(instance_id, item.key,item.value)
+            sql_stmt += "({0}, {1}, {2}),".format(instance_id, item.key,item.value)
             
         # remove the trailing comma
         sql_stmt = sql_stmt[:-1]
