@@ -157,7 +157,7 @@ class ASGS_Queue_callback:
         # we must have an existing instance id
         if (instance_id > 0):
             # get the configuration params
-            param_list: list = msg_obj.get("param_list", "N/A")
+            param_list = msg_obj.get("param_list", "N/A")
             
             # insert the records
             self.ASGS_DB.insert_config_items(instance_id, param_list)
