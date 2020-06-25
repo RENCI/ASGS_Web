@@ -143,11 +143,21 @@ class ASGS_Queue_callback:
         # load the message
         msg_obj = json.loads(body)
         
-        # get the instance id from the message
-        instance_id = msg_obj.get("instance_id", "N/A")
+        # get the site id from the name in the message
+        site_id = self.ASGSConstants_inst.getLuIdFromMsg(msg_obj, "physical_location", "site")
 
-        # get the configuration params
-        param_list = msg_obj.get("config_params", "N/A")
-        
-        # insert the records
-        self.ASGS_DB.insert_config_items(instance_id, param_list)
+        try:
+            # get the instance id
+            instance_id = self.ASGS_DB_inst.get_existing_instance_id(site_id[0], msg_obj)
+        except:
+            e = sys.exc_info()[0]
+            self.logger.error("FAILURE - Cannot retrieve instance id. error {0}".format(str(e)))
+            return
+
+        # we must have an existing instance id
+        if (instance_id > 0):
+            # get the configuration params
+            param_list: list = msg_obj.get("param_list", "N/A")
+            
+            # insert the records
+            self.ASGS_DB.insert_config_items(instance_id, param_list)
