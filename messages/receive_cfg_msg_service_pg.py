@@ -31,14 +31,14 @@ if __name__ == "__main__":
         
         channel = connection.channel()    
         
-        channel.queue_declare(queue='asgs_config')
+        channel.queue_declare(queue='asgs_props')
         
         logger.info("receive_cfg_msg_queue channel and queue declared.")
         
         # get an instance to the callback handler
         Queue_callback_inst = ASGS_Queue_callback(parser)
         
-        channel.basic_consume(Queue_callback_inst.cfg_callback, queue='asgs_config', no_ack=True)
+        channel.basic_consume(Queue_callback_inst.cfg_callback, queue='asgs_props', no_ack=True)
         
         logger.info('receive_cfg_msg_queue configured and waiting for messages...')
         
