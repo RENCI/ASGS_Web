@@ -305,6 +305,9 @@ class ASGS_DB:
         # remove the trailing comma
         sql_stmt = sql_stmt[:-1]
         
+        self.logger.debug("sql_stmt {0}".format(sql_stmt))
+        
         # execute the sql
         inst = self.exec_sql(sql_stmt)
+        
         

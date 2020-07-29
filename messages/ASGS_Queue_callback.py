@@ -138,7 +138,7 @@ class ASGS_Queue_callback:
         """
         
         #print(" [x] Received %r" % body)
-        self.logger.info("Received %r" % body)
+        self.logger.info("Received cfg msg %r" % body)
         
         # load the message
         msg_obj = json.loads(body)
@@ -158,6 +158,6 @@ class ASGS_Queue_callback:
         if (instance_id > 0):
             # get the configuration params
             param_list = msg_obj.get("param_list", "N/A")
-            
+                        
             # insert the records
-            self.ASGS_DB.insert_config_items(instance_id, param_list)
+            self.ASGS_DB_inst.insert_config_items(instance_id, param_list)
