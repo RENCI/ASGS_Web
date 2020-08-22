@@ -104,7 +104,7 @@ def dataReq(request):
                     paramVal = param
             
             elif reqType == 'wellness':
-                retVal = 'retry:5000\ndata: {}\n\n'
+                retVal = 'retry:15000\ndata: {}\n\n'
             
             elif reqType == 'insert_chatmsg':
                 # these params are not optional
