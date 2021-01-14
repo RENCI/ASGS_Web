@@ -82,7 +82,7 @@ function updateMsg(val)
 }
 	
 /**
- * Populates the Run configurations tab
+ * Populates the Run properties tab
  * 
  * @returns
  */
@@ -101,7 +101,7 @@ function initConfigTabList()
 			configList.forEach(function(info, i)
 			{
 				// tack on each entry
-				output += '<span class="input-group-text" style="margin-top: -3px">' + info.instance_name + '&nbsp;(ID: ' + info.id + ')&nbsp;<a href="javascript:getConfigDetails(' + info.id + ', \'asgs\')">View details</a></span><div style="display:none; border:1px solid black; margin-top: 5px; margin-bottom: 1px" id="configdetail_' + info.id + '"></div><br>';
+				output += '<span class="input-group-text" style="margin-top: -3px">' + info.instance_name + '&nbsp;(ID: ' + info.id + ')&nbsp;<a href="javascript:getConfigDetails(' + info.id + ', \'asgs\')">View/hide details</a></span><div style="display:none; border:1px solid black; margin-top: 5px; margin-bottom: 1px" id="configdetail_' + info.id + '"></div><br>';
 			});
 			
 			// output the result
@@ -111,7 +111,7 @@ function initConfigTabList()
 }
 
 /**
- * Calls the database to get the run configuration data
+ * Calls the database to get the run properties data
  * 
  * @param id
  * @param type
@@ -134,7 +134,7 @@ function getConfigDetails(id, type)
 			var retVal = '';
 			
 			if(error != null)
-				retVal = '<span style="color:red">Error retrieving information.</span>';
+				retVal = '<span style="color:#ff0000">Error retrieving information.</span>';
 			else
 			{
 				// get the type of data to display
@@ -144,11 +144,13 @@ function getConfigDetails(id, type)
 					retVal = '<span style="color:red">&nbsp;&nbsp;Sorry, no configuration parameters found for this instance.&nbsp;&nbsp;</span>';
 				else
 				{
-					retVal += '<span style="margin-left: 3px">Name : Value</span><br><span style="margin-left: 3px">--------------------</span>';
+					retVal += '<table border="1px"><tr><td><b>Name</b></td><td><b>Value</b></td></tr>';
 					
 					configitems.forEach(function(info, i){
-						retVal += '<br><span style="margin-left: 3px">' + info.key + ' : ' + info.value + '</span>';
+						retVal += '<tr><td>' + info.key + '</td><td>' + info.value + '</td></tr>';
 					});
+
+					retVal += '</table>'
 				}
 			}
 			
