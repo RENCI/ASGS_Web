@@ -124,8 +124,8 @@ class Supervisor_config(models.Model):
     data_volume_name = models.CharField(max_length=50)   #EX:  "staging-volume-data-",
     ssh_volume_name = models.CharField(max_length=50)    #EX:  "staging-volume-ssh-",
     image = models.CharField(max_length=50)              #EX:   "renciorg/stagedata:0.0.1",
-    command_line = models.CharField(max_length=50)       #EX:  ["python", "stage_data.py"],
-    command_matrix = models.CharField(max_length=50)     #EX:  [""],
+    command_line = models.CharField(max_length=300)       #EX:  ["python", "stage_data.py"],
+    command_matrix = models.CharField(max_length=300)     #EX:  [""],
     data_mount_path = models.CharField(max_length=50)    #EX:  "/data",
     ssh_mount_path = models.CharField(max_length=50)     #EX:  "/root/.ssh"
     sub_path = models.CharField(max_length=50)           #EX:  "/input",
