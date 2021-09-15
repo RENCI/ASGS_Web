@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
                 ('instance', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='ASGS_Mon.Instance')),
             ],
         ),
-        migrations.AlterField(
+        migrations.AddField(
             model_name='json',
             name='id',
             field=models.AutoField(primary_key=True, serialize=False),
