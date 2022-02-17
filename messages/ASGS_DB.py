@@ -1,4 +1,5 @@
 import sys
+import os
 import re
 import psycopg2
 import datetime
@@ -14,7 +15,7 @@ class ASGS_DB:
             
             self.logger.info("Initializing ASGS_DB")
             
-            conn_str = "host={0} port={1} dbname={2} user={3} password={4}".format(parser.get('postgres', 'host'), parser.get('postgres', 'port'), parser.get('postgres', 'database'), parser.get('postgres', 'username'), parser.get('postgres', 'password'))
+            conn_str = "host={0} port={1} dbname={2} user={3} password={4}".format(os.environ.get("PG_HOST", parser.get('postgres', 'host')), parser.get('postgres', 'port'), os.environ.get("PG_DB", parser.get('postgres', 'database')), os.environ.get("PG_USER", parser.get('postgres', 'username')), os.environ.get("PG_PW", parser.get('postgres', 'password')))
     
             self.conn = psycopg2.connect(conn_str)
                                     
