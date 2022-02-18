@@ -37,5 +37,5 @@ RUN pip install -r requirements.txt
 # change to the new user
 USER nru
 
-# start the service entry point
-ENTRYPOINT ["python", "receive_msg_service_pg.py", "&", "python", "receive_cfg_msg_service_pg.py", "&"]
+# start the services
+ENTRYPOINT ["bash", "startup.sh"]
