@@ -69,7 +69,7 @@ class Instance_config(models.Model):
     asgs_config = models.TextField()
 
 class Json(models.Model):
-    id = models.AutoField(primary_key=True)
+    #id = models.AutoField(primary_key=True)
     data = models.CharField(max_length = 4000)
 
 class User_pref(models.Model):
@@ -89,4 +89,46 @@ class Config_item(models.Model):
     instance = models.ForeignKey(Instance, on_delete=models.PROTECT)
     key = models.CharField(max_length = 255)
     value = models.CharField(max_length = 1024)
-    
+
+# Values for now:
+# staging
+# hazus
+# hazus-singleton
+# obs-mod
+# run-geo-tiff,
+# compute-mbtiles-0-10
+# compute-mbtiles-11
+# compute-mbtiles-12
+# load-geo-server
+# final-staging
+class Supervisor_job_type_lu(models.Model):
+    #id = models.CharField(max_length=50, primary_key=True)
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=100)
+
+# Values for now:
+# renci
+# aws
+class Supervisor_job_location_lu(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=100)
+
+class Supervisor_config(models.Model):
+    id = models.AutoField(primary_key=True)
+    job_type = models.ForeignKey(Supervisor_job_type_lu, related_name='job_types', on_delete=models.PROTECT)
+    next_job_type = models.ForeignKey(Supervisor_job_type_lu, related_name='next_job_types', on_delete=models.PROTECT)
+    job_name = models.CharField(max_length=50)
+    job_location = models.ForeignKey(Supervisor_job_location_lu, on_delete=models.PROTECT)
+    data_volume_name = models.CharField(max_length=50)   #EX:  "staging-volume-data-",
+    ssh_volume_name = models.CharField(max_length=50)    #EX:  "staging-volume-ssh-",
+    image = models.CharField(max_length=50)              #EX:   "renciorg/stagedata:0.0.1",
+    command_line = models.CharField(max_length=300)       #EX:  ["python", "stage_data.py"],
+    command_matrix = models.CharField(max_length=300)     #EX:  [""],
+    data_mount_path = models.CharField(max_length=50)    #EX:  "/data",
+    ssh_mount_path = models.CharField(max_length=50)     #EX:  "/root/.ssh"
+    sub_path = models.CharField(max_length=50)           #EX:  "/input",
+    additional_path = models.CharField(max_length=50)    #EX:  "/",
+    memory = models.CharField(max_length=50)             #EX:  "10M",
+    node_type = models.CharField(max_length=50)          #EX:  "large"

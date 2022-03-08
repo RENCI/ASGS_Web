@@ -303,6 +303,9 @@ class ASGS_DB:
         for item in param_list:
             sql_stmt += "({0}, '{1}', '{2}'),".format(instance_id, item[0], item[1])
             
+        # finally add a record for supervisor job status
+        sql_stmt += "({0}, '{1}', '{2}'),".format(instance_id, "supervisor_job_status", "new")
+            
         # remove the trailing comma
         sql_stmt = sql_stmt[:-1]
         
