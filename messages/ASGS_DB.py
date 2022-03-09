@@ -146,12 +146,16 @@ class ASGS_DB:
             return ret_val
         except Exception as e:
             self.logger.error("FAILURE - DB issue: {0}".format(e))
-            return -1
+            return
 
-    ##########################################
-    # just a check to see if there are any event groups defined for this site yet
-    ##########################################
     def get_existing_event_group_id(self, instance_id, advisory_id):
+        """
+        just a check to see if there are any event groups defined for this site yet
+
+        :param instance_id:
+        :param advisory_id:
+        :return:
+        """
         self.logger.debug("instance_id: {0}, advisory_id {1}".format(instance_id, advisory_id))
     
         # see if there are any event groups yet that have this instance_id
@@ -168,11 +172,15 @@ class ASGS_DB:
         self.logger.debug("existing_group_id: {0}".format(existing_group_id))
         
         return existing_group_id
-        
-    ##########################################
-    # just a check to see if there are any instances defined for this site yet
-    ##########################################
+
     def get_existing_instance_id(self, site_id, msg_obj):
+        """
+        just a check to see if there are any instances defined for this site yet
+
+        :param site_id:
+        :param msg_obj:
+        :return:
+        """
         self.logger.debug("site_id: {0}".format(site_id))
     
         # get the instance name
@@ -202,6 +210,7 @@ class ASGS_DB:
     def get_instance_id(self, start_ts, site_id, process_id, instance_name):
         """
         gets the instance id for a process
+
         :param start_ts:
         :param site_id:
         :param process_id:
@@ -263,21 +272,30 @@ class ASGS_DB:
         sql_stmt = 'UPDATE "ASGS_Mon_instance" SET inst_state_type_id = {0}, end_ts = \'{1}\', run_params = \'{2}\' WHERE site_id = {3} AND id={4}'.format(state_id, end_ts, run_params, site_id, instance_id)
                                                    
         self.exec_sql(sql_stmt)
-   
-    ##########################################
-    # saves the raw message
-    ##########################################
+
     def save_raw_msg(self, msg):
+        """
+        saves the raw message
+
+        :param msg:
+        :return:
+        """
         self.logger.debug("msg: {0}".format(msg))
     
         sql_stmt = 'INSERT INTO "ASGS_Mon_json" (data) VALUES (\'{0}\''.format(msg)
         
         self.exec_sql(sql_stmt)
-        
-    ##########################################
-    # insert an event
-    ##########################################
+
     def insert_event(self, site_id, event_group_id, event_type_id, msg_obj):
+        """
+        insert an event
+
+        :param site_id:
+        :param event_group_id:
+        :param event_type_id:
+        :param msg_obj:
+        :return:
+        """
         # get a default time stamp, use it if necessary
         now = datetime.datetime.now()
         ts = now.strftime("%Y-%m-%d %H:%M")
@@ -311,11 +329,16 @@ class ASGS_DB:
         sql_stmt = 'INSERT INTO "ASGS_Mon_event" (site_id, event_group_id, event_type_id, event_ts, advisory_id, pct_complete, sub_pct_complete, process{0}) VALUES ({1}, {2}, {3}, \'{4}\', \'{5}\', {6}, {7}, \'{8}\'{9})'.format(raw_data_col, site_id, event_group_id, event_type_id, event_ts, advisory_id, pct_complete, sub_pct_complete, process, msg_line)
     
         self.exec_sql(sql_stmt)
-        
-    ##########################################
-    # inserts an event group
-    ##########################################
+
     def insert_event_group(self, state_id, instance_id, msg_obj):
+        """
+        inserts an event group
+
+        :param state_id:
+        :param instance_id:
+        :param msg_obj:
+        :return:
+        """
         # get a default time stamp, use it if necessary
         now = datetime.datetime.now()
         ts = now.strftime("%Y-%m-%d %H:%M")
@@ -337,11 +360,18 @@ class ASGS_DB:
         self.logger.debug("group {0}".format(group))
 
         return group
-    
-    ##########################################
-    # id | process_id | start_ts | end_ts | run_params | inst_state_type_id | site_id  | instance_name
-    ##########################################
+
     def insert_instance(self, state_id, site_id, msg_obj):
+        """
+        inserts an instance
+
+        id | process_id | start_ts | end_ts | run_params | inst_state_type_id | site_id  | instance_name
+
+        :param state_id:
+        :param site_id:
+        :param msg_obj:
+        :return:
+        """
         # get a default time stamp, use it if necessary
         now = datetime.datetime.now()
         ts = now.strftime("%Y-%m-%d %H:%M")
