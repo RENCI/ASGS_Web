@@ -1,36 +1,104 @@
 import sys
-import os
 import re
 import psycopg2
 import datetime
 import logging
+import time
 
 class ASGS_DB:
     def __init__(self, ASGSConstants_inst, parser, logger=None):
         # load the config
         self.logger = logger or logging.getLogger(__name__)
-        
+
+        self.ASGSConstants_inst = ASGSConstants_inst
+
+        self.logger.info("Initializing ASGS_DB")
+
+        self.conn_str = "host={0} port={1} dbname={2} user={3} password={4}".format(parser.get('postgres', 'host'), parser.get('postgres', 'port'), parser.get('postgres', 'database'), parser.get('postgres', 'username'), parser.get('postgres', 'password'))
+
+        # init the DB connection objects
+        self.conn = None
+        self.cursor = None
+
+        # get a db connection and cursor
+        self.get_db_connection()
+
+        self.logger.info("ASGS_DB initialized.")
+
+    def get_db_connection(self):
+        """
+        Gets a connection to the DB. performs a check to continue trying until
+        a connection is made
+
+        :return:
+        """
+        # init the connection status indicator
+        good_conn = False
+
+        # until forever
+        while not good_conn:
+            # check the DB connection
+            good_conn = self.check_db_connection()
+
+            try:
+                # do we have a good connection
+                if not good_conn:
+                    # connect to the DB
+                    self.conn = psycopg2.connect(self.conn_str)
+
+                    # insure records are updated immediately
+                    self.conn.autocommit = True
+
+                    # create the connection cursor
+                    self.cursor = self.conn.cursor()
+
+                    # check the DB connection
+                    good_conn = self.check_db_connection()
+
+                    # is the connection ok now?
+                    if good_conn:
+                        # ok to continue
+                        return
+                else:
+                    # ok to continue
+                    return
+            except (Exception, psycopg2.DatabaseError):
+                good_conn = False
+
+            self.logger.error(f'DB Connection failed. Retrying...')
+            time.sleep(5)
+
+    def check_db_connection(self) -> bool:
+        """
+        checks to see if there is a good connection to the DB
+
+        :return: boolean
+        """
+        # init the return value
+        ret_val = None
+
         try:
-            self.ASGSConstants_inst = ASGSConstants_inst
-            
-            self.logger.info("Initializing ASGS_DB")
-            
-            conn_str = "host={0} port={1} dbname={2} user={3} password={4}".format(os.environ.get("PG_HOST", parser.get('postgres', 'host')), parser.get('postgres', 'port'), os.environ.get("PG_DB", parser.get('postgres', 'database')), os.environ.get("PG_USER", parser.get('postgres', 'username')), os.environ.get("PG_PW", parser.get('postgres', 'password')))
-    
-            self.conn = psycopg2.connect(conn_str)
-                                    
-            self.logger.debug("Connection to {0} established".format(parser.get('postgres', 'database')))
-            
-            self.conn.set_session(autocommit=True)
+            # is there a connection
+            if not self.conn or not self.cursor:
+                ret_val = False
+            else:
+                # get the DB version
+                self.cursor.execute("SELECT version()")
 
-            self.logger.debug("Autocommit for session set")
+                # get the value
+                db_version = self.cursor.fetchone()
 
-            self.cursor = self.conn.cursor()
-                    
-            self.logger.info("ASGS_DB initialized.")
-        except:
-            e = sys.exc_info()[0]
-            self.logger.error("FAILURE - initializing ASGS_DB. error {0}".format(str(e)))
+                # did we get a value
+                if db_version:
+                    # update the return flag
+                    ret_val = True
+
+        except (Exception, psycopg2.DatabaseError):
+            # connect failed
+            ret_val = False
+
+        # return to the caller
+        return ret_val
 
     def __del__(self):
         self.logger.info("ASGS_DB closing the DB connection")
