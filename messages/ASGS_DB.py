@@ -122,7 +122,9 @@ class ASGS_DB:
         """
         try:        
             self.logger.debug("sql_stmt: {0}, bFetch {1}".format(sql_stmt, b_fetch))
-            
+
+            self.get_db_connection()
+
             # execute the sql
             self.cursor.execute(sql_stmt)
             
