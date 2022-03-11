@@ -26,7 +26,6 @@ WORKDIR /message
 
 # get all queue message handler files into this image
 COPY . .
-COPY ./msg_settings.ini /srv/django/ASGS_Web/messages
 COPY ./logging.conf /srv/django/ASGS_Web/messages
 
 RUN chmod 777 -R .
