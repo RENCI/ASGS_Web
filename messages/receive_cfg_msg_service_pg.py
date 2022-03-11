@@ -1,4 +1,5 @@
 import sys
+import os
 import pika
 import logging.config
 from configparser import ConfigParser
@@ -23,9 +24,9 @@ if __name__ == "__main__":
         parser.read('/srv/django/ASGS_Web/messages/msg_settings.ini')#
     
         # set up AMQP credentials and connect to asgs queue
-        credentials = pika.PlainCredentials(parser.get('pika', 'username'), parser.get('pika', 'password'))
-        
-        parameters = pika.ConnectionParameters(parser.get('pika', 'host'), parser.get('pika', 'port'), '/', credentials, socket_timeout=2)
+        credentials = pika.PlainCredentials(os.environ.get("RABBITMQ_USER", parser.get('pika', 'username')), os.environ.get("RABBITMQ_PW", parser.get('pika', 'password')))
+
+        parameters = pika.ConnectionParameters(os.environ.get("RABBITMQ_HOST", parser.get('pika', 'host')), parser.get('pika', 'port'), '/', credentials, socket_timeout=2)
         
         connection = pika.BlockingConnection(parameters)
         
@@ -38,7 +39,7 @@ if __name__ == "__main__":
         # get an instance to the callback handler
         Queue_callback_inst = ASGS_Queue_callback(parser)
         
-        channel.basic_consume(Queue_callback_inst.cfg_callback, queue='asgs_props', no_ack=True)
+        channel.basic_consume('asgs_props', Queue_callback_inst.cfg_callback, auto_ack=True)
         
         logger.info('receive_cfg_msg_queue configured and waiting for messages...')
         
