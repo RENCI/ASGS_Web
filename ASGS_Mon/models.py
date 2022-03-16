@@ -69,7 +69,7 @@ class Instance_config(models.Model):
     asgs_config = models.TextField()
 
 class Json(models.Model):
-    #id = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     data = models.CharField(max_length = 4000)
 
 class User_pref(models.Model):
@@ -132,3 +132,4 @@ class Supervisor_config(models.Model):
     additional_path = models.CharField(max_length=50)    #EX:  "/",
     memory = models.CharField(max_length=50)             #EX:  "10M",
     node_type = models.CharField(max_length=50)          #EX:  "large"
+    cpus = models.CharField(null=True, max_length=10)     #EX:  "10000m"
