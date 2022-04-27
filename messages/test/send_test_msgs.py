@@ -28,6 +28,7 @@ def queue_message(message):
 # open messages file
 f = open('message_log.txt')
 #f = open('config_msg_example.txt')
+#f = open('config_msg_example3.txt')
 
 # while there are messages in the file
 for line in f:
