@@ -142,22 +142,47 @@ class ASGS_Queue_callback:
         
         # load the message
         msg_obj = json.loads(body)
+        self.logger.info("msg_obj: " + str(msg_obj))
         
         # get the site id from the name in the message
         site_id = self.ASGSConstants_inst.getLuIdFromMsg(msg_obj, "physical_location", "site")
+        self.logger.info("site_id: " + str(site_id))
 
-        try:
-            # get the instance id
-            instance_id = self.ASGS_DB_inst.get_existing_instance_id(site_id[0], msg_obj)
-        except:
-            e = sys.exc_info()[0]
-            self.logger.error("FAILURE - Cannot retrieve instance id. error {0}".format(str(e)))
-            return
+        # filter out handing - accept runs for all locations, except UCF and George Mason runs for now
+        renci = self.ASGSConstants_inst.getLuId('RENCI', 'site')
+        tacc = self.ASGSConstants_inst.getLuId('TACC', 'site')
+        lsu = self.ASGSConstants_inst.getLuId('LSU', 'site')
+        penguin = self.ASGSConstants_inst.getLuId('Penguin', 'site')
+        loni = self.ASGSConstants_inst.getLuId('LONI', 'site')
+        seahorse = self.ASGSConstants_inst.getLuId('Seahorse', 'site')
+        qb2 = self.ASGSConstants_inst.getLuId('QB2', 'site')
+        cct = self.ASGSConstants_inst.getLuId('CCT', 'site')
+        psc = self.ASGSConstants_inst.getLuId('PSC', 'site')
 
-        # we must have an existing instance id
-        if (instance_id > 0):
-            # get the configuration params
-            param_list = msg_obj.get("param_list", "N/A")
+        if (
+            (site_id[0] == renci) or
+            (site_id[0] == tacc) or
+            (site_id[0] == lsu) or
+            (site_id[0] == penguin) or
+            (site_id[0] == loni) or
+            (site_id[0] == seahorse) or
+            (site_id[0] == qb2) or
+            (site_id[0] == cct) or
+            (site_id[0] == psc)
+        ):
+            try:
+                # get the instance id
+                instance_id = self.ASGS_DB_inst.get_existing_instance_id(site_id[0], msg_obj)
+                self.logger.info("instance_id: " + str(instance_id))
+            except:
+                e = sys.exc_info()[0]
+                self.logger.error("FAILURE - Cannot retrieve instance id. error {0}".format(str(e)))
+                return
+
+            # we must have an existing instance id
+            if (instance_id > 0):
+                # get the configuration params
+                param_list = msg_obj.get("param_list", "N/A")
                         
-            # insert the records
-            self.ASGS_DB_inst.insert_config_items(instance_id, param_list)
+                # insert the records
+                self.ASGS_DB_inst.insert_config_items(site_id, instance_id, param_list)

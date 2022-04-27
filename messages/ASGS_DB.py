@@ -1,3 +1,4 @@
+import sys
 import re
 import psycopg2
 import datetime
@@ -194,7 +195,7 @@ class ASGS_DB:
         # see if there are any instances yet that have this site_id and instance_name
         # this could be caused by a new install that does not have any data in the DB yet
         sql_stmt = 'SELECT id FROM "ASGS_Mon_instance" WHERE site_id={0} AND process_id={1} AND instance_name=\'{2}\' AND inst_state_type_id!=9 ORDER BY id DESC'.format(site_id, process_id, instance_name)
-                                                     
+
         # TODO +++++++++++++++FIX THIS++++++++++++++++++++Add query to get correct stat id for Defunct++++++++++++++++++++++++
         # TODO +++++++++++++++FIX THIS++++++++++++++++++++Add day to query too? (to account for rollover of process ids)++++++++++++++++++++++++
         
@@ -400,21 +401,45 @@ class ASGS_DB:
 
         return inst
         
-    def insert_config_items(self, instance_id, param_list):
+    def insert_config_items(self, site_id, instance_id, param_list):
         """
         Inserts the configuration parameters into the database
         """
+        self.logger.debug("param_list {0}".format(param_list))
+        
         # remove all records that may already exist
         self.exec_sql('DELETE FROM public."ASGS_Mon_config_item" WHERE instance_id = {0}'.format(instance_id))
-        
+
         # create the baseline sql statement
-        sql_stmt = 'INSERT INTO public."ASGS_Mon_config_item" (instance_id, key, value) VALUES '
+        sql_stmt = 'INSERT INTO public."ASGS_Mon_config_item" (instance_id, uid, key, value) VALUES '
+
+        # get advisory and enstorm values from param_list to create UID
+        x = [x for x in param_list if 'advisory' in x][0]
+        advisory = param_list[param_list.index(x)][x.index('advisory') + 1]
+        x = [x for x in param_list if 'enstorm' in x][0]
+        enstorm = param_list[param_list.index(x)][x.index('enstorm') + 1]
+        uid = str(advisory) + "-" + str(enstorm)
+        self.logger.debug("uid: {0}".format(uid))
 
         for item in param_list:
-            sql_stmt += "({0}, '{1}', '{2}'),".format(instance_id, item[0], item[1])
-            
-        # finally add a record for supervisor job status
-        sql_stmt += "({0}, '{1}', '{2}'),".format(instance_id, "supervisor_job_status", "new")
+            sql_stmt += "({0}, '{1}', '{2}', '{3}'),".format(instance_id, uid, item[0], item[1])
+
+        # finally add a record for supervisor job status 
+        # 'new' for RENCI, TACC, Penguin, and PSC jobs, 'hazus' for all other sites
+        renci = self.ASGSConstants_inst.getLuId('RENCI', 'site')
+        tacc = self.ASGSConstants_inst.getLuId('TACC', 'site')
+        penguin = self.ASGSConstants_inst.getLuId('Penguin', 'site')
+        psc = self.ASGSConstants_inst.getLuId('PSC', 'site')
+
+        status = "new" 
+        if (
+            (site_id[0] != renci) and
+            (site_id[0] != tacc) and
+            (site_id[0] != penguin) and
+            (site_id[0] != psc)
+        ):
+            status = "hazus"
+        sql_stmt += "({0}, '{1}', '{2}', '{3}'),".format(instance_id, uid, "supervisor_job_status", status)
             
         # remove the trailing comma
         sql_stmt = sql_stmt[:-1]
@@ -422,6 +447,6 @@ class ASGS_DB:
         self.logger.debug("sql_stmt {0}".format(sql_stmt))
         
         # execute the sql
-        self.exec_sql(sql_stmt)
+        inst = self.exec_sql(sql_stmt)
         
         
