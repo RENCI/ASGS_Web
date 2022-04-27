@@ -408,8 +408,8 @@ class ASGS_DB:
         self.logger.debug("param_list {0}".format(param_list))
         
         # remove all records that may already exist
-        # inst = self.exec_sql('DELETE FROM public."ASGS_Mon_config_item" WHERE instance_id = {0}'.format(instance_id))
-        
+        self.exec_sql('DELETE FROM public."ASGS_Mon_config_item" WHERE instance_id = {0}'.format(instance_id))
+
         # create the baseline sql statement
         sql_stmt = 'INSERT INTO public."ASGS_Mon_config_item" (instance_id, uid, key, value) VALUES '
 
