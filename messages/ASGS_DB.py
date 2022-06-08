@@ -430,12 +430,14 @@ class ASGS_DB:
         tacc = self.ASGSConstants_inst.getLuId('TACC', 'site')
         penguin = self.ASGSConstants_inst.getLuId('Penguin', 'site')
         psc = self.ASGSConstants_inst.getLuId('PSC', 'site')
+        lsu = self.ASGSConstants_inst.getLuId('LSU', 'site')
 
         status = "new" 
         if (
             (site_id[0] != renci) and
             (site_id[0] != tacc) and
             (site_id[0] != penguin) and
+            (site_id[0] != lsu) and
             (site_id[0] != psc)
         ):
             status = "hazus"
