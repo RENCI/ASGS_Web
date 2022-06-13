@@ -15,10 +15,10 @@ def queue_message(message):
     channel = connection.channel()
 
     #channel.queue_declare(queue="asgs_queue")
-    #channel.queue_declare(queue="asgs_props")
+    channel.queue_declare(queue="asgs_props")
 
     #channel.basic_publish(exchange='',routing_key='asgs_queue',body=message)
-    #channel.basic_publish(exchange='',routing_key='asgs_props',body=message)
+    channel.basic_publish(exchange='',routing_key='asgs_props',body=message)
     connection.close()
 
 # retrieve configuration settings
