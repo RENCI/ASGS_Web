@@ -14,11 +14,11 @@ def queue_message(message):
     connection = pika.BlockingConnection(parameters)
     channel = connection.channel()
 
-    channel.queue_declare(queue="asgs_queue")
-    #channel.queue_declare(queue="asgs_config")
+    #channel.queue_declare(queue="asgs_queue")
+    channel.queue_declare(queue="asgs_props")
 
-    channel.basic_publish(exchange='',routing_key='asgs_queue',body=message)
-    #channel.basic_publish(exchange='',routing_key='asgs_config',body=message)
+    #channel.basic_publish(exchange='',routing_key='asgs_queue',body=message)
+    channel.basic_publish(exchange='',routing_key='asgs_props',body=message)
     connection.close()
 
 # retrieve configuration settings
@@ -26,7 +26,8 @@ def queue_message(message):
 # parser.read('./msg_settings.ini')
 
 # open messages file
-f = open('message_log.txt')
+f = open('run.properties.json')
+#f = open('message_log.txt')
 #f = open('config_msg_example.txt')
 #f = open('config_msg_example3.txt')
 
