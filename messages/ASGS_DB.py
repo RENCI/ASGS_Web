@@ -406,9 +406,6 @@ class ASGS_DB:
         Inserts the configuration parameters into the database
         """
         self.logger.debug("param_list {0}".format(param_list))
-        
-        # remove all records that may already exist
-        #self.exec_sql('DELETE FROM public."ASGS_Mon_config_item" WHERE instance_id = {0}'.format(instance_id))
 
         # create the baseline sql statement
         sql_stmt = 'INSERT INTO public."ASGS_Mon_config_item" (instance_id, uid, key, value) VALUES '
@@ -420,6 +417,9 @@ class ASGS_DB:
         enstorm = param_list[param_list.index(x)][x.index('enstorm') + 1]
         uid = str(advisory) + "-" + str(enstorm)
         self.logger.debug("uid: {0}".format(uid))
+        
+        # remove all duplicate records that may already exist
+        self.exec_sql('DELETE FROM public."ASGS_Mon_config_item" WHERE instance_id = {0} AND uid = \'{1}\''.format(instance_id, uid))
 
         for item in param_list:
             sql_stmt += "({0}, '{1}', '{2}', '{3}'),".format(instance_id, uid, item[0], item[1])
