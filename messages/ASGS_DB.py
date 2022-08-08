@@ -405,17 +405,29 @@ class ASGS_DB:
         """
         Inserts the configuration parameters into the database
         """
+        ret_msg = None
         self.logger.debug("param_list {0}".format(param_list))
 
         # create the baseline sql statement
         sql_stmt = 'INSERT INTO public."ASGS_Mon_config_item" (instance_id, uid, key, value) VALUES '
 
         # get advisory and enstorm values from param_list to create UID
-        x = [x for x in param_list if 'advisory' in x][0]
-        advisory = param_list[param_list.index(x)][x.index('advisory') + 1]
-        x = [x for x in param_list if 'enstorm' in x][0]
-        enstorm = param_list[param_list.index(x)][x.index('enstorm') + 1]
-        uid = str(advisory) + "-" + str(enstorm)
+        try:
+            x = [x for x in param_list if 'advisory' in x][0]
+            advisory = param_list[param_list.index(x)][x.index('advisory') + 1]
+        except:
+            e = sys.exc_info()[0]
+            ret_msg = "'advisory' not found in param_list"
+            return ret_msg
+
+        try:
+            x = [x for x in param_list if 'enstorm' in x][0]
+            enstorm = param_list[param_list.index(x)][x.index('enstorm') + 1]
+            uid = str(advisory) + "-" + str(enstorm)
+        except:
+            ret_msg = "'enstorm' not found in param_list"
+            return ret_msg
+
         self.logger.debug("uid: {0}".format(uid))
         
         # remove all duplicate records that may already exist
@@ -450,5 +462,7 @@ class ASGS_DB:
         
         # execute the sql
         inst = self.exec_sql(sql_stmt)
+
+        return ret_msg
         
         

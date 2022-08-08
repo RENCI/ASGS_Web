@@ -2,6 +2,7 @@ import sys
 import json
 import logging
 
+from SlackMsgs import SlackMsgs
 from ASGSConstants import ASGSConstants
 from ASGS_DB import ASGS_DB
 
@@ -20,6 +21,9 @@ class ASGS_Queue_callback:
         
         # define and init the object that will handle ASGS DB operations
         self.ASGS_DB_inst = ASGS_DB(self.ASGSConstants_inst, self.parser)
+
+        # create object to send errors to apsviz-issues slack channel
+        self.slack_msg = SlackMsgs()
 
         self.logger.info("ASGS_Queue_callback initialization complete")
         
@@ -136,16 +140,34 @@ class ASGS_Queue_callback:
         The callback function for things that land on the configuration queue
         
         """
-        
+        ret_msg = None
+
         #print(" [x] Received %r" % body)
         self.logger.info("Received cfg msg %r" % body)
+        context = "Config Message Queue callback function"
         
         # load the message
-        msg_obj = json.loads(body)
-        self.logger.info("msg_obj: " + str(msg_obj))
+        try:
+            msg_obj = json.loads(body)
+            self.logger.info("msg_obj: " + str(msg_obj))
+        except:
+            e = sys.exc_info()[0]
+            err = "ERROR loading json from the config message queue. Error:{0]".format(str(e))
+            self.logger.error(err)
+            # send a message to slack
+            self.slack_msg.send_slack_msg(context, err)
+            return
         
         # get the site id from the name in the message
         site_id = self.ASGSConstants_inst.getLuIdFromMsg(msg_obj, "physical_location", "site")
+
+        if(site_id is None or site_id[0] < 0):
+            err = f'ERROR Unknown physical location: {msg_obj.get("physical_location", "")}. Ignoring message'
+            self.logger.error(err)
+            # send a message to slack
+            self.slack_msg.send_slack_msg(context, err)
+            return
+
         self.logger.info("site_id: " + str(site_id))
 
         # filter out handing - accept runs for all locations, except UCF and George Mason runs for now
@@ -177,12 +199,37 @@ class ASGS_Queue_callback:
             except:
                 e = sys.exc_info()[0]
                 self.logger.error("FAILURE - Cannot retrieve instance id. error {0}".format(str(e)))
+                # send a message to slack
+                self.slack_msg.send_slack_msg(context, f'Incorrect or missing instance id in message: {msg_obj.get("instance_name", "N/A")}. Ignoring message')
                 return
 
             # we must have an existing instance id
             if (instance_id > 0):
                 # get the configuration params
-                param_list = msg_obj.get("param_list", "N/A")
-                        
+                param_list = msg_obj.get("param_list")
+            else:
+                self.logger.error("FAILURE - Cannot find instance. Ignoring message")
+                # send a message to slack
+                self.slack_msg.send_slack_msg(context, f'Instance provided in message: {msg_obj.get("instance_name", "N/A")} does not exist. Ignoring message')
+                return
+
+            if (param_list is not None):
                 # insert the records
-                self.ASGS_DB_inst.insert_config_items(site_id, instance_id, param_list)
+                ret_msg = self.ASGS_DB_inst.insert_config_items(site_id, instance_id, param_list)
+            else:
+                err = "ERROR - Invalid message - 'param_list' key is missing from the message. Ignoring message"
+                self.logger.error(err)
+                # send a message to slack
+                self.slack_msg.send_slack_msg(context, err)
+                return
+            if(ret_msg is not None):
+                err = "ERROR - DB insert for message failed: {0}. Ignoring message".format(ret_msg)
+                self.logger.error(err)
+                # send a message to slack
+                self.slack_msg.send_slack_msg(context, err)
+
+        else:
+            err = "The sites UFC and George Mason are not currently supported. Ignoring message."
+            self.logger.info(err)
+            # send a message to slack
+            self.slack_msg.send_slack_msg(context, err)
