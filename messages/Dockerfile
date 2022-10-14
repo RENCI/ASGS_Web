@@ -1,40 +1,39 @@
 # This Dockerfile is used to build THE ASGS RabbitMQ message handler python image
-FROM python:3.6.5
+FROM python:3.6.5-slim
 
 # get some credit
 LABEL maintainer="RENCI"
 
 # install basic tools
 RUN apt-get update
-RUN apt-get install -yq vim
+RUN apt-get install -yq vim procps
 
 # update pip
 RUN pip install --upgrade pip
 
-# create a new non-root user
-RUN useradd -M -u 1000 nru
+# clear out the apt cache
+RUN apt-get clean
 
 # make a directory for the repo
-RUN mkdir -p -m777 /message/logs
 RUN mkdir -p -m777 /srv/django/ASGS_Web/messages/
+RUN mkdir -p -m777 /repo/message/logs
 
-# go to the directory where we are going to upload the repo
-WORKDIR /message
-
-# get the latest code
-#RUN git clone https://github.com/RENCI/ASGS_Web.git
-
-# get all queue message handler files into this image
-COPY . .
-COPY ./logging.conf /srv/django/ASGS_Web/messages
-
-RUN chmod 777 -R .
-
-# install requirements
-RUN pip install -r requirements.txt
-
-# change to the new user
+# create a new non-root user and switch to it
+RUN useradd --create-home -u 1000 nru
 USER nru
 
+# go to the directory where we are going to upload the repo
+WORKDIR /repo/message
+
+# install requirements
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+
+# get all queue message handler files into this image
+COPY ./*.py ./
+COPY ./*.sh ./
+COPY ./*.template ./
+COPY ./logging.conf /srv/django/ASGS_Web/messages
+
 # start the services
-ENTRYPOINT ["bash", "startup.sh"]
+ENTRYPOINT ["bash", "startup.sh", "30"]
