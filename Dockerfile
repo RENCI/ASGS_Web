@@ -24,10 +24,10 @@ WORKDIR /repo/asgs-monitor-ui
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
-# get all queue message handler files into this image
+# copy over the django manager
 COPY manage.py manage.py
 
-# copy over the django files
+# copy over the rest of the website files
 COPY ASGS_Mon ASGS_Mon
 COPY ASGS_Web ASGS_Web
 
