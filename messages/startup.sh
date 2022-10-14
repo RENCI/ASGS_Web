@@ -1,4 +1,4 @@
-#/usr/bin/bash
+#!/bin/bash
 echo "sleeping $1 second(s) to give the queue time to initialize"
 sleep $1
 python receive_msg_service_pg.py &

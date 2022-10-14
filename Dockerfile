@@ -1,41 +1,37 @@
 # This Dockerfile is used to build THE ASGS RabbitMQ message handler python image
-FROM python:3.6.5
+FROM python:3.6.5-slim
 
 # get some credit
 LABEL maintainer="RENCI"
 
-# install basic tools
+# update the base image
 RUN apt-get update
-RUN apt-get install -yq vim
 
 # update pip
 RUN pip install --upgrade pip
 
-# create a new non-root user
-RUN useradd -M -u 1000 nru
+# clear out the apt cache
+RUN apt-get clean
 
-# make a directory for the repo code
-RUN mkdir -p -m777 /code
-
-# go to the directory where we are going to upload the repo
-WORKDIR /code
-
-# get all queue message handler files into this image
-COPY ./manage.py .
-COPY ./requirements.txt .
-
-# copy over the django files
-COPY ASGS_Mon/ ASGS_Mon/
-COPY ASGS_Web/ ASGS_Web/
-
-RUN chmod 777 -R .
-
-# install requirements
-RUN pip install -r requirements.txt
-
-# change to the new user
+# create a new non-root user and switch to it
+RUN useradd --create-home -u 1000 nru
 USER nru
 
+# Create the directory for the code and cd to it
+WORKDIR /repo/asgs-monitor-ui
+
+# install requirements
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+
+# copy over the django manager
+COPY manage.py manage.py
+
+# copy over the rest of the website files
+COPY ASGS_Mon ASGS_Mon
+COPY ASGS_Web ASGS_Web
+
+# expose the website container port
 EXPOSE 8000
 
 # start the services
