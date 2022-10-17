@@ -35,5 +35,8 @@ COPY ./*.sh ./
 COPY ./*.template ./
 COPY ./logging.conf /srv/django/ASGS_Web/messages
 
+# make sure the file has execute permissions
+RUN chmod 755 startup.sh
+
 # start the services
 ENTRYPOINT ["bash", "startup.sh", "30"]
