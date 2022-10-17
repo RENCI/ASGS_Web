@@ -18,10 +18,6 @@ RUN apt-get clean
 RUN mkdir -p -m777 /srv/django/ASGS_Web/messages/
 RUN mkdir -p -m777 /repo/message/logs
 
-# create a new non-root user and switch to it
-RUN useradd --create-home -u 1000 nru
-USER nru
-
 # go to the directory where we are going to upload the repo
 WORKDIR /repo/message
 
@@ -37,6 +33,10 @@ COPY ./logging.conf /srv/django/ASGS_Web/messages
 
 # make sure the file has execute permissions
 RUN chmod 755 startup.sh
+
+# create a new non-root user and switch to it
+RUN useradd --create-home -u 1000 nru
+USER nru
 
 # start the services
 ENTRYPOINT ["bash", "startup.sh", "30"]
