@@ -26,13 +26,13 @@ COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
 # get all queue message handler files into this image
-COPY ./*.py ./
-COPY ./*.sh ./
-COPY ./*.template ./
-COPY ./logging.conf /srv/django/ASGS_Web/messages
+COPY ./messages/*.py ./
+COPY ./messages/*.sh ./
+COPY ./messages/*.template ./
+COPY ./messages/logging.conf /srv/django/ASGS_Web/messages
 
 # make sure the file has execute permissions
-RUN chmod 755 startup.sh
+RUN chmod 755 ./messages/startup.sh
 
 # create a new non-root user and switch to it
 RUN useradd --create-home -u 1000 nru
