@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: LicenseRef-RENCI
 # SPDX-License-Identifier: MIT
 
-name: Build/push the Docker image
+name: Build/push the ASGS Monitor UI Docker image
 
 # working parameters that are specific to this script
 env:
