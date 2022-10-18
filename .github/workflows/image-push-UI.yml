@@ -20,7 +20,7 @@ on:
 
 # job definition
 jobs:
-  build-and-push-image:
+  build-and-push-UI-image:
     runs-on: ubuntu-latest
     permissions:
       contents: read
