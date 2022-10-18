@@ -10,7 +10,7 @@ name: Build/push the Docker image
 env:
   REGISTRY: containers.renci.org/eds/asgs_monitor_ui
 
-# trigger event is publishing a release in the repo
+# trigger event is manual
 on:
   workflow_dispatch:
     inputs:
