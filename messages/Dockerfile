@@ -22,7 +22,7 @@ RUN mkdir -p -m777 /repo/message/logs
 WORKDIR /repo/message
 
 # install requirements
-COPY requirements.txt requirements.txt
+COPY ./messages/requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
 # get all queue message handler files into this image
