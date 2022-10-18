@@ -32,7 +32,7 @@ COPY ./messages/*.template ./
 COPY ./messages/logging.conf /srv/django/ASGS_Web/messages
 
 # make sure the file has execute permissions
-RUN chmod 755 ./messages/startup.sh
+RUN chmod 755 startup.sh
 
 # create a new non-root user and switch to it
 RUN useradd --create-home -u 1000 nru
