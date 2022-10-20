@@ -30,6 +30,8 @@ COPY ./messages/*.py ./
 COPY ./messages/*.sh ./
 COPY ./messages/*.template ./
 COPY ./messages/logging.conf /srv/django/ASGS_Web/messages
+# also get the test dir for running tests in the image
+COPY ./messages/test ./test
 
 # make sure the file has execute permissions
 RUN chmod 755 startup.sh
