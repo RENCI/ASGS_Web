@@ -1,5 +1,5 @@
 # This Dockerfile is used to build THE ASGS RabbitMQ message handler python image
-FROM python:3.6.5-slim
+FROM python:3.9.16-slim
 
 # get some credit
 LABEL maintainer="RENCI"
